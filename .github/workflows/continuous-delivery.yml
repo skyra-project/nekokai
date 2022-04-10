@@ -22,11 +22,6 @@ jobs:
           submodules: true
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@94ab11c41e45d028884a99163086648e898eed25 # renovate: tag=v1.6.0
-      - name: Login to DockerHub
-        uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7 # tag=v1.14.1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Login to GitHub Container Registry
         uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7 # tag=v1.14.1
         with:
@@ -38,14 +33,4 @@ jobs:
         with:
           push: true
           context: .
-          tags: |
-            skyrabot/nekokai:latest
-            ghcr.io/skyra-project/nekokai:latest
-      - name: Update repo description
-        uses: peter-evans/dockerhub-description@836d7e6aa8f6f32dce26f5a1dd46d3dc24997eae # tag=v3.0.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: skyrabot/nekokai
-          readme-filepath: ./assets/docker-hub/NEKOKAI.md
-          short-description: Nekokai - Your favourite Discord bot for anime
+          tags: ghcr.io/skyra-project/nekokai:latest

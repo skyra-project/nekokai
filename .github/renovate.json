@@ -5,12 +5,8 @@
 	"npm": {
 		"packageRules": [
 			{
-				"matchPackagePatterns": ["tslib", "colorette", "i18next", "discord-api-types"],
+				"matchPackagePatterns": ["discord-api-types"],
 				"enabled": false
-			},
-			{
-				"matchPackagePatterns": ["@influxdata"],
-				"groupName": "InfluxDB Dependencies"
 			}
 		]
 	}

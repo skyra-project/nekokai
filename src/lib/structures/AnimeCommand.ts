@@ -5,6 +5,7 @@ import { envParseString } from '@skyra/env-wrapper';
 import { Command, PieceContext, PieceOptions } from '@skyra/http-framework';
 import { resolveUserKey } from '@skyra/http-framework-i18n';
 import { APIApplicationCommandInteraction, APIUser, MessageFlags } from 'discord-api-types/v10';
+import { platform, release } from 'node:os';
 
 export abstract class AnimeCommand extends Command {
 	private readonly type: string;
@@ -54,7 +55,7 @@ export abstract class AnimeCommand extends Command {
 
 	private static readonly headers = {
 		Authorization: `Wolke ${envParseString('WEEB_SH_TOKEN')}`,
-		'User-Agent': `Skyra/${envParseString('CLIENT_VERSION')}`
+		'User-Agent': `Skyra/${envParseString('CLIENT_VERSION')} (undici) ${platform()}/${release()} (https://github.com/skyra-project/nekokai)`
 	} as const;
 }
 
