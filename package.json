@@ -17,7 +17,7 @@
 		"watch": "tsc -b src -w",
 		"watch:start": "tsc-watch -b src --onSuccess \"yarn start\"",
 		"clean": "node scripts/build/clean.mjs",
-		"start": "node --enable-source-maps dist/main.js",
+		"start": "node --enable-source-maps --experimental-fetch dist/main.js",
 		"test": "eslint --ext ts src",
 		"lint": "eslint --fix --ext ts src",
 		"format": "prettier --write --loglevel=warn \"src/**/*.{js,ts,json}\"",
@@ -56,6 +56,9 @@
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
 		"minimist": "^1.2.6"
+	},
+	"engines": {
+		"node": ">=17.5.0"
 	},
 	"commitlint": {
 		"extends": [
