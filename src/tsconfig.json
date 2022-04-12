@@ -6,7 +6,6 @@
 		"outDir": "../dist",
 		"composite": true,
 		"tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
-		"emitDeclarationOnly": true,
 		"paths": {
 			"#lib/*": ["lib/*"]
 		}

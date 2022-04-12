@@ -1,9 +1,11 @@
-import { envParseNumber, envParseString, setup } from '@skyra/env-wrapper';
+import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
 import { createBanner } from '@skyra/start-banner';
-import { blue, red, redBright } from 'colorette';
+import { blue, blueBright, bold } from 'colorette';
 
-setup(import.meta.url);
+// import '@skyra/shared-http-pieces/register';
+
+setup(new URL('../src/.env', import.meta.url));
 
 const client = new Client();
 await client.load();
@@ -11,34 +13,26 @@ await client.load();
 // await registerCommands();
 
 const address = envParseString('HTTP_ADDRESS', '0.0.0.0');
-const port = envParseNumber('HTTP_PORT', 3000);
+const port = envParseInteger('HTTP_PORT', 3000);
 await client.listen({ address, port });
 
 console.log(
 	createBanner({
 		logo: [
-			blue(String.raw`             (`),
-			blue(String.raw`            (((((`),
-			blue(String.raw`       ${red('*')}${redBright(',')}/((((((((((((((((     (`),
-			blue(String.raw`    ${red('****')}${redBright(',')}/(((((((((((((((((((((`),
-			blue(String.raw`   ${red('*****')}${redBright(',')}/((((       ((((((((((`),
-			blue(String.raw`  (${red('*****')}${redBright(',')}/               ((((((((`),
-			blue(String.raw` ((${red('*****')}${redBright(',')}(                ((((((((`),
-			blue(String.raw` ((${red('*****')}${redBright(',')}(                 (((((((`),
-			blue(String.raw` ((${red('*****')}${redBright(',')}(                 (((((((`),
-			blue(String.raw` ((${red('*****')}${redBright(',')}(                 (((((((`),
-			blue(String.raw`  (${red('*****')}${redBright(',')}/               ((((((((`),
-			blue(String.raw`   ${red('*****')}${redBright(',')}/(((         ((((((((((`),
-			blue(String.raw`   &${red('****')}${redBright(',')}/((((((((((((((((((((`),
-			blue(String.raw`      ${red('**')}${redBright(',')}/(((((((((((((((((`),
-			blue(String.raw`            #(((((((((`)
+			bold(blueBright('      ::::    :::')),
+			bold(blueBright('     :+:+:   :+:')),
+			blueBright('    :+:+:+  +:+'),
+			blueBright('   +#+ +:+ +#+'),
+			blue('  +#+  +#+#+#'),
+			blue(' #+#   #+#+#'),
+			blue('###    ####')
 		],
 		name: [
-			blue(String.raw`            _         _         _ `),
-			blue(String.raw` _ __   ___| | _____ | | ____ _(_)`),
-			blue(String.raw`| '_ \ / _ \ |/ / _ \| |/ / _\` | |`),
-			blue(String.raw`| | | |  __/   < (_) |   < (_| | |`),
-			blue(String.raw`|_| |_|\___|_|\_\___/|_|\_\__,_|_|`)
+			blue(String.raw`     __     _         _         _`),
+			blue(String.raw`  /\ \ \___| | _____ | | ____ _(_)`),
+			blue(String.raw` /  \/ / _ \ |/ / _ \| |/ / _' | |`),
+			blue(String.raw`/ /\  /  __/   < (_) |   < (_| | |`),
+			blue(String.raw`\_\ \/ \___|_|\_\___/|_|\_\__,_|_|`)
 		],
 		extra: [`Listening on ${address}:${port}`]
 	})

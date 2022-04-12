@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
 import { err, ok } from '@sapphire/result';
-import { envParseString } from '@skyra/env-wrapper';
+import { envParseString } from '@skyra/env-utilities';
 import { Command, PieceContext, PieceOptions } from '@skyra/http-framework';
-import { resolveUserKey } from '@skyra/http-framework-i18n';
+import { CustomGet, resolveUserKey } from '@skyra/http-framework-i18n';
 import { APIApplicationCommandInteraction, APIUser, MessageFlags } from 'discord-api-types/v10';
 import { platform, release } from 'node:os';
 
@@ -16,7 +16,10 @@ export abstract class AnimeCommand extends Command {
 		this.type = options.type;
 	}
 
-	protected override async chatInputRun(interaction: APIApplicationCommandInteraction, args: AnimeCommandArgs): Command.Response {
+	protected override async chatInputRun(
+		interaction: APIApplicationCommandInteraction,
+		args: AnimeCommandArgs
+	): Promise<Command.MessageResponseResult> {
 		const query = new URL('https://api.weeb.sh/images/random');
 		query.searchParams.append('type', this.type);
 		query.searchParams.append('nsfw', 'false');
@@ -36,7 +39,7 @@ export abstract class AnimeCommand extends Command {
 		return this.message({ content, embeds: [embed.toJSON()] });
 	}
 
-	private handleError(interaction: APIApplicationCommandInteraction, error: string) {
+	private handleError(interaction: APIApplicationCommandInteraction, error: CustomGet<string, string>) {
 		const content = resolveUserKey(interaction, error);
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -55,7 +58,7 @@ export abstract class AnimeCommand extends Command {
 
 	private static readonly headers = {
 		Authorization: `Wolke ${envParseString('WEEB_SH_TOKEN')}`,
-		'User-Agent': `Skyra/${envParseString('CLIENT_VERSION')} (undici) ${platform()}/${release()} (https://github.com/skyra-project/nekokai)`
+		'User-Agent': `Skyra/${envParseString('CLIENT_VERSION')} (fetch) ${platform()}/${release()} (https://github.com/skyra-project/nekokai)`
 	} as const;
 }
 
