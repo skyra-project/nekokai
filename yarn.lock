@@ -447,27 +447,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/env-utilities@npm:0.0.3":
-  version: 0.0.3
-  resolution: "@skyra/env-utilities@npm:0.0.3"
+"@skyra/env-utilities@npm:0.0.5":
+  version: 0.0.5
+  resolution: "@skyra/env-utilities@npm:0.0.5"
   dependencies:
     dotenv-cra: ^3.0.2
-  checksum: bcde66d25e18a663636cdde06ed144f16f30f27cb3ec521aca839b5fb0364c30c3f1553d325b9f7569f51c16cab42988dbdcecd5041a77263fb491277f7fb0d0
+  checksum: 51ea8a95fd9bb7bfa5416131259bb86d55797ba3f7580b6608643f907d3749954b0033e314338283be5945dcf7318ecb36ee03521a3c60b9fdc1efd5110c5656
   languageName: node
   linkType: hard
 
-"@skyra/http-framework-i18n@npm:0.0.4":
-  version: 0.0.4
-  resolution: "@skyra/http-framework-i18n@npm:0.0.4"
+"@skyra/http-framework-i18n@npm:0.0.5":
+  version: 0.0.5
+  resolution: "@skyra/http-framework-i18n@npm:0.0.5"
   dependencies:
     "@discordjs/collection": ^0.5.0
     "@sapphire/utilities": 3.6.2
-    "@skyra/http-framework": ^0.3.1
+    "@skyra/http-framework": ^0.3.2
     "@skyra/i18next-backend": ^0.0.3
     discord-api-types: ^0.29.0
     i18next: ^21.6.16
     tslib: ^2.3.1
-  checksum: bde997e0992795413abcf1d6bd64a22b03fd6f050d4d8f6991c006dfd2334e6a06ff541d78226ea1d4a22d0cbbbd6376c0eee6ba8e1dbaf7e394c720a2292e7c
+  checksum: 99a0a391efb594a0b8d3c77da0b695f85f685afa84cbfeb6fbe72b89348f0f8b9a79d3d95e2377e313797b1dec64a334b6b42fb22b8654227423f4489207f13e
   languageName: node
   linkType: hard
 
@@ -485,6 +485,23 @@ __metadata:
     form-data: ^4.0.0
     tweetnacl: ^1.0.3
   checksum: bdebdbbaa94963142d09c091a0af6263b2d40cea35231beda1298f8689f1ff4c11eaa191d6778dc2d890c39c9da176e37cf6aafa19451e43760f6768273b41fb
+  languageName: node
+  linkType: hard
+
+"@skyra/http-framework@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@skyra/http-framework@npm:0.3.2"
+  dependencies:
+    "@discordjs/builders": 0.13.0-dev.1649505810-3c0bbac
+    "@discordjs/collection": ^0.5.0
+    "@discordjs/rest": 0.4.0-dev.1649505800-3c0bbac
+    "@sapphire/pieces": ^3.3.1
+    "@sapphire/utilities": ^3.6.2
+    discord-api-types: ^0.29.0
+    fastify: ^3.28.0
+    form-data: ^4.0.0
+    tweetnacl: ^1.0.3
+  checksum: 6c974d37fe6f4a0d6568ce19a72257238a93c5f01c6f72dd6f5570327f413ccef7989c081e5c942495c1ffcc45e0e554827d15cc4cb8442bdbe0aa7038240299
   languageName: node
   linkType: hard
 
@@ -508,11 +525,11 @@ __metadata:
     "@sapphire/prettier-config": ^1.4.2
     "@sapphire/result": ^1.1.1
     "@sapphire/ts-config": ^3.3.4
-    "@skyra/env-utilities": 0.0.3
-    "@skyra/http-framework": ^0.3.1
-    "@skyra/http-framework-i18n": 0.0.4
+    "@skyra/env-utilities": 0.0.5
+    "@skyra/http-framework": ^0.3.2
+    "@skyra/http-framework-i18n": 0.0.5
     "@skyra/shared-http-pieces": 0.0.18
-    "@skyra/start-banner": 0.0.3
+    "@skyra/start-banner": 0.0.4
     "@types/node": ^17.0.23
     "@typescript-eslint/eslint-plugin": ^5.19.0
     "@typescript-eslint/parser": ^5.19.0
@@ -544,10 +561,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/start-banner@npm:0.0.3":
-  version: 0.0.3
-  resolution: "@skyra/start-banner@npm:0.0.3"
-  checksum: fa1c8ad3df35f7325a4704715d6c22ebb092ab1216ebe874cd97ac2a3f1e6e204a5bdd83d706dcad97cf76c177b9bad8452f126a03805236c18557fa7ac6dd52
+"@skyra/start-banner@npm:0.0.4":
+  version: 0.0.4
+  resolution: "@skyra/start-banner@npm:0.0.4"
+  checksum: a0708f85507368ace009e933a6092f96690c09b10a0b29b26e96b8dcd332e6cfd5789fa958add7141eb4511c1672711a77d41b74aa9ba46b9844e8c80fe33fe8
   languageName: node
   linkType: hard
 

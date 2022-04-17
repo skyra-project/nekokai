@@ -1,3 +1,4 @@
+import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
 import { createBanner } from '@skyra/start-banner';
@@ -10,7 +11,7 @@ setup(new URL('../src/.env', import.meta.url));
 const client = new Client();
 await client.load();
 
-// await registerCommands();
+void registerCommands();
 
 const address = envParseString('HTTP_ADDRESS', '0.0.0.0');
 const port = envParseInteger('HTTP_PORT', 3000);

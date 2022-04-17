@@ -7,6 +7,8 @@ declare module '@skyra/env-utilities' {
 		HTTP_ADDRESS: string;
 		HTTP_PORT: IntegerString;
 
+		REGISTRY_GUILD_ID: string;
+
 		WEEB_SH_TOKEN: string;
 	}
 }

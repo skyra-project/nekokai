@@ -1,25 +1,22 @@
+import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
 import { err, ok } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
-import { Command, PieceContext, PieceOptions } from '@skyra/http-framework';
-import { CustomGet, resolveUserKey } from '@skyra/http-framework-i18n';
+import { Command } from '@skyra/http-framework';
+import { resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
 import { APIApplicationCommandInteraction, APIUser, MessageFlags } from 'discord-api-types/v10';
 import { platform, release } from 'node:os';
 
 export abstract class AnimeCommand extends Command {
 	private readonly type: string;
 
-	// TODO: Command.Context
-	public constructor(context: PieceContext, options: AnimeCommand.Options) {
+	public constructor(context: Command.Context, options: AnimeCommand.Options) {
 		super(context, options);
 		this.type = options.type;
 	}
 
-	protected override async chatInputRun(
-		interaction: APIApplicationCommandInteraction,
-		args: AnimeCommandArgs
-	): Promise<Command.MessageResponseResult> {
+	protected override async chatInputRun(interaction: Command.Interaction, args: AnimeCommandArgs): Promise<Command.MessageResponseResult> {
 		const query = new URL('https://api.weeb.sh/images/random');
 		query.searchParams.append('type', this.type);
 		query.searchParams.append('nsfw', 'false');
@@ -33,13 +30,13 @@ export abstract class AnimeCommand extends Command {
 		const embed = new UnsafeEmbedBuilder()
 			.setTitle('→')
 			.setURL(result.url)
-			.setColor(0x000000) // TODO: Add constant
+			.setColor(BrandingColors.Primary)
 			.setImage(result.url)
 			.setFooter({ text: LanguageKeys.Commands.Anime.PoweredByWeebSh });
 		return this.message({ content, embeds: [embed.toJSON()] });
 	}
 
-	private handleError(interaction: APIApplicationCommandInteraction, error: CustomGet<string, string>) {
+	private handleError(interaction: APIApplicationCommandInteraction, error: TypedT) {
 		const content = resolveUserKey(interaction, error);
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -63,8 +60,7 @@ export abstract class AnimeCommand extends Command {
 }
 
 export namespace AnimeCommand {
-	// TODO: Command.Options
-	export interface Options extends PieceOptions {
+	export interface Options extends Command.Options {
 		type: string;
 	}
 }
