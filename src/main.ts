@@ -1,12 +1,16 @@
 import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
+import { init, load } from '@skyra/http-framework-i18n';
 import { createBanner } from '@skyra/start-banner';
 import { blue, blueBright, bold } from 'colorette';
 
 // import '@skyra/shared-http-pieces/register';
 
 setup(new URL('../src/.env', import.meta.url));
+
+await load(new URL('../src/locales', import.meta.url));
+await init();
 
 const client = new Client();
 await client.load();

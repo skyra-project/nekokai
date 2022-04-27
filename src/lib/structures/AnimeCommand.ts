@@ -3,12 +3,12 @@ import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
 import { err, ok } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
-import { Command } from '@skyra/http-framework';
-import { resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
-import { APIApplicationCommandInteraction, APIUser, MessageFlags } from 'discord-api-types/v10';
+import { Command, TransformedArguments } from '@skyra/http-framework';
+import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
+import { APIApplicationCommandInteraction, MessageFlags } from 'discord-api-types/v10';
 import { platform, release } from 'node:os';
 
-export abstract class AnimeCommand extends Command {
+export class AnimeCommand extends Command {
 	private readonly type: string;
 
 	public constructor(context: Command.Context, options: AnimeCommand.Options) {
@@ -22,17 +22,17 @@ export abstract class AnimeCommand extends Command {
 		query.searchParams.append('nsfw', 'false');
 
 		const result = await this.get(query);
-		return result.success ? this.handleSuccess(result.value, args) : this.handleError(interaction, result.error);
+		return result.success ? this.handleSuccess(interaction, result.value, args) : this.handleError(interaction, result.error);
 	}
 
-	private handleSuccess(result: AnimeCommandFetchResult, args: AnimeCommandArgs) {
-		const content = args.user ? userMention(args.user.id) : undefined;
+	private handleSuccess(interaction: Command.Interaction, result: AnimeCommandFetchResult, args: AnimeCommandArgs) {
+		const content = args.user ? userMention(args.user.user.id) : undefined;
 		const embed = new UnsafeEmbedBuilder()
 			.setTitle('→')
 			.setURL(result.url)
 			.setColor(BrandingColors.Primary)
 			.setImage(result.url)
-			.setFooter({ text: LanguageKeys.Commands.Anime.PoweredByWeebSh });
+			.setFooter({ text: resolveKey(interaction, LanguageKeys.Commands.Anime.PoweredByWeebSh) });
 		return this.message({ content, embeds: [embed.toJSON()] });
 	}
 
@@ -60,13 +60,14 @@ export abstract class AnimeCommand extends Command {
 }
 
 export namespace AnimeCommand {
+	export type Context = Command.Context;
 	export interface Options extends Command.Options {
 		type: string;
 	}
 }
 
 interface AnimeCommandArgs {
-	user?: APIUser;
+	user?: TransformedArguments.User;
 }
 
 interface AnimeCommandFetchResult {
