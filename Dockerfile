@@ -30,7 +30,6 @@ FROM base as builder
 ENV NODE_ENV="development"
 
 COPY --chown=node:node tsconfig.base.json .
-COPY --chown=node:node scripts/ scripts/
 COPY --chown=node:node src/ src/
 
 RUN yarn install --immutable
