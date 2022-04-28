@@ -31,7 +31,7 @@
 		"@skyra/env-utilities": "0.0.7",
 		"@skyra/http-framework": "^0.3.6",
 		"@skyra/http-framework-i18n": "0.1.2",
-		"@skyra/shared-http-pieces": "0.0.23",
+		"@skyra/shared-http-pieces": "file:./package5.tgz",
 		"@skyra/start-banner": "0.0.4",
 		"discord-api-types": "^0.31.2",
 		"tslib": "^2.4.0"
@@ -80,5 +80,8 @@
 	"eslintConfig": {
 		"extends": "@sapphire"
 	},
-	"packageManager": "yarn@3.2.0"
+	"packageManager": "yarn@3.2.0",
+	"volta": {
+		"node": "18.0.0"
+	}
 }

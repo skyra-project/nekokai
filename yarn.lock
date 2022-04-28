@@ -555,7 +555,7 @@ __metadata:
     "@skyra/env-utilities": 0.0.7
     "@skyra/http-framework": ^0.3.6
     "@skyra/http-framework-i18n": 0.1.2
-    "@skyra/shared-http-pieces": 0.0.23
+    "@skyra/shared-http-pieces": "file:./package5.tgz"
     "@skyra/start-banner": 0.0.4
     "@types/node": ^17.0.29
     "@typescript-eslint/eslint-plugin": ^5.21.0
@@ -575,9 +575,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@skyra/shared-http-pieces@npm:0.0.23":
+"@skyra/shared-http-pieces@file:./package5.tgz::locator=%40skyra%2Fnekokai%40workspace%3A.":
   version: 0.0.23
-  resolution: "@skyra/shared-http-pieces@npm:0.0.23"
+  resolution: "@skyra/shared-http-pieces@file:./package5.tgz::locator=%40skyra%2Fnekokai%40workspace%3A."
   dependencies:
     "@discordjs/builders": 0.13.0
     "@discordjs/collection": ^0.6.0
@@ -585,7 +585,7 @@ __metadata:
     "@skyra/http-framework-i18n": ^0.1.2
     discord-api-types: ^0.31.2
     tslib: ^2.4.0
-  checksum: 8109ebda231de404ef94124d3b5426a865c31dc3275070cc3b4064a007c487084c0633f9cc8b1d4debf1694096a1ce9cdfb47a4b2228fe9e51c81fdab5f095db
+  checksum: 73b881c77c2a2497232540f76d52346aaf190d19c465ee4175cc905a6c189139491424c7d8b29ee31558fca014d4722a0b69a86b6431a002be8f688469e3ef49
   languageName: node
   linkType: hard
 
