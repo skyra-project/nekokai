@@ -8,5 +8,4 @@
 
 # Just Favna
 /.github/ @favna
-/.eslintrc.json @favna
 /.gitignore @favna

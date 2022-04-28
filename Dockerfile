@@ -10,7 +10,7 @@ ENV HUSKY=0
 ENV CI=true
 ENV LOG_LEVEL=info
 
-# RUN apk add --no-cache dumb-init
+RUN apk add --no-cache dumb-init
 
 COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
@@ -19,7 +19,7 @@ COPY --chown=node:node .yarn/ .yarn/
 
 RUN sed -i 's/"prepare": "husky install .github\/husky"/"prepare": ""/' ./package.json
 
-# ENTRYPOINT ["dumb-init", "--"]
+ENTRYPOINT ["dumb-init", "--"]
 
 # ================ #
 #   Builder Stage  #
@@ -43,7 +43,7 @@ RUN yarn run build
 FROM base AS runner
 
 ENV NODE_ENV="production"
-ENV NODE_OPTIONS="--enable-source-maps --experimental-fetch"
+ENV NODE_OPTIONS="--enable-source-maps"
 
 WORKDIR /usr/src/app
 
