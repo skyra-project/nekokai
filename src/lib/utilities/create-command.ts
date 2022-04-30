@@ -1,6 +1,7 @@
 import { AnimeCommand } from '#lib/structures';
 import { SlashCommandBuilder, SlashCommandUserOption } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
+import { cutText } from '@sapphire/utilities';
 import { RegisterCommand } from '@skyra/http-framework';
 import { getT, loadedLocales, type TypedT } from '@skyra/http-framework-i18n';
 
@@ -26,9 +27,27 @@ export function createCommand(options: createCommand.Options): typeof AnimeComma
 		const localeOptionDescription = `commands/anime:${name}OptionDescription` as TypedT;
 		const option = new SlashCommandUserOption()
 			.setName(defaultT(localeOptionName))
-			.setNameLocalizations(Object.fromEntries(locales.map((t, locale) => [locale, t(localeOptionName)])))
-			.setDescription(defaultT(localeOptionDescription))
-			.setDescriptionLocalizations(Object.fromEntries(locales.map((t, locale) => [locale, t(localeOptionDescription)])))
+			.setNameLocalizations(
+				Object.fromEntries(
+					locales.map(
+						(
+							t,
+							locale //
+						) => [locale, t(localeOptionName)]
+					)
+				)
+			)
+			.setDescription(cutText(defaultT(localeOptionDescription), 100))
+			.setDescriptionLocalizations(
+				Object.fromEntries(
+					locales.map(
+						(
+							t,
+							locale //
+						) => [locale, cutText(t(localeOptionDescription), 100)]
+					)
+				)
+			)
 			.setRequired(options.userRequired ?? false);
 
 		builder.addUserOption(option);
