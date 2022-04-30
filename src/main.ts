@@ -13,7 +13,7 @@ setInvite('939613684592934992', '16384');
 setup(new URL('../src/.env', import.meta.url));
 
 await load(new URL('../src/locales', import.meta.url));
-await init();
+await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false });
 
 const client = new Client();
 await client.load();
