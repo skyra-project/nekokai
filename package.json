@@ -33,6 +33,7 @@
 		"@skyra/http-framework-i18n": "0.1.2",
 		"@skyra/shared-http-pieces": "^0.0.24",
 		"@skyra/start-banner": "0.0.4",
+		"colorette": "^2.0.16",
 		"discord-api-types": "^0.31.2",
 		"tslib": "^2.4.0"
 	},
@@ -45,7 +46,6 @@
 		"@types/node": "^17.0.29",
 		"@typescript-eslint/eslint-plugin": "^5.21.0",
 		"@typescript-eslint/parser": "^5.21.0",
-		"colorette": "^2.0.16",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.14.0",
 		"eslint-config-prettier": "^8.5.0",
