@@ -47,6 +47,7 @@ ENV NODE_OPTIONS="--enable-source-maps"
 WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app/dist dist
+COPY --chown=node:node --from=builder /usr/src/app/src/locales src/locales
 
 RUN yarn workspaces focus --all --production
 
