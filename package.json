@@ -32,7 +32,7 @@
 		"@skyra/http-framework": "^0.3.7",
 		"@skyra/http-framework-i18n": "0.1.2",
 		"@skyra/shared-http-pieces": "^0.0.24",
-		"@skyra/start-banner": "0.0.4",
+		"@skyra/start-banner": "1.0.0",
 		"colorette": "^2.0.16",
 		"discord-api-types": "^0.31.2",
 		"tslib": "^2.4.0"
