@@ -25,8 +25,8 @@
 		"prepare": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@discordjs/builders": "0.14.0-dev.1652702621-5e9b757",
-		"@discordjs/collection": "0.7.0-dev.1652702622-5e9b757",
+		"@discordjs/builders": "0.14.0-dev.1653091712-fdeac9d",
+		"@discordjs/collection": "0.7.0-dev.1653091708-fdeac9d",
 		"@sapphire/result": "^1.1.1",
 		"@skyra/env-utilities": "1.0.0",
 		"@skyra/http-framework": "^0.5.0",
