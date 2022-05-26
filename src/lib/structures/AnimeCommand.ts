@@ -1,12 +1,12 @@
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
-import { err, fromAsync, ok, Result } from '@sapphire/result';
+import { err, fromAsync, ok, type Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, TransformedArguments } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
 import { APIApplicationCommandInteraction, MessageFlags } from 'discord-api-types/v10';
-import { elementAt } from 'ix/iterable/elementat';
+import { elementAt } from 'ix/iterable/elementat.js';
 import { platform, release } from 'node:os';
 import { setTimeout } from 'node:timers';
 
