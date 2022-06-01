@@ -1,15 +1,18 @@
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
-import { err, ok } from '@sapphire/result';
+import { err, fromAsync, ok, type Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, TransformedArguments } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
 import { APIApplicationCommandInteraction, MessageFlags } from 'discord-api-types/v10';
+import { elementAt } from 'ix/iterable/elementat.js';
 import { platform, release } from 'node:os';
+import { setTimeout } from 'node:timers';
 
 export class AnimeCommand extends Command {
 	private readonly type: string;
+	private readonly cache = new Set<string>();
 
 	public constructor(context: Command.Context, options: AnimeCommand.Options) {
 		super(context, options);
@@ -25,13 +28,13 @@ export class AnimeCommand extends Command {
 		return result.success ? this.handleSuccess(interaction, result.value, args) : this.handleError(interaction, result.error);
 	}
 
-	private handleSuccess(interaction: Command.Interaction, result: AnimeCommandFetchResult, args: AnimeCommandArgs) {
+	private handleSuccess(interaction: Command.Interaction, url: string, args: AnimeCommandArgs) {
 		const content = args.user ? userMention(args.user.user.id) : undefined;
 		const embed = new UnsafeEmbedBuilder()
 			.setTitle('→')
-			.setURL(result.url)
+			.setURL(url)
 			.setColor(BrandingColors.Primary)
-			.setImage(result.url)
+			.setImage(url)
 			.setFooter({ text: resolveKey(interaction, LanguageKeys.Commands.Anime.PoweredByWeebSh) });
 		return this.message({ content, embeds: [embed.toJSON()] });
 	}
@@ -41,16 +44,40 @@ export class AnimeCommand extends Command {
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private async get(url: URL) {
-		const result = await fetch(url.href, { headers: AnimeCommand.headers });
-		if (result.ok) return ok((await result.json()) as AnimeCommandFetchResult);
+	private async get(url: URL): Promise<Result<string, TypedT>> {
+		// We will abort requests that take longer than 2 seconds, to be safe with the 3 second limit:
+		const abort = new AbortController();
+		const timer = setTimeout(() => abort.abort('TimeoutError'), 2000);
 
-		// If we received a 5XX code error, warn the user about the service's unavailability.
-		if (result.status >= 500) return err(LanguageKeys.Commands.Anime.UnavailableError);
+		const result = await fromAsync(fetch(url.href, { headers: AnimeCommand.headers, signal: abort.signal }));
+		clearTimeout(timer);
 
-		// If otherwise we got an 4XX error code, warn the user about unexpected error.
-		console.error(`Unexpected error in ${this.name}: [${result.status}] ${await result.text()}`);
-		return err(LanguageKeys.Commands.Anime.UnexpectedError);
+		// Handle cases in which we have a Response:
+		if (result.success) {
+			const response = result.value;
+
+			// If 2XX, deserialize the data, cache the URL, and return it:
+			if (response.ok) {
+				const data = (await response.json()) as AnimeCommandFetchResult;
+				this.cache.add(data.url);
+				return ok(data.url);
+			}
+
+			// If we got an 4XX error code, warn the error:
+			if (response.status < 500) {
+				console.error(`Unexpected error in ${this.name}: [${response.status}] ${await response.text()}`);
+			}
+		}
+
+		if (this.cache.size === 0) {
+			const key =
+				result.success && result.value.status >= 500
+					? LanguageKeys.Commands.Anime.UnavailableError
+					: LanguageKeys.Commands.Anime.UnexpectedError;
+			return err(key);
+		}
+
+		return ok(elementAt(this.cache.values(), Math.floor(Math.random() * this.cache.size))!);
 	}
 
 	private static readonly headers = {

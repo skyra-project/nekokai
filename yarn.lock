@@ -553,6 +553,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.0.0
     husky: ^8.0.1
+    ix: ^4.5.2
     lint-staged: ^12.4.1
     prettier: ^2.6.2
     pretty-quick: ^3.1.3
@@ -635,6 +636,13 @@ __metadata:
   version: 17.0.35
   resolution: "@types/node@npm:17.0.35"
   checksum: 7a24946ae7fd20267ed92466384f594e448bfb151081158d565cc635d406ecb29ea8fb85fcd2a1f71efccf26fb5bd3c6f509bde56077eb8b832b847a6664bc62
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^13.7.4":
+  version: 13.13.52
+  resolution: "@types/node@npm:13.13.52"
+  checksum: 8f1afff497ebeba209e2dc340d823284e087a47632afe99a7daa30eaff80893e520f222ad400cd1f2d3b8288e93cf3eaded52a8e64eaefb8aacfe6c35de98f42
   languageName: node
   linkType: hard
 
@@ -2512,6 +2520,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ix@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "ix@npm:4.5.2"
+  dependencies:
+    "@types/node": ^13.7.4
+    tslib: ^2.3.0
+  checksum: 0249ae35eee3f40c4bb9f9e3244f82071ef2b86a374cd4407b16b02f3aaa0bca00302c7a9c3bdb1686e3c901bfec3e8a770df7f7601998dbf2f59a0151e5a4b5
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -3946,7 +3964,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0":
+"tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
