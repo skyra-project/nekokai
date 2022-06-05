@@ -25,8 +25,8 @@
 		"postinstall": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@discordjs/builders": "0.14.0-dev.1653480270-68d5169",
-		"@discordjs/collection": "0.7.0-dev.1653480253-68d5169",
+		"@discordjs/builders": "0.14.0",
+		"@discordjs/collection": "0.7.0",
 		"@sapphire/result": "^1.1.1",
 		"@skyra/env-utilities": "1.0.0",
 		"@skyra/http-framework": "^0.5.2",
