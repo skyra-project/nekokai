@@ -1,7 +1,7 @@
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
-import { err, fromAsync, ok, type Result } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, TransformedArguments } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
@@ -25,7 +25,10 @@ export class AnimeCommand extends Command {
 		query.searchParams.append('nsfw', 'false');
 
 		const result = await this.get(query);
-		return result.success ? this.handleSuccess(interaction, result.value, args) : this.handleError(interaction, result.error);
+		return result.match({
+			ok: (value) => this.handleSuccess(interaction, value, args),
+			err: (error) => this.handleError(interaction, error)
+		});
 	}
 
 	private handleSuccess(interaction: Command.Interaction, url: string, args: AnimeCommandArgs) {
@@ -49,18 +52,18 @@ export class AnimeCommand extends Command {
 		const abort = new AbortController();
 		const timer = setTimeout(() => abort.abort('TimeoutError'), 2000);
 
-		const result = await fromAsync(fetch(url.href, { headers: AnimeCommand.headers, signal: abort.signal }));
+		const result = await Result.fromAsync(fetch(url.href, { headers: AnimeCommand.headers, signal: abort.signal }));
 		clearTimeout(timer);
 
 		// Handle cases in which we have a Response:
-		if (result.success) {
-			const response = result.value;
+		if (result.isOk()) {
+			const response = result.unwrap();
 
 			// If 2XX, deserialize the data, cache the URL, and return it:
 			if (response.ok) {
 				const data = (await response.json()) as AnimeCommandFetchResult;
 				this.cache.add(data.url);
-				return ok(data.url);
+				return Result.ok(data.url);
 			}
 
 			// If we got an 4XX error code, warn the error:
@@ -70,14 +73,13 @@ export class AnimeCommand extends Command {
 		}
 
 		if (this.cache.size === 0) {
-			const key =
-				result.success && result.value.status >= 500
-					? LanguageKeys.Commands.Anime.UnavailableError
-					: LanguageKeys.Commands.Anime.UnexpectedError;
-			return err(key);
+			const key = result.isOkAnd((value) => value.status >= 500)
+				? LanguageKeys.Commands.Anime.UnavailableError
+				: LanguageKeys.Commands.Anime.UnexpectedError;
+			return Result.err(key);
 		}
 
-		return ok(elementAt(this.cache.values(), Math.floor(Math.random() * this.cache.size))!);
+		return Result.ok(elementAt(this.cache.values(), Math.floor(Math.random() * this.cache.size))!);
 	}
 
 	private static readonly headers = {
