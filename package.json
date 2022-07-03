@@ -27,7 +27,7 @@
 	"dependencies": {
 		"@discordjs/builders": "0.16.0-dev.1656158607-c4653f9",
 		"@discordjs/collection": "0.8.0-dev.1656158612-c4653f9",
-		"@sapphire/result": "^1.1.1",
+		"@sapphire/result": "^2.0.1",
 		"@skyra/env-utilities": "1.0.1",
 		"@skyra/http-framework": "^0.5.8",
 		"@skyra/http-framework-i18n": "0.1.13",
