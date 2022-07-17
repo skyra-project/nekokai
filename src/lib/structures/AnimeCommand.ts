@@ -1,6 +1,6 @@
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { UnsafeEmbedBuilder, userMention } from '@discordjs/builders';
+import { EmbedBuilder, userMention } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, TransformedArguments } from '@skyra/http-framework';
@@ -33,7 +33,7 @@ export class AnimeCommand extends Command {
 
 	private handleSuccess(interaction: Command.Interaction, url: string, args: AnimeCommandArgs) {
 		const content = args.user ? userMention(args.user.user.id) : undefined;
-		const embed = new UnsafeEmbedBuilder()
+		const embed = new EmbedBuilder()
 			.setTitle('→')
 			.setURL(url)
 			.setColor(BrandingColors.Primary)
