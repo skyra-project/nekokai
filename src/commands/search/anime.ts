@@ -2,19 +2,19 @@ import { fetchAniListApi, getAnime, parseAniListDescription } from '#lib/apis/an
 import type { Media } from '#lib/apis/anilist/Anlist';
 import type { Kitsu } from '#lib/apis/kitsu/Kitsu';
 import { fetchKitsuApi } from '#lib/apis/kitsu/kitsu-constants';
+import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { RedisKeys } from '#lib/redis-cache/RedisCacheClient';
-import { apply } from '#lib/utilities/add-builder-localizations';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { buildAnimeSubcommand, checkIsKitsuSubcommand } from '#lib/utilities/search-command-helpers';
 import { minutes } from '#lib/utilities/time-utilities';
 import { bold, EmbedBuilder, hideLinkEmbed, hyperlink, time, TimestampStyles } from '@discordjs/builders';
 import { cutText, filterNullish, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { AutocompleteInteractionArguments, Command, InteractionArguments, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
-import { getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
+import { applyLocalizedBuilder, getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
 import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
-@RegisterCommand((builder) => apply(builder, LanguageKeys.Common.AnimeName, LanguageKeys.Common.AnimeDescription))
+@RegisterCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Common.AnimeName, LanguageKeys.Common.AnimeDescription))
 export class UserCommand extends Command {
 	public override async autocompleteRun(
 		autocompleteInteraction: Command.AutocompleteInteraction,
@@ -105,6 +105,7 @@ export class UserCommand extends Command {
 		const embedData = t(LanguageKeys.Commands.Kitsu.Anime.EmbedData);
 
 		const embed = new EmbedBuilder()
+			.setColor(BrandingColors.Primary)
 			.setTitle(title)
 			.setURL(animeURL)
 			.setDescription(
@@ -213,6 +214,7 @@ export class UserCommand extends Command {
 		return {
 			embeds: [
 				embed
+					.setColor(BrandingColors.Primary)
 					.setTitle(media.title?.english ?? media.title?.romaji ?? media.title?.native ?? '') //
 					.setDescription(description.join('\n'))
 					.setImage(`https://img.anili.st/media/${media.id}`)

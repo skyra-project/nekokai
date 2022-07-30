@@ -1,8 +1,8 @@
 import type { AniListResponse } from '#lib/apis/anilist/anilist-constants';
 import type { Kitsu } from '#lib/apis/kitsu/Kitsu';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { apply } from '#lib/utilities/add-builder-localizations';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import { applyLocalizedBuilder } from '@skyra/http-framework-i18n';
 
 export function buildMangaSubcommand(name: 'kitsu' | 'anilist') {
 	return buildSubcommand(name, 'manga');
@@ -27,9 +27,9 @@ function buildSubcommand(name: 'kitsu' | 'anilist', animeOrManga: 'anime' | 'man
 			? LanguageKeys.Commands.AniList.Anime.RootDescription
 			: LanguageKeys.Commands.AniList.Manga.RootDescription;
 
-	return apply(new SlashCommandSubcommandBuilder(), resolvedName, resolvedDescription) //
+	return applyLocalizedBuilder(new SlashCommandSubcommandBuilder(), resolvedName, resolvedDescription) //
 		.addStringOption((option) =>
-			apply(option, animeOrManga === 'anime' ? LanguageKeys.Common.OptionsAnime : LanguageKeys.Common.OptionsManga) //
+			applyLocalizedBuilder(option, animeOrManga === 'anime' ? LanguageKeys.Common.OptionsAnime : LanguageKeys.Common.OptionsManga) //
 				.setRequired(true)
 				.setAutocomplete(true)
 		);

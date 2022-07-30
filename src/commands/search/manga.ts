@@ -5,17 +5,16 @@ import { fetchKitsuApi } from '#lib/apis/kitsu/kitsu-constants';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { RedisKeys } from '#lib/redis-cache/RedisCacheClient';
-import { apply } from '#lib/utilities/add-builder-localizations';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { buildMangaSubcommand, checkIsKitsuSubcommand } from '#lib/utilities/search-command-helpers';
 import { minutes } from '#lib/utilities/time-utilities';
 import { bold, EmbedBuilder, hideLinkEmbed, hyperlink, time, TimestampStyles } from '@discordjs/builders';
 import { cutText, filterNullish, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { AutocompleteInteractionArguments, Command, InteractionArguments, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
-import { getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
+import { applyLocalizedBuilder, getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
 import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
-@RegisterCommand((builder) => apply(builder, LanguageKeys.Common.MangaName, LanguageKeys.Common.MangaDescription))
+@RegisterCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Common.MangaName, LanguageKeys.Common.MangaDescription))
 export class UserCommand extends Command {
 	public override autocompleteRun(autocompleteInteraction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		if (!options.subCommand || options.focused !== 'manga' || isNullishOrEmpty(options.manga)) {
@@ -206,6 +205,7 @@ export class UserCommand extends Command {
 		return {
 			embeds: [
 				embed
+					.setColor(BrandingColors.Primary)
 					.setTitle(media.title?.english ?? media.title?.romaji ?? media.title?.native ?? '') //
 					.setDescription(description.join('\n'))
 					.setImage(`https://img.anili.st/media/${media.id}`)
