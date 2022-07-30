@@ -239,7 +239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/builders@npm:1.1.0, @discordjs/builders@npm:^1.1.0":
+"@discordjs/builders@npm:^1.1.0":
   version: 1.1.0
   resolution: "@discordjs/builders@npm:1.1.0"
   dependencies:
@@ -252,7 +252,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/collection@npm:1.0.1, @discordjs/collection@npm:^1.0.0, @discordjs/collection@npm:^1.0.1":
+"@discordjs/collection@npm:^1.0.0, @discordjs/collection@npm:^1.0.1":
   version: 1.0.1
   resolution: "@discordjs/collection@npm:1.0.1"
   checksum: 6477ae9870f3c069b190f673a6b34467930b409a6d763f1b0d4f6169051b8499d03de7b0e7e4c3697222845aea6d94283573ad6a488b50516764df675915ff44
@@ -493,26 +493,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/env-utilities@npm:1.0.2":
+"@skyra/env-utilities@npm:^1.0.2":
   version: 1.0.2
   resolution: "@skyra/env-utilities@npm:1.0.2"
   dependencies:
     dotenv-cra: ^3.0.2
   checksum: 21afca53bfdf3dc5845b95d0c56f20bafe5e9738b29dbdf7f67bee34d86a2f3c1d75b1eb6bed2bc8c32ddd07c5a345f3d67fb3c22c57e821c667ae3da283f60e
-  languageName: node
-  linkType: hard
-
-"@skyra/http-framework-i18n@npm:0.2.0":
-  version: 0.2.0
-  resolution: "@skyra/http-framework-i18n@npm:0.2.0"
-  dependencies:
-    "@discordjs/collection": ^1.0.1
-    "@sapphire/utilities": ^3.8.0
-    "@skyra/i18next-backend": ^1.0.2
-    discord-api-types: ^0.36.3
-    i18next: ^21.8.16
-    tslib: ^2.4.0
-  checksum: 855ebbee2319c39535f6c89174a335d2bab2156edde7a5553b6d5f01e212a5fa681b3773e89bf329fb28e66c56f3ea806e665bbb763e1c0198bdb7a1fad48ae3
   languageName: node
   linkType: hard
 
@@ -527,6 +513,20 @@ __metadata:
     i18next: ^21.8.16
     tslib: ^2.4.0
   checksum: 1ff8d054399111f0fb6a43a1db435decc9bec3bece015fa9d8c95a2308b309eb0ceb51e8bffc421efe699d363faa440740b69645d6d3f94306f92d798f1e97b7
+  languageName: node
+  linkType: hard
+
+"@skyra/http-framework-i18n@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@skyra/http-framework-i18n@npm:0.2.0"
+  dependencies:
+    "@discordjs/collection": ^1.0.1
+    "@sapphire/utilities": ^3.8.0
+    "@skyra/i18next-backend": ^1.0.2
+    discord-api-types: ^0.36.3
+    i18next: ^21.8.16
+    tslib: ^2.4.0
+  checksum: 855ebbee2319c39535f6c89174a335d2bab2156edde7a5553b6d5f01e212a5fa681b3773e89bf329fb28e66c56f3ea806e665bbb763e1c0198bdb7a1fad48ae3
   languageName: node
   linkType: hard
 
@@ -579,26 +579,26 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.0.3
     "@commitlint/config-conventional": ^17.0.3
-    "@discordjs/builders": 1.1.0
-    "@discordjs/collection": 1.0.1
+    "@discordjs/builders": ^1.1.0
+    "@discordjs/collection": ^1.0.1
     "@sapphire/eslint-config": ^4.3.7
     "@sapphire/prettier-config": ^1.4.3
     "@sapphire/result": ^2.1.1
     "@sapphire/time-utilities": ^1.7.5
     "@sapphire/ts-config": ^3.3.4
     "@sapphire/utilities": ^3.8.0
-    "@skyra/env-utilities": 1.0.2
+    "@skyra/env-utilities": ^1.0.2
     "@skyra/http-framework": ^0.7.0
-    "@skyra/http-framework-i18n": 0.2.0
+    "@skyra/http-framework-i18n": ^0.2.0
     "@skyra/shared-http-pieces": ^0.0.39
-    "@skyra/start-banner": 1.0.2
+    "@skyra/start-banner": ^1.0.2
     "@types/he": ^1.1.2
     "@types/node": ^18.6.2
     "@typescript-eslint/eslint-plugin": ^5.31.0
     "@typescript-eslint/parser": ^5.31.0
     colorette: ^2.0.19
     cz-conventional-changelog: ^3.3.0
-    discord-api-types: 0.36.3
+    discord-api-types: ^0.36.3
     eslint: ^8.20.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
@@ -628,7 +628,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/start-banner@npm:1.0.2":
+"@skyra/start-banner@npm:^1.0.2":
   version: 1.0.2
   resolution: "@skyra/start-banner@npm:1.0.2"
   checksum: d2937cc093e200fb7e0fdc0612667be574bd6f9d20f9d64d3c96914efa637ebbafa34d07d9e03c2fe422f40443aea7b3c2ccf4a4389732832623b580decf616a
@@ -1594,7 +1594,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:0.36.3, discord-api-types@npm:^0.36.3":
+"discord-api-types@npm:^0.36.3":
   version: 0.36.3
   resolution: "discord-api-types@npm:0.36.3"
   checksum: 3089c0fb37425dc5df03c76d82988d43fcc272699b06a02fc830d0a3bef550009aaebdf6d646529e8a7ccea76ae3f43b099d736ea5ef37a0be143142ab49871d
