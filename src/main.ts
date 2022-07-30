@@ -1,3 +1,4 @@
+import { RedisCacheClient } from '#lib/redis-cache/RedisCacheClient';
 import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
@@ -13,7 +14,9 @@ setInvite('939613684592934992', '16384');
 setup(new URL('../src/.env', import.meta.url));
 
 await load(new URL('../src/locales', import.meta.url));
-await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false });
+await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false, returnObjects: true });
+
+new RedisCacheClient();
 
 const client = new Client();
 await client.load();
