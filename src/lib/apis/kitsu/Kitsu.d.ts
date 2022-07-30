@@ -57,11 +57,11 @@ export namespace Kitsu {
 	}
 
 	interface Description {
-		en: string;
-		en_jp: string;
-		en_us: string;
-		ja_jp: string;
-		[key: string]: string;
+		en?: string;
+		en_jp?: string;
+		en_us?: string;
+		ja_jp?: string;
+		[key: string]: string | undefined;
 	}
 
 	interface AlgoliaResult<T> {

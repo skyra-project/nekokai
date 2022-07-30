@@ -25,9 +25,7 @@ export class UserCommand extends Command {
 		}
 
 		const result = await fetchKitsuApi('anime', options.anime);
-
 		return result.match({
-			err: () => this.autocompleteNoResults(),
 			ok: async (value) => {
 				const redisInsertPromises: Promise<'OK'>[] = [];
 				const results: APIApplicationCommandOptionChoice[] = [];
@@ -50,7 +48,8 @@ export class UserCommand extends Command {
 				return this.autocomplete({
 					choices: results.slice(0, 19)
 				});
-			}
+			},
+			err: () => this.autocompleteNoResults()
 		});
 	}
 
@@ -65,14 +64,11 @@ export class UserCommand extends Command {
 		const result = await fetchKitsuApi('anime', packageFromAutocomplete ?? anime, 1);
 
 		return result.match({
-			err: () => this.handleError(interaction),
-			ok: (value) => {
-				if (!value.hits?.[0]) {
-					return this.handleError(interaction);
-				}
-
-				return this.buildResponse(value.hits[0], interaction);
-			}
+			ok: (value) =>
+				isNullishOrEmpty(value.hits) //
+					? this.handleError(interaction)
+					: this.buildResponse(value.hits[0], interaction),
+			err: () => this.handleError(interaction)
 		});
 	}
 
@@ -98,9 +94,9 @@ export class UserCommand extends Command {
 		const type = entry.subtype;
 		const title = entry.titles.en || entry.titles.en_jp || entry.canonicalTitle || '--';
 
-		const [englishTitle, japaneseTitle, canonicalTitle] = [entry.titles.en || entry.titles.en_us, entry.titles.ja_jp, entry.canonicalTitle].map(
-			(title) => title || t(LanguageKeys.Common.None)
-		);
+		const englishTitle = entry.titles.en || entry.titles.en_us || t(LanguageKeys.Common.None);
+		const japaneseTitle = entry.titles.ja_jp || t(LanguageKeys.Common.None);
+		const canonicalTitle = entry.canonicalTitle || t(LanguageKeys.Common.None);
 
 		const embedData = t(LanguageKeys.Commands.Kitsu.Anime.EmbedData);
 
@@ -158,9 +154,7 @@ export class UserCommand extends Command {
 			.setFooter({ text: '© kitsu.io' })
 			.toJSON();
 
-		return this.message({
-			embeds: [embed]
-		});
+		return this.message({ embeds: [embed] });
 	}
 
 	private handleError(interaction: Command.Interaction) {
