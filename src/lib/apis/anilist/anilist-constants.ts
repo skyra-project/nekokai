@@ -3,7 +3,13 @@ import { Result } from '@sapphire/result';
 import { cutText } from '@sapphire/utilities';
 import he from 'he';
 
-const MediaFragment = gql`
+export interface AniListResponse {
+	data: {
+		Page: Page;
+	};
+}
+
+const MediaFragment = `
 	fragment MediaFragment on Media {
 		id
 		title {
@@ -51,7 +57,7 @@ const htmlEntityReplacements = Object.freeze({
 	u: '__'
 } as const);
 
-export const getAnime = gql`
+export const getAnime = `
 	${MediaFragment}
 
 	query getAnime($search: String!) {
@@ -64,7 +70,7 @@ export const getAnime = gql`
 	}
 `;
 
-export const getManga = gql`
+export const getManga = `
 	${MediaFragment}
 
 	query getManga($search: String!) {
@@ -107,23 +113,4 @@ export function parseAniListDescription(description: string) {
 			.replace(excessiveNewLinesRegex, '\n\n'),
 		500
 	);
-}
-
-/**
- * Fake GraphQL tag that just returns everything passed in as a single combined string
- * @remark used to trick the GraphQL parser into treating some code as GraphQL parsable data for syntax checking
- * @param gqlData data to pass off as GraphQL code
- */
-function gql(...args: any[]): string {
-	return args[0].reduce((acc: string, str: string, idx: number) => {
-		acc += str;
-		if (Reflect.has(args, idx + 1)) acc += args[idx + 1];
-		return acc;
-	}, '');
-}
-
-export interface AniListResponse {
-	data: {
-		Page: Page;
-	};
 }

@@ -1,5 +1,4 @@
 {
-	"subcommandName": "anilist",
 	"animeDescription": "Get data for any anime on AniList.",
 	"embedTitles": {
 		"chapters": "Amount of chapters",
@@ -12,5 +11,6 @@
 		"romajiName": "Romanized name",
 		"volumes": "Amount of volumes"
 	},
-	"mangaDescription": "Get data for any manga on AniList."
+	"mangaDescription": "Get data for any manga on AniList.",
+	"subcommandName": "anilist"
 }
