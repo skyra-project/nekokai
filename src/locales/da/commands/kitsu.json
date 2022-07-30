@@ -1,0 +1,42 @@
+{
+	"animeDescription": "",
+	"animeEmbedData": {
+		"ageRating": "",
+		"episodeLength": "",
+		"episodes": "",
+		"firstAirDate": "",
+		"score": "",
+		"stillAiring": "",
+		"type": "",
+		"watchIt": ""
+	},
+	"animeEpisodeCount": "",
+	"animeOutputDescription": "",
+	"animeTypes": {
+		"movie": "",
+		"music": "",
+		"ona": "",
+		"ova": "",
+		"special": "",
+		"tv": ""
+	},
+	"mangaDescription": "",
+	"mangaEmbedData": {
+		"ageRating": "",
+		"firstPublishDate": "",
+		"readIt": "",
+		"score": "",
+		"type": ""
+	},
+	"mangaOutputDescription": "",
+	"mangaTypes": {
+		"doujin": "",
+		"manga": "",
+		"manhua": "",
+		"manhwa": "",
+		"novel": "",
+		"oel": "",
+		"oneshot": ""
+	},
+	"subcommandName": ""
+}
