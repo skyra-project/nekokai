@@ -1,0 +1,38 @@
+{
+	"animeDescription": "Get data for any anime on Kitsu.",
+	"animeEmbedData": {
+		"ageRating": "Age rating",
+		"episodeLength": "Episode length",
+		"episodes": "Episode(s)",
+		"firstAirDate": "First air date",
+		"score": "Score",
+		"stillAiring": "Still airing",
+		"type": "Type",
+		"watchIt": "Watch it here:"
+	},
+	"animeName": "kitsu-anime",
+	"animeOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
+	"animeTypes": {
+		"movie": "🎥 Movie",
+		"ova": "📼 Original Video Animation",
+		"special": "🎴 Special",
+		"tv": "📺 TV"
+	},
+	"mangaDescription": "Get data for any manga on Kitsu.",
+	"mangaEmbedData": {
+		"ageRating": "Age Rating",
+		"firstPublishDate": "First published on",
+		"readIt": "Read it here:",
+		"score": "Score",
+		"type": "Subtype"
+	},
+	"mangaName": "kitsu-manga",
+	"mangaOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
+	"mangaTypes": {
+		"manga": "📘 Manga",
+		"manhwa": "🇰🇷 Manhwa",
+		"novel": "📕 Novel",
+		"oneShot": "☄ One Shot",
+		"special": "🎴 Special"
+	}
+}
