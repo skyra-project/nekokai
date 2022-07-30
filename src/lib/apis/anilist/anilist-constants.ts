@@ -1,4 +1,4 @@
-import type { Page } from '#lib/apis/anilist/Anlist';
+import type { Page } from '#lib/apis/anilist/anilist-types';
 import { Result } from '@sapphire/result';
 import { cutText } from '@sapphire/utilities';
 import he from 'he';

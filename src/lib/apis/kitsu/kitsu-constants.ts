@@ -1,4 +1,4 @@
-import type { Kitsu } from '#lib/apis/kitsu/Kitsu';
+import type { Kitsu } from '#lib/apis/kitsu/kitsu-types';
 import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { stringify } from 'node:querystring';

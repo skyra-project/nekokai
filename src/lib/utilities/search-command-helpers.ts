@@ -1,5 +1,5 @@
 import type { AniListResponse } from '#lib/apis/anilist/anilist-constants';
-import type { Kitsu } from '#lib/apis/kitsu/Kitsu';
+import type { Kitsu } from '#lib/apis/kitsu/kitsu-types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { applyLocalizedBuilder } from '@skyra/http-framework-i18n';

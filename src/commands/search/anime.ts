@@ -1,6 +1,6 @@
 import { fetchAniListApi, getAnime, parseAniListDescription } from '#lib/apis/anilist/anilist-constants';
-import type { Media } from '#lib/apis/anilist/Anlist';
-import type { Kitsu } from '#lib/apis/kitsu/Kitsu';
+import type { Media } from '#lib/apis/anilist/anilist-types';
+import type { Kitsu } from '#lib/apis/kitsu/kitsu-types';
 import { fetchKitsuApi } from '#lib/apis/kitsu/kitsu-constants';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
@@ -255,7 +255,7 @@ export class UserCommand extends Command {
 				}
 
 				return this.autocomplete({
-					choices: results.slice(0, 19)
+					choices: results.slice(0, 24)
 				});
 			},
 			err: () => this.autocompleteNoResults()
@@ -297,7 +297,7 @@ export class UserCommand extends Command {
 				}
 
 				return this.autocomplete({
-					choices: results.slice(0, 19)
+					choices: results.slice(0, 24)
 				});
 			},
 			err: () => this.autocompleteNoResults()
