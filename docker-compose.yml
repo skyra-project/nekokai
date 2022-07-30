@@ -1,4 +1,4 @@
-version: '2.4'
+version: '3.9'
 
 services:
   redis:
@@ -12,4 +12,3 @@ services:
       options:
         max-size: '20m'
         max-file: '3'
-
