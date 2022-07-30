@@ -10,6 +10,7 @@
 		"type": "Type",
 		"watchIt": "Watch it here:"
 	},
+	"animeEpisodeCount": "{{episodeCount, number(maximumFractionDigits: 2)}}",
 	"animeName": "kitsu-anime",
 	"animeOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
 	"animeTypes": {

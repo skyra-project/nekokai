@@ -27,6 +27,7 @@
 		"@discordjs/builders": "1.0.0",
 		"@discordjs/collection": "1.0.0",
 		"@sapphire/result": "^2.0.1",
+		"@sapphire/time-utilities": "^1.7.5",
 		"@sapphire/utilities": "^3.7.0",
 		"@skyra/env-utilities": "1.0.2",
 		"@skyra/http-framework": "^0.6.2",
