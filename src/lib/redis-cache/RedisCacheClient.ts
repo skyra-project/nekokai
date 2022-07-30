@@ -23,17 +23,20 @@ export class RedisCacheClient extends Redis {
 		container.redisCache = this;
 	}
 
-	public async fetch<T>(key: RedisKeys, query: string, nthResult: string): Promise<T | null> {
+	public async fetch<T>(key: RedisKeys, userId: string | undefined, query: string, nthResult: string): Promise<T | null> {
+		const resolvedUserId = userId ? `:${userId}` : '';
+
 		const result = await Result.fromAsync<T | null>(async () => {
-			const raw = await this.get(`${key}:${query}:${nthResult}`);
+			const raw = await this.get(`${key}${resolvedUserId}:${query}:${nthResult}`);
 			return isNullish(raw) ? raw : JSON.parse(raw);
 		});
 
 		return result.unwrapOr(null);
 	}
 
-	public insertFor60Seconds<T>(key: RedisKeys, query: string, nthResult: string, data: T) {
-		return this.setex(`${key}:${query}:${nthResult}`, 60, JSON.stringify(data));
+	public insertFor60Seconds<T>(key: RedisKeys, userId: string | undefined, query: string, nthResult: string, data: T) {
+		const resolvedUserId = userId ? `:${userId}` : '';
+		return this.setex(`${key}${resolvedUserId}:${query}:${nthResult}`, 60, JSON.stringify(data));
 	}
 }
 

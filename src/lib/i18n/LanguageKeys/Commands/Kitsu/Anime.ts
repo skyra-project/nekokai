@@ -1,7 +1,7 @@
 import { FT, T } from '@skyra/http-framework-i18n';
 
-export const RootName = T('commands/kitsu:animeName');
 export const RootDescription = T('commands/kitsu:animeDescription');
+
 export const EmbedData = T<{
 	type: string;
 	score: string;
@@ -18,5 +18,3 @@ export const OutputDescription = FT<{ englishTitle: string; japaneseTitle: strin
 );
 
 export const Types = T<{ tv: string; movie: string; ova: string; special: string; [index: string]: string }>('commands/kitsu:animeTypes');
-
-export const EpisodeCount = FT<{ episodeCount: number }, string>('commands/kitsu:animeEpisodeCount');

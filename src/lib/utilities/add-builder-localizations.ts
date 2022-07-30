@@ -1,6 +1,6 @@
-import { lazy } from '#lib/common/lazy';
 import { Collection } from '@discordjs/collection';
 import type { NonNullObject } from '@sapphire/utilities';
+import { lazy } from '@sapphire/utilities';
 import { getT, loadedLocales, type TypedT } from '@skyra/http-framework-i18n';
 import type { LocalizationMap } from 'discord-api-types/v10';
 

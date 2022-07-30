@@ -1,9 +1,7 @@
 {
+	"subcommandName": "anilist",
 	"animeDescription": "Get data for any anime on AniList.",
-	"animeError": "An error occurred while trying to find the anime. Try again or contact the developer by joining [the support server](<https://join.skyra.pw>)",
-	"animeQueryFail": "I am sorry, but that query failed. Are you sure `{{search}}` is actually an anime?",
 	"embedTitles": {
-		"adultContent": "Includes adult content",
 		"chapters": "Amount of chapters",
 		"countryOfOrigin": "Country of origin",
 		"englishName": "English name",
@@ -14,8 +12,5 @@
 		"romajiName": "Romanized name",
 		"volumes": "Amount of volumes"
 	},
-	"mangaDescription": "Get data for any manga on AniList.",
-	"mangaError": "An error occurred while trying to find the manga. Try again or contact the developer by joining [the support server](<https://join.skyra.pw>)",
-	"mangaQueryFail": "I am sorry, but that query failed. Are you sure `{{search}}` is actually an manga?",
-	"queryOnlyNsfw": "I am sorry, but {{search}} only returned NSFW results which are not allowed here. Why don't you try searching that in an NSFW channel?"
+	"mangaDescription": "Get data for any manga on AniList."
 }

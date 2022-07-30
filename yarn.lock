@@ -239,7 +239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/builders@npm:1.1.0, @discordjs/builders@npm:^1.0.0":
+"@discordjs/builders@npm:1.1.0, @discordjs/builders@npm:^1.1.0":
   version: 1.1.0
   resolution: "@discordjs/builders@npm:1.1.0"
   dependencies:
@@ -259,7 +259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/rest@npm:^1.0.0":
+"@discordjs/rest@npm:^1.0.1":
   version: 1.0.1
   resolution: "@discordjs/rest@npm:1.0.1"
   dependencies:
@@ -423,7 +423,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/pieces@npm:^3.3.4":
+"@sapphire/pieces@npm:^3.3.5":
   version: 3.3.5
   resolution: "@sapphire/pieces@npm:3.3.5"
   dependencies:
@@ -493,6 +493,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/utilities@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "@sapphire/utilities@npm:3.8.0"
+  checksum: 5b7520bcce6abf743bdf393783bed7b003e2fe6e6473a8325c00ee1df8c7eb6325ec0a307435345627b609146ca0555e5169545af41c7b3a71dcf6f7b87339f3
+  languageName: node
+  linkType: hard
+
 "@skyra/env-utilities@npm:1.0.2":
   version: 1.0.2
   resolution: "@skyra/env-utilities@npm:1.0.2"
@@ -502,35 +509,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/http-framework-i18n@npm:0.1.16, @skyra/http-framework-i18n@npm:^0.1.16":
-  version: 0.1.16
-  resolution: "@skyra/http-framework-i18n@npm:0.1.16"
+"@skyra/http-framework-i18n@npm:0.1.17, @skyra/http-framework-i18n@npm:^0.1.17":
+  version: 0.1.17
+  resolution: "@skyra/http-framework-i18n@npm:0.1.17"
   dependencies:
-    "@discordjs/collection": ^1.0.0
+    "@discordjs/collection": ^1.0.1
     "@sapphire/utilities": ^3.7.0
-    "@skyra/http-framework": ^0.6.2
     "@skyra/i18next-backend": ^1.0.2
     discord-api-types: ^0.36.3
-    i18next: ^21.8.14
+    i18next: ^21.8.16
     tslib: ^2.4.0
-  checksum: 209f58c17e402d07a8716e9f8bfba9bd53a932fb8fb36b579478e8ce403b683956d2ded62e26a4195f1ed4e8f18081391b2d43c3262efe547bbf2f947381b4a2
+  checksum: 1ff8d054399111f0fb6a43a1db435decc9bec3bece015fa9d8c95a2308b309eb0ceb51e8bffc421efe699d363faa440740b69645d6d3f94306f92d798f1e97b7
   languageName: node
   linkType: hard
 
-"@skyra/http-framework@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "@skyra/http-framework@npm:0.6.2"
+"@skyra/http-framework@npm:^0.6.3":
+  version: 0.6.3
+  resolution: "@skyra/http-framework@npm:0.6.3"
   dependencies:
-    "@discordjs/builders": ^1.0.0
-    "@discordjs/collection": ^1.0.0
-    "@discordjs/rest": ^1.0.0
-    "@sapphire/pieces": ^3.3.4
+    "@discordjs/builders": ^1.1.0
+    "@discordjs/collection": ^1.0.1
+    "@discordjs/rest": ^1.0.1
+    "@sapphire/pieces": ^3.3.5
     "@sapphire/utilities": ^3.7.0
     discord-api-types: ^0.36.3
     fastify: ^4.3.0
     form-data: ^4.0.0
     tweetnacl: ^1.0.3
-  checksum: f085773dc7bd9b7c95da95a0d33b8e027fc44ca48a490fc94fefed68eb9c75b3ada2a1ddf20f2ac526d72c534cc8a37bb99664e26aeb5a63b56e8cfcd0c49121
+  checksum: 70c46b99728be5cc0e697fc4376dffd614f9064007b6395ede356a573d28df67703adec26abe0ebb06ff6a9aadbee2d74f3571ba9af3c61ecf617e6231a50657
+  languageName: node
+  linkType: hard
+
+"@skyra/http-framework@npm:^0.6.4":
+  version: 0.6.4
+  resolution: "@skyra/http-framework@npm:0.6.4"
+  dependencies:
+    "@discordjs/builders": ^1.1.0
+    "@discordjs/collection": ^1.0.1
+    "@discordjs/rest": ^1.0.1
+    "@sapphire/pieces": ^3.3.5
+    "@sapphire/utilities": ^3.7.0
+    discord-api-types: ^0.36.3
+    fastify: ^4.3.0
+    form-data: ^4.0.0
+    tweetnacl: ^1.0.3
+  checksum: ec8d944a619bade43fc0a94b07f129dc91e6487cc9e9d10508d72113558f0162952da785929851ffd0468bae5df20a480004a85a550492debd3ca46da41ad344
   languageName: node
   linkType: hard
 
@@ -556,12 +579,13 @@ __metadata:
     "@sapphire/result": ^2.1.1
     "@sapphire/time-utilities": ^1.7.5
     "@sapphire/ts-config": ^3.3.4
-    "@sapphire/utilities": ^3.7.0
+    "@sapphire/utilities": ^3.8.0
     "@skyra/env-utilities": 1.0.2
-    "@skyra/http-framework": ^0.6.2
-    "@skyra/http-framework-i18n": 0.1.16
-    "@skyra/shared-http-pieces": ^0.0.38
+    "@skyra/http-framework": ^0.6.4
+    "@skyra/http-framework-i18n": 0.1.17
+    "@skyra/shared-http-pieces": ^0.0.39
     "@skyra/start-banner": 1.0.2
+    "@types/he": ^1.1.2
     "@types/node": ^18.6.2
     "@typescript-eslint/eslint-plugin": ^5.31.0
     "@typescript-eslint/parser": ^5.31.0
@@ -571,6 +595,7 @@ __metadata:
     eslint: ^8.20.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
+    he: ^1.2.0
     husky: ^8.0.1
     ioredis: ^5.2.2
     ix: ^4.6.1
@@ -582,17 +607,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@skyra/shared-http-pieces@npm:^0.0.38":
-  version: 0.0.38
-  resolution: "@skyra/shared-http-pieces@npm:0.0.38"
+"@skyra/shared-http-pieces@npm:^0.0.39":
+  version: 0.0.39
+  resolution: "@skyra/shared-http-pieces@npm:0.0.39"
   dependencies:
-    "@discordjs/builders": ^1.0.0
-    "@discordjs/collection": ^1.0.0
-    "@skyra/http-framework": ^0.6.2
-    "@skyra/http-framework-i18n": ^0.1.16
+    "@discordjs/builders": ^1.1.0
+    "@discordjs/collection": ^1.0.1
+    "@skyra/http-framework": ^0.6.3
+    "@skyra/http-framework-i18n": ^0.1.17
     discord-api-types: ^0.36.3
     tslib: ^2.4.0
-  checksum: 4c7f50f6c9c01afa5d38ba899f25afc55b3b0f020344a8c9353a865b688f8b5533812a1331bf0931ec230696f24e0e5d4b0f0fb8745701938677e9bd0f141785
+  checksum: 10d6acc088b72a7dcaa4c298e1ff715c82e1e3d27806cc536112ce6880c51ede673a0b5bcc6482e5e43ab55e010604f098cac48833f76280d876cdb5b9b6e33b
   languageName: node
   linkType: hard
 
@@ -635,6 +660,13 @@ __metadata:
   version: 1.0.3
   resolution: "@tsconfig/node16@npm:1.0.3"
   checksum: 3a8b657dd047495b7ad23437d6afd20297ce90380ff0bdee93fc7d39a900dbd8d9e26e53ff6b465e7967ce2adf0b218782590ce9013285121e6a5928fbd6819f
+  languageName: node
+  linkType: hard
+
+"@types/he@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@types/he@npm:1.1.2"
+  checksum: 71e9786c35330a2003a7692d5dc4f70946e4c45486f84d7a5792360c6c234cd34bf53421856de40a2c4bead9c21a805c309d72d012467f46bb2cce0571a9ba08
   languageName: node
   linkType: hard
 
@@ -2346,6 +2378,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"he@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "he@npm:1.2.0"
+  bin:
+    he: bin/he
+  checksum: 3d4d6babccccd79c5c5a3f929a68af33360d6445587d628087f39a965079d84f18ce9c3d3f917ee1e3978916fc833bb8b29377c3b403f919426f91bc6965e7a7
+  languageName: node
+  linkType: hard
+
 "homedir-polyfill@npm:^1.0.1":
   version: 1.0.3
   resolution: "homedir-polyfill@npm:1.0.3"
@@ -2401,12 +2442,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^21.8.14":
-  version: 21.8.14
-  resolution: "i18next@npm:21.8.14"
+"i18next@npm:^21.8.16":
+  version: 21.8.16
+  resolution: "i18next@npm:21.8.16"
   dependencies:
     "@babel/runtime": ^7.17.2
-  checksum: 83b1a57d761c3d29b90f4e87eb9945902fa13d7750f11bc7f22e8c9999f7e5bf9b2a30c44a9b47569c8ea704573b02a562c2678cf2281073197ace07657d21be
+  checksum: b29d0cfd3e69edb01ba55fac7f642cde921a47880bfb0552756dffdd2aaa866da17ae0825e47b6972b2c1249aa22a6e9f8813ce18a5072975a0dc720c408a4e5
   languageName: node
   linkType: hard
 
