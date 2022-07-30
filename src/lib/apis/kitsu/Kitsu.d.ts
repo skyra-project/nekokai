@@ -1,5 +1,3 @@
-import type { AlgoliaResult } from './AlgoliaSearch';
-
 export namespace Kitsu {
 	export type KitsuResult = AlgoliaResult<KitsuHit>;
 
@@ -30,12 +28,12 @@ export namespace Kitsu {
 		_tags: string[];
 	}
 
-	export interface KitsuPosterImageDimensions {
+	interface KitsuPosterImageDimensions {
 		width: number | null;
 		height: number | null;
 	}
 
-	export interface KitsuPosterImage {
+	interface KitsuPosterImage {
 		tiny?: string;
 		small?: string;
 		medium?: string;
@@ -51,18 +49,42 @@ export namespace Kitsu {
 		};
 	}
 
-	export interface Titles {
+	interface Titles {
 		en?: string;
 		en_jp?: string;
 		en_us?: string;
 		ja_jp?: string;
 	}
 
-	export interface Description {
+	interface Description {
 		en: string;
 		en_jp: string;
 		en_us: string;
 		ja_jp: string;
 		[key: string]: string;
+	}
+
+	interface AlgoliaResult<T> {
+		exhaustiveNbHits: boolean;
+
+		exhaustiveTypo: boolean;
+
+		hits: T[];
+
+		hitsPerPage: number;
+
+		nbHits: number;
+
+		nbPages: number;
+
+		page: number;
+
+		params: string;
+
+		processingTimeMS: number;
+
+		query: string;
+
+		queryAfterRemoval: string;
 	}
 }
