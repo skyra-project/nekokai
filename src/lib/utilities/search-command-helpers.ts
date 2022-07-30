@@ -1,5 +1,5 @@
 import type { AniListResponse } from '#lib/apis/anilist/anilist-constants';
-import type { Kitsu } from '#lib/apis/kitsu/kitsu-types';
+import type { KitsuResult } from '#lib/apis/kitsu/kitsu-types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { applyLocalizedBuilder } from '@skyra/http-framework-i18n';
@@ -12,7 +12,8 @@ export function buildAnimeSubcommand(name: 'kitsu' | 'anilist') {
 	return buildSubcommand(name, 'anime');
 }
 
-export function checkIsKitsuSubcommand(subCommand: string | null, _value?: Kitsu.KitsuResult | AniListResponse): _value is Kitsu.KitsuResult {
+export function checkIsKitsuSubcommand(subCommand: string | null, value?: KitsuResult | AniListResponse): value is KitsuResult;
+export function checkIsKitsuSubcommand(subCommand: string | null): boolean {
 	return subCommand === 'kitsu';
 }
 

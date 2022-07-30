@@ -1,11 +1,11 @@
-import type { Kitsu } from '#lib/apis/kitsu/kitsu-types';
+import type { KitsuResult } from '#lib/apis/kitsu/kitsu-types';
 import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { stringify } from 'node:querystring';
 
 const KITSU_API_URL = `https://${envParseString('KITSU_ID')}-dsn.algolia.net/1/indexes/production_media/query`;
 
-export function fetchKitsuApi(mangaOrAnime: 'manga' | 'anime', name: string, hitsPerPage = 25): Promise<Result<Kitsu.KitsuResult, unknown>> {
+export function fetchKitsuApi(mangaOrAnime: 'manga' | 'anime', name: string, hitsPerPage = 25): Promise<Result<KitsuResult, unknown>> {
 	return Result.fromAsync(async () => {
 		const response = await fetch(KITSU_API_URL, {
 			method: 'POST',
@@ -23,6 +23,6 @@ export function fetchKitsuApi(mangaOrAnime: 'manga' | 'anime', name: string, hit
 			})
 		});
 
-		return (await response.json()) as Promise<Kitsu.KitsuResult>;
+		return (await response.json()) as Promise<KitsuResult>;
 	});
 }

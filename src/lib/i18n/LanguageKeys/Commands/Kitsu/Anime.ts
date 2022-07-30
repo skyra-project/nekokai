@@ -13,7 +13,7 @@ export const EmbedData = T<{
 	stillAiring: string;
 }>('commands/kitsu:animeEmbedData');
 
-export const OutputDescription = FT<{ englishTitle: string; japaneseTitle: string; canonicalTitle: string; synopsis: string }, string>(
+export const OutputDescription = FT<{ englishTitle: string; japaneseTitle: string; canonicalTitle: string; synopsis: string }>(
 	'commands/kitsu:animeOutputDescription'
 );
 

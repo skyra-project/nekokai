@@ -14,6 +14,8 @@
 	"animeOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
 	"animeTypes": {
 		"movie": "🎥 Movie",
+		"music": "🎵 Music",
+		"ona": "🌏 Original Net Animation",
 		"ova": "📼 Original Video Animation",
 		"special": "🎴 Special",
 		"tv": "📺 TV"
@@ -28,11 +30,13 @@
 	},
 	"mangaOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
 	"mangaTypes": {
+		"doujin": "📘 Doujin",
 		"manga": "📘 Manga",
+		"manhua": "🇨🇳 Manhua",
 		"manhwa": "🇰🇷 Manhwa",
 		"novel": "📕 Novel",
-		"oneShot": "☄ One Shot",
-		"special": "🎴 Special"
+		"oel": "🇬🇧 Original English-language manga",
+		"oneshot": "☄ One Shot"
 	},
 	"subcommandName": "kitsu"
 }
