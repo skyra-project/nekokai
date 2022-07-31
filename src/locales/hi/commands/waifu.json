@@ -1,1 +1,11 @@
-{}
+{
+	"name": "वाइफू",
+	"description": "एक कोई सी भी वाइफू छवि पोस्ट करता है।",
+	"footer": "thiswaifudoesnotexist.net द्वारा संचालित",
+	"optionsRangeDescription": "चुनने के लिए वाइफू की रेंज।",
+	"optionsRangeName": "रेंज",
+	"keyAll": "सभी उपलब्ध छवियां (डिफ़ॉल्ट)",
+	"keyMediumQuality": "मध्यम गुणवत्ता / मध्यम विविधता",
+	"keyHighQuality": "उच्च गुणवत्ता / कम विविधता",
+	"keyLowQuality": "निम्न गुणवत्ता / उच्च विविधता"
+}
