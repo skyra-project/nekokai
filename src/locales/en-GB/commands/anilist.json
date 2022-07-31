@@ -1,16 +1,16 @@
 {
 	"animeDescription": "Get data for any anime on AniList.",
 	"embedTitles": {
-		"chapters": "",
-		"countryOfOrigin": "",
-		"englishName": "",
-		"episodeLength": "",
-		"episodes": "",
-		"externalLinks": "",
-		"nativeName": "",
-		"romajiName": "",
-		"volumes": ""
+		"chapters": "Amount of chapters",
+		"countryOfOrigin": "Country of origin",
+		"englishName": "English name",
+		"episodeLength": "Episode length",
+		"episodes": "Amount of episodes",
+		"externalLinks": "External links",
+		"nativeName": "Native name",
+		"romajiName": "Romanized name",
+		"volumes": "Amount of volumes"
 	},
-	"mangaDescription": "",
-	"subcommandName": ""
+	"mangaDescription": "Get data for any manga on AniList.",
+	"subcommandName": "anilist"
 }
