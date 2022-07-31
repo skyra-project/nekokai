@@ -33,7 +33,7 @@ export class UserCommand extends Command {
 
 	public override chatInputRun(interaction: Command.Interaction, options: InteractionArguments<Options>) {
 		const range = this.SIZES[options.range ?? 'all'];
-		const id = Math.random() * (range.max - range.min) + range.min;
+		const id = Math.floor(Math.random() * (range.max - range.min) + range.min);
 		const url = `https://thiswaifudoesnotexist.net/example-${id}.jpg`;
 
 		const embed = new EmbedBuilder()
