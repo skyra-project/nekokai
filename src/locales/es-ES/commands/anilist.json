@@ -1,0 +1,16 @@
+{
+	"animeDescription": "Obtiene datos de cualquier anime en AniList.",
+	"embedTitles": {
+		"chapters": "Cantidad de capítulos",
+		"countryOfOrigin": "País de origen",
+		"englishName": "Nombre inglés",
+		"episodeLength": "Longitud del episodio",
+		"episodes": "Cantidad de episodios",
+		"externalLinks": "Enlaces externos",
+		"nativeName": "Nombre nativo",
+		"romajiName": "Nombre romanizado",
+		"volumes": "Cantidad de volúmenes"
+	},
+	"mangaDescription": "Obtiene datos de cualquier manga en AniList.",
+	"subcommandName": "anilist"
+}
