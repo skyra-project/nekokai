@@ -12,13 +12,19 @@ import { applyLocalizedBuilder, createSelectMenuChoiceName, resolveKey } from '@
 		applyLocalizedBuilder(builder, LanguageKeys.Commands.Waifu.RootName, LanguageKeys.Commands.Waifu.RootDescription).addStringOption((builder) =>
 			applyLocalizedBuilder(builder, LanguageKeys.Commands.Waifu.OptionRange) //
 				.addChoices(
-					createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyMediumQuality, { value: '50_000' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyHighQuality, { value: '75_000' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyLowQuality, { value: '100_000' })
+					createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyMediumQuality, { value: 'medium' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyHighQuality, { value: 'high' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyLowQuality, { value: 'low' })
 				)
 		)
 )
 export class UserCommand extends Command {
+	private readonly SIZES = {
+		medium: { min: 0, max: 50_000 },
+		high: { min: 50_000, max: 75_000 },
+		low: { min: 75_000, max: 100_000 },
+		all: { min: 0, max: 100_000 }
+	} as const;
 	private readonly IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)$/i;
 
 	/**
@@ -29,14 +35,16 @@ export class UserCommand extends Command {
 	 */
 	private readonly maximum = '100_000';
 
-	public override chatInputRun(interaction: Command.Interaction, { range }: InteractionArguments<Options>) {
-		const url = `https://thiswaifudoesnotexist.net/example-${Math.floor(Math.random() * parseInt(range ?? this.maximum, 10))}.jpg`;
+	public override chatInputRun(interaction: Command.Interaction, options: InteractionArguments<Options>) {
+		const range = this.SIZES[options.range ?? 'all'];
+		const id = (Math.random() * (range.max - range.min)) + range.min;
+		const url = `https://thiswaifudoesnotexist.net/example-${id}.jpg`;
 
 		const embed = new EmbedBuilder()
 			.setTitle('→')
 			.setURL(url)
 			.setColor(BrandingColors.Primary)
-			.setImage(this.getImageUrl(url) ?? 'https://i.imgur.com/vKUeMoH.png')
+			.setImage(this.getImageUrl(url))
 			.setFooter({ text: resolveKey(interaction, LanguageKeys.Commands.Waifu.Footer) })
 			.setTimestamp()
 			.toJSON();
@@ -50,10 +58,10 @@ export class UserCommand extends Command {
 	 */
 	private getImageUrl(url: string): string | undefined {
 		const parsed = parseURL(url);
-		return parsed && this.IMAGE_EXTENSION.test(parsed.pathname) ? parsed.href : undefined;
+		return parsed && this.IMAGE_EXTENSION.test(parsed.pathname) ? parsed.href : 'https://i.imgur.com/vKUeMoH.png';
 	}
 }
 
 interface Options {
-	range?: string;
+	range?: 'low' | 'medium' | 'high';
 }
