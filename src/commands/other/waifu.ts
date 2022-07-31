@@ -21,10 +21,10 @@ export class UserCommand extends Command {
 	private readonly SIZES = Object.freeze({
 		/** `𝜓 = 0.8` for images `#0 – 50_000` (medium quality/medium diversity). */
 		medium: { min: 0, max: 50_000 },
-		/** `𝜓 = 0.6` for images `#50_001 – 75_000` (high quality, low diversity). */
-		high: { min: 50_001, max: 75_000 },
-		/** `𝜓 = 1.1` for images `#75_001 – 100_000` (low quality, high diversity) for a mix of good & interesting faces. */
-		low: { min: 75_001, max: 100_000 },
+		/** `𝜓 = 0.6` for images `#50_000 – 75_000` (high quality, low diversity). */
+		high: { min: 50_000, max: 75_000 },
+		/** `𝜓 = 1.1` for images `#75_000 – 100_000` (low quality, high diversity) for a mix of good & interesting faces. */
+		low: { min: 75_000, max: 100_000 },
 		/** For images `#0 – 100_000` */
 		all: { min: 0, max: 100_000 }
 	});
