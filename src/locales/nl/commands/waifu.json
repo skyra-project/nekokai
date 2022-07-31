@@ -1,1 +1,11 @@
-{}
+{
+	"name": "waifu",
+	"description": "Post een willekeurig gegenereerde waifu afbeelding.",
+	"footer": "Mogelijk gemaakt door thiswaifudoesnotexist.net",
+	"optionsRangeDescription": "De reeksen van waifus om uit te kiezen.",
+	"optionsRangeName": "reeks",
+	"keyAll": "Alle beschikbare afbeeldingen (standaard)",
+	"keyMediumQuality": "Gemiddelde kwaliteit / Gemiddelde Diversiteit",
+	"keyHighQuality": "Hoge kwaliteit / Lage Diversiteit",
+	"keyLowQuality": "Lage kwaliteit / Hoge Diversiteit"
+}
