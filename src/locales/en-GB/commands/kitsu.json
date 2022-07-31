@@ -1,42 +1,42 @@
 {
-	"animeDescription": "",
+	"animeDescription": "Get data for any anime on Kitsu.",
 	"animeEmbedData": {
-		"ageRating": "",
-		"episodeLength": "",
-		"episodes": "",
-		"firstAirDate": "",
-		"score": "",
-		"stillAiring": "",
-		"type": "",
-		"watchIt": ""
+		"ageRating": "Age rating",
+		"episodeLength": "Episode length",
+		"episodes": "Episode(s)",
+		"firstAirDate": "First air date",
+		"score": "Score",
+		"stillAiring": "Still airing",
+		"type": "Type",
+		"watchIt": "Watch it here:"
 	},
-	"animeEpisodeCount": "",
-	"animeOutputDescription": "",
+	"animeEpisodeCount": "{{episodeCount, number(maximumFractionDigits: 2)}}",
+	"animeOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
 	"animeTypes": {
-		"movie": "",
-		"music": "",
-		"ona": "",
-		"ova": "",
-		"special": "",
-		"tv": ""
+		"movie": "🎥 Film",
+		"music": "🎵 Music",
+		"ona": "🌏 Original Net Animation",
+		"ova": "📼 Original Video Animation",
+		"special": "🎴 Special",
+		"tv": "📺 TV"
 	},
-	"mangaDescription": "",
+	"mangaDescription": "Get data for any manga on Kitsu.",
 	"mangaEmbedData": {
-		"ageRating": "",
-		"firstPublishDate": "",
-		"readIt": "",
-		"score": "",
-		"type": ""
+		"ageRating": "Age Rating",
+		"firstPublishDate": "First published on",
+		"readIt": "Read it here:",
+		"score": "Score",
+		"type": "Subtype"
 	},
-	"mangaOutputDescription": "",
+	"mangaOutputDescription": "**English title:** {{englishTitle}}\n**Japanese title:** {{japaneseTitle}}\n**Canonical title:** {{canonicalTitle}}\n{{synopsis}}",
 	"mangaTypes": {
-		"doujin": "",
-		"manga": "",
-		"manhua": "",
-		"manhwa": "",
-		"novel": "",
-		"oel": "",
-		"oneshot": ""
+		"doujin": "📘 Doujin",
+		"manga": "📘 Manga",
+		"manhua": "🇨🇳 Manhua",
+		"manhwa": "🇰🇷 Manhwa",
+		"novel": "📕 Novel",
+		"oel": "🇬🇧 Original English-language manga",
+		"oneshot": "☄ One Shot"
 	},
-	"subcommandName": ""
+	"subcommandName": "kitsu"
 }
