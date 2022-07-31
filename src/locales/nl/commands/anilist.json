@@ -6,11 +6,11 @@
 		"englishName": "Engelse naam",
 		"episodeLength": "Aflevering lengte",
 		"episodes": "Aantal afleveringen",
-		"externalLinks": "",
-		"nativeName": "",
-		"romajiName": "",
-		"volumes": ""
+		"externalLinks": "Externe links",
+		"nativeName": "Oorspronkelijke naam",
+		"romajiName": "Geromaniseerde naam",
+		"volumes": "Aantal volumes"
 	},
-	"mangaDescription": "",
-	"subcommandName": ""
+	"mangaDescription": "Zoek je favoriete manga op AniList met dit command.",
+	"subcommandName": "anilist"
 }
