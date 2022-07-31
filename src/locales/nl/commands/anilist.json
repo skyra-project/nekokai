@@ -1,11 +1,11 @@
 {
-	"animeDescription": "",
+	"animeDescription": "Zoek je favoriete anime op AniList met dit command.",
 	"embedTitles": {
-		"chapters": "",
-		"countryOfOrigin": "",
-		"englishName": "",
-		"episodeLength": "",
-		"episodes": "",
+		"chapters": "Aantal hoofdstukken",
+		"countryOfOrigin": "Land van oorsprong",
+		"englishName": "Engelse naam",
+		"episodeLength": "Aflevering lengte",
+		"episodes": "Aantal afleveringen",
 		"externalLinks": "",
 		"nativeName": "",
 		"romajiName": "",
