@@ -4,7 +4,7 @@
 	"footer": "Powered by thiswaifudoesnotexist.net",
 	"optionsRangeDescription": "The ranges of waifus to pick from.",
 	"optionsRangeName": "range",
-	"keyAll": "All available images",
+	"keyAll": "All available images (Default)",
 	"keyMediumQuality": "Medium Quality / Medium Diversity",
 	"keyHighQuality": "High Quality / Low Diversity",
 	"keyLowQuality": "Low Quality / High Diversity"
