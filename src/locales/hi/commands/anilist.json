@@ -1,16 +1,16 @@
 {
-	"animeDescription": "",
+	"animeDescription": "AniList पर किसी भी एनीमे के लिए डेटा प्राप्त करें।",
 	"embedTitles": {
-		"chapters": "",
-		"countryOfOrigin": "",
-		"englishName": "",
-		"episodeLength": "",
-		"episodes": "",
-		"externalLinks": "",
-		"nativeName": "",
-		"romajiName": "",
-		"volumes": ""
+		"chapters": "अध्यायों की सांख्या",
+		"countryOfOrigin": "उद्गम देश",
+		"englishName": "अंग्रेजी नाम",
+		"episodeLength": "एपिसोड की अवधि",
+		"episodes": "एपिसोड की सांख्या",
+		"externalLinks": "बाहरी लिंक",
+		"nativeName": "मूल नाम",
+		"romajiName": "रोमनकृत नाम",
+		"volumes": "मात्राओं की सांख्या"
 	},
-	"mangaDescription": "",
-	"subcommandName": ""
+	"mangaDescription": "AniList पर किसी भी मांगा के लिए डेटा प्राप्त करें।",
+	"subcommandName": "anilist"
 }
