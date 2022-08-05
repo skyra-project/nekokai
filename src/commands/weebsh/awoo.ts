@@ -1,3 +1,3 @@
 import { createCommand } from '#lib/utilities/create-command';
 
-export default createCommand({ type: 'awoo' });
+export default createCommand({ path: import.meta.url });

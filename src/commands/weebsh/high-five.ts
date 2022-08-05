@@ -1,3 +1,3 @@
 import { createCommand } from '#lib/utilities/create-command';
 
-export default createCommand({ type: 'highfive', name: 'high-five', user: true, userRequired: true });
+export default createCommand({ path: import.meta.url, type: 'highfive', user: true, userRequired: true });
