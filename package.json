@@ -1,7 +1,7 @@
 {
 	"name": "@skyra/nekokai",
 	"version": "1.0.0",
-	"description": "Slash Commands handler Sapphire Discord server",
+	"description": "Your favourite Discord bot for anime, part of ArchId Network",
 	"author": "Skyra Project <contact@skyra.pw>",
 	"license": "MIT",
 	"private": true,
