@@ -87,6 +87,6 @@
 	},
 	"packageManager": "yarn@3.2.3",
 	"volta": {
-		"node": "18.7.0"
+		"node": "18.8.0"
 	}
 }

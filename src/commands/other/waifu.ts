@@ -31,7 +31,7 @@ export class UserCommand extends Command {
 
 	private readonly IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)$/i;
 
-	public override chatInputRun(interaction: Command.Interaction, options: InteractionArguments<Options>) {
+	public override chatInputRun(interaction: Command.ChatInputInteraction, options: InteractionArguments<Options>) {
 		const range = this.SIZES[options.range ?? 'all'];
 		const id = Math.floor(Math.random() * (range.max - range.min) + range.min);
 		const url = `https://thiswaifudoesnotexist.net/example-${id}.jpg`;
@@ -45,7 +45,7 @@ export class UserCommand extends Command {
 			.setTimestamp()
 			.toJSON();
 
-		return this.message({ embeds: [embed] });
+		return interaction.sendMessage({ embeds: [embed] });
 	}
 
 	/**

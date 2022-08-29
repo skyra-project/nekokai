@@ -16,22 +16,22 @@ import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Common.MangaName, LanguageKeys.Common.MangaDescription))
 export class UserCommand extends Command {
-	public override autocompleteRun(autocompleteInteraction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
+	public override autocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		if (!options.subCommand || options.focused !== 'manga' || isNullishOrEmpty(options.manga)) {
-			return this.autocompleteNoResults();
+			return interaction.sendEmptyAutocomplete();
 		}
 
 		switch (options.subCommand as 'kitsu' | 'anilist') {
 			case 'kitsu':
-				return this.kitsuAutocompleteRun(autocompleteInteraction, options);
+				return this.kitsuAutocompleteRun(interaction, options);
 			case 'anilist':
-				return this.aniListAutocompleteRun(autocompleteInteraction, options);
+				return this.aniListAutocompleteRun(interaction, options);
 		}
 	}
 
 	@RegisterSubCommand(buildMangaSubcommand('kitsu'))
 	@RegisterSubCommand(buildMangaSubcommand('anilist'))
-	public async *sharedRun(interaction: Command.Interaction, { manga, subCommand }: InteractionArguments<Options>): Command.AsyncGeneratorResponse {
+	public async sharedRun(interaction: Command.ChatInputInteraction, { manga, subCommand }: InteractionArguments<Options>) {
 		const isKitsuSubcommand = checkIsKitsuSubcommand(subCommand);
 
 		const [, packageFromAutocomplete, nthResult] = manga.split(':');
@@ -43,14 +43,14 @@ export class UserCommand extends Command {
 		);
 
 		if (hitFromRedisCache) {
-			return this.message(
+			return interaction.sendMessage(
 				isKitsuSubcommand
 					? this.buildKitsuResponse(hitFromRedisCache as KitsuHit, interaction)
 					: this.buildAnilistResponse(hitFromRedisCache as Media, interaction)
 			);
 		}
 
-		yield this.defer();
+		const message = await interaction.defer();
 		const result = isKitsuSubcommand
 			? await fetchKitsuApi('manga', packageFromAutocomplete ?? manga, 1)
 			: await fetchAniListApi(getManga, { search: manga });
@@ -70,10 +70,10 @@ export class UserCommand extends Command {
 			err: () => this.handleError(interaction)
 		});
 
-		return this.updateResponse(response);
+		return message.update(response);
 	}
 
-	private buildKitsuResponse(kitsuManga: KitsuHit, interaction: Command.Interaction): Command.MessageResponseOptions {
+	private buildKitsuResponse(kitsuManga: KitsuHit, interaction: Command.ChatInputInteraction) {
 		const t = getSupportedLanguageT(interaction);
 
 		const description =
@@ -147,7 +147,7 @@ export class UserCommand extends Command {
 		return { embeds: [embed] };
 	}
 
-	private buildAnilistResponse(anilistManga: Media, interaction: Command.Interaction): Command.MessageResponseOptions {
+	private buildAnilistResponse(anilistManga: Media, interaction: Command.ChatInputInteraction) {
 		const embed = new EmbedBuilder();
 
 		const t = getSupportedLanguageT(interaction);
@@ -214,10 +214,7 @@ export class UserCommand extends Command {
 		};
 	}
 
-	private async kitsuAutocompleteRun(
-		autocompleteInteraction: Command.AutocompleteInteraction,
-		options: AutocompleteInteractionArguments<Options>
-	): Command.AsyncAutocompleteResponse {
+	private async kitsuAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		const result = await fetchKitsuApi('manga', options.manga);
 		return result.match({
 			ok: async (value) => {
@@ -228,7 +225,7 @@ export class UserCommand extends Command {
 					redisInsertPromises.push(
 						this.container.redisCache.insertFor60Seconds<KitsuHit>(
 							RedisKeys.KitsuManga,
-							autocompleteInteraction.user?.id,
+							interaction.user?.id,
 							options.manga,
 							index.toString(),
 							hit
@@ -245,18 +242,15 @@ export class UserCommand extends Command {
 					await Promise.all(redisInsertPromises);
 				}
 
-				return this.autocomplete({
+				return interaction.sendAutocomplete({
 					choices: results.slice(0, 24)
 				});
 			},
-			err: () => this.autocompleteNoResults()
+			err: () => interaction.sendEmptyAutocomplete()
 		});
 	}
 
-	private async aniListAutocompleteRun(
-		autocompleteInteraction: Command.AutocompleteInteraction,
-		options: AutocompleteInteractionArguments<Options>
-	): Command.AsyncAutocompleteResponse {
+	private async aniListAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		const result = await fetchAniListApi(getManga, { search: options.manga });
 
 		return result.match({
@@ -270,7 +264,7 @@ export class UserCommand extends Command {
 					redisInsertPromises.push(
 						this.container.redisCache.insertFor60Seconds<Media>(
 							RedisKeys.AnilistManga,
-							autocompleteInteraction.user?.id,
+							interaction.user.id,
 							options.manga,
 							index.toString(),
 							hit
@@ -287,15 +281,15 @@ export class UserCommand extends Command {
 					await Promise.all(redisInsertPromises);
 				}
 
-				return this.autocomplete({
+				return interaction.sendAutocomplete({
 					choices: results.slice(0, 24)
 				});
 			},
-			err: () => this.autocompleteNoResults()
+			err: () => interaction.sendEmptyAutocomplete()
 		});
 	}
 
-	private handleError(interaction: Command.Interaction): Command.MessageResponseOptions {
+	private handleError(interaction: Command.ChatInputInteraction) {
 		return { content: resolveKey(interaction, LanguageKeys.Common.MangaError) };
 	}
 }
