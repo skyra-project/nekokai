@@ -5,7 +5,7 @@ import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, TransformedArguments } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
-import { APIApplicationCommandInteraction, MessageFlags } from 'discord-api-types/v10';
+import { MessageFlags } from 'discord-api-types/v10';
 import { elementAt } from 'ix/iterable/elementat.js';
 import { platform, release } from 'node:os';
 import { setTimeout } from 'node:timers';
@@ -19,7 +19,7 @@ export class AnimeCommand extends Command {
 		this.type = options.type;
 	}
 
-	protected override async chatInputRun(interaction: Command.Interaction, args: AnimeCommandArgs): Promise<Command.MessageResponseResult> {
+	protected override async chatInputRun(interaction: Command.ChatInputInteraction, args: AnimeCommandArgs) {
 		const query = new URL('https://api.weeb.sh/images/random');
 		query.searchParams.append('type', this.type);
 		query.searchParams.append('nsfw', 'false');
@@ -31,7 +31,7 @@ export class AnimeCommand extends Command {
 		});
 	}
 
-	private handleSuccess(interaction: Command.Interaction, url: string, args: AnimeCommandArgs) {
+	private handleSuccess(interaction: Command.ChatInputInteraction, url: string, args: AnimeCommandArgs) {
 		const content = args.user ? userMention(args.user.user.id) : undefined;
 		const embed = new EmbedBuilder()
 			.setTitle('→')
@@ -39,12 +39,12 @@ export class AnimeCommand extends Command {
 			.setColor(BrandingColors.Primary)
 			.setImage(url)
 			.setFooter({ text: resolveKey(interaction, LanguageKeys.Commands.Anime.PoweredByWeebSh) });
-		return this.message({ content, embeds: [embed.toJSON()] });
+		return interaction.sendMessage({ content, embeds: [embed.toJSON()] });
 	}
 
-	private handleError(interaction: APIApplicationCommandInteraction, error: TypedT) {
+	private handleError(interaction: Command.ChatInputInteraction, error: TypedT) {
 		const content = resolveUserKey(interaction, error);
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private async get(url: URL): Promise<Result<string, TypedT>> {
