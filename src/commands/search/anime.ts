@@ -18,7 +18,7 @@ import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 export class UserCommand extends Command {
 	public override async autocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		if (!options.subCommand || options.focused !== 'anime' || isNullishOrEmpty(options.anime)) {
-			return interaction.sendEmptyAutocomplete();
+			return interaction.replyEmpty();
 		}
 
 		switch (options.subCommand as 'kitsu' | 'anilist') {
@@ -43,7 +43,7 @@ export class UserCommand extends Command {
 		);
 
 		if (hitFromRedisCache) {
-			return interaction.sendMessage(
+			return interaction.reply(
 				isKitsuSubcommand
 					? this.buildKitsuResponse(hitFromRedisCache as KitsuHit, interaction)
 					: this.buildAnilistResponse(hitFromRedisCache as Media, interaction)
@@ -248,11 +248,11 @@ export class UserCommand extends Command {
 					await Promise.all(redisInsertPromises);
 				}
 
-				return interaction.sendAutocomplete({
+				return interaction.reply({
 					choices: results.slice(0, 24)
 				});
 			},
-			err: () => interaction.sendEmptyAutocomplete()
+			err: () => interaction.replyEmpty()
 		});
 	}
 
@@ -287,11 +287,11 @@ export class UserCommand extends Command {
 					await Promise.all(redisInsertPromises);
 				}
 
-				return interaction.sendAutocomplete({
+				return interaction.reply({
 					choices: results.slice(0, 24)
 				});
 			},
-			err: () => interaction.sendEmptyAutocomplete()
+			err: () => interaction.replyEmpty()
 		});
 	}
 

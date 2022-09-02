@@ -45,7 +45,7 @@ export class UserCommand extends Command {
 			.setTimestamp()
 			.toJSON();
 
-		return interaction.sendMessage({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 
 	/**

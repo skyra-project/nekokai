@@ -39,12 +39,12 @@ export class AnimeCommand extends Command {
 			.setColor(BrandingColors.Primary)
 			.setImage(url)
 			.setFooter({ text: resolveKey(interaction, LanguageKeys.Commands.Anime.PoweredByWeebSh) });
-		return interaction.sendMessage({ content, embeds: [embed.toJSON()] });
+		return interaction.reply({ content, embeds: [embed.toJSON()] });
 	}
 
 	private handleError(interaction: Command.ChatInputInteraction, error: TypedT) {
 		const content = resolveUserKey(interaction, error);
-		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private async get(url: URL): Promise<Result<string, TypedT>> {
