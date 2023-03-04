@@ -3,15 +3,16 @@ import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
-import { setInvite, setRepository } from '@skyra/shared-http-pieces';
+import { initializeSentry, setInvite, setRepository } from '@skyra/shared-http-pieces';
 import '@skyra/shared-http-pieces/register';
 import { createBanner } from '@skyra/start-banner';
 import { blue, blueBright, bold } from 'colorette';
 
+setup(new URL('../src/.env', import.meta.url));
+
 setRepository('nekokai');
 setInvite('939613684592934992', '16384');
-
-setup(new URL('../src/.env', import.meta.url));
+initializeSentry();
 
 await load(new URL('../src/locales', import.meta.url));
 await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false, returnObjects: true });
