@@ -1,5 +1,6 @@
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
+import { isNsfwChannel } from '#lib/utilities/discord-utilities';
 import { EmbedBuilder, userMention } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
@@ -22,7 +23,7 @@ export class AnimeCommand extends Command {
 	protected override async chatInputRun(interaction: Command.ChatInputInteraction, args: AnimeCommandArgs) {
 		const query = new URL('https://api.weeb.sh/images/random');
 		query.searchParams.append('type', this.type);
-		query.searchParams.append('nsfw', 'false');
+		query.searchParams.append('nsfw', isNsfwChannel(interaction.channel).toString());
 
 		const result = await this.get(query);
 		return result.match({
