@@ -1,4 +1,4 @@
-import { FT, LocalePrefixKey, T } from '@skyra/http-framework-i18n';
+import { FT, T, type LocalePrefixKey } from '@skyra/http-framework-i18n';
 
 export const AnimeDescription = T('commands/common:animeDescription');
 export const AnimeError = T('commands/common:animeError');

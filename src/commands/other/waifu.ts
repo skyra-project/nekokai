@@ -2,7 +2,7 @@ import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { EmbedBuilder } from '@discordjs/builders';
 import { parseURL } from '@sapphire/utilities';
-import { Command, InteractionArguments, RegisterCommand } from '@skyra/http-framework';
+import { Command, RegisterCommand, type InteractionArguments } from '@skyra/http-framework';
 import { applyLocalizedBuilder, createSelectMenuChoiceName, resolveKey } from '@skyra/http-framework-i18n';
 
 @RegisterCommand((builder) =>

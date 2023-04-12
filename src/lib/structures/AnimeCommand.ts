@@ -4,7 +4,7 @@ import { isNsfwChannel } from '#lib/utilities/discord-utilities';
 import { EmbedBuilder, userMention } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
-import { Command, TransformedArguments } from '@skyra/http-framework';
+import { Command, type TransformedArguments } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
 import { MessageFlags } from 'discord-api-types/v10';
 import { elementAt } from 'ix/iterable/elementat.js';
