@@ -8,9 +8,15 @@ import { RedisKeys } from '#lib/redis-cache/RedisCacheClient';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { buildMangaSubcommand, checkIsKitsuSubcommand } from '#lib/utilities/search-command-helpers';
 import { minutes } from '#lib/utilities/time-utilities';
-import { bold, EmbedBuilder, hideLinkEmbed, hyperlink, time, TimestampStyles } from '@discordjs/builders';
+import { EmbedBuilder, TimestampStyles, bold, hideLinkEmbed, hyperlink, time } from '@discordjs/builders';
 import { cutText, filterNullish, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
-import { AutocompleteInteractionArguments, Command, InteractionArguments, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
+import {
+	Command,
+	RegisterCommand,
+	RegisterSubCommand,
+	type AutocompleteInteractionArguments,
+	type InteractionArguments
+} from '@skyra/http-framework';
 import { applyLocalizedBuilder, getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
 import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
