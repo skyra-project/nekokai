@@ -1,11 +1,9 @@
 import { parseAniListDescription } from '#lib/apis/anilist/anilist-constants';
-import type { Media } from '#lib/apis/anilist/anilist-types';
+import type { AnilistEntry } from '#lib/apis/anilist/anilist-types';
 import { anilistMangaGet, anilistMangaSearch } from '#lib/apis/anilist/anilist-utilities';
-import { fetchKitsuApi } from '#lib/apis/kitsu/kitsu-constants';
-import type { KitsuHit } from '#lib/apis/kitsu/kitsu-types';
+import { kitsuMangaGet, kitsuMangaSearch, type KitsuManga } from '#lib/apis/kitsu/kitsu-utilities';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { RedisKeys } from '#lib/redis-cache/RedisCacheClient';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { buildMangaSubcommand, checkIsKitsuSubcommand } from '#lib/utilities/search-command-helpers';
 import { minutes } from '#lib/utilities/time-utilities';
@@ -19,14 +17,14 @@ import {
 	type InteractionArguments
 } from '@skyra/http-framework';
 import { applyLocalizedBuilder, getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
-import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
+import { MessageFlags } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Common.MangaName, LanguageKeys.Common.MangaDescription))
 export class UserCommand extends Command {
 	public override autocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		switch (options.subCommand as 'kitsu' | 'anilist') {
 			case 'kitsu':
-				return isNullishOrEmpty(options.manga) ? interaction.replyEmpty() : this.kitsuAutocompleteRun(interaction, options);
+				return this.kitsuAutocompleteRun(interaction, options);
 			case 'anilist':
 				return this.aniListAutocompleteRun(interaction, options);
 		}
@@ -37,44 +35,20 @@ export class UserCommand extends Command {
 	public async sharedRun(interaction: Command.ChatInputInteraction, { manga, subCommand }: InteractionArguments<Options>) {
 		const isKitsuSubcommand = checkIsKitsuSubcommand(subCommand);
 
-		const [packageFromAutocomplete, nthResult] = manga.split(':');
-		const hitFromRedisCache = await this.container.redis.fetch<KitsuHit | Media>(
-			isKitsuSubcommand ? RedisKeys.KitsuManga : RedisKeys.AnilistManga,
-			interaction.user?.id,
-			packageFromAutocomplete,
-			nthResult
-		);
-
-		if (hitFromRedisCache) {
-			return interaction.reply(
-				isKitsuSubcommand
-					? this.buildKitsuResponse(hitFromRedisCache as KitsuHit, interaction)
-					: this.buildAnilistResponse(hitFromRedisCache as Media, interaction)
-			);
-		}
-
-		const message = await interaction.defer();
-		const result = isKitsuSubcommand ? await fetchKitsuApi('manga', packageFromAutocomplete ?? manga, 1) : await anilistMangaGet(manga);
-
+		const result = isKitsuSubcommand ? await kitsuMangaGet(manga) : await anilistMangaGet(manga);
 		const response = result.match({
-			ok: (value) => {
-				if (checkIsKitsuSubcommand(subCommand, value!)) {
-					return isNullishOrEmpty(value.hits) //
-						? this.handleError(interaction)
-						: this.buildKitsuResponse(value.hits[0], interaction);
-				}
-
-				return isNullishOrEmpty(value) //
+			ok: (value) =>
+				isNullishOrEmpty(value) //
 					? this.handleError(interaction)
-					: this.buildAnilistResponse(value, interaction);
-			},
+					: checkIsKitsuSubcommand(subCommand, value!)
+					? this.buildKitsuResponse(value, interaction)
+					: this.buildAnilistResponse(value, interaction),
 			err: () => this.handleError(interaction)
 		});
-
-		return message.update(response);
+		return interaction.reply(response);
 	}
 
-	private buildKitsuResponse(kitsuManga: KitsuHit, interaction: Command.ChatInputInteraction) {
+	private buildKitsuResponse(kitsuManga: KitsuManga, interaction: Command.ChatInputInteraction) {
 		const t = getSupportedLanguageT(interaction);
 
 		const description =
@@ -94,11 +68,11 @@ export class UserCommand extends Command {
 		const score = `${kitsuManga.averageRating}%`;
 		const mangaURL = `https://kitsu.io/manga/${kitsuManga.id}`;
 		const type = kitsuManga.subtype;
-		const title = kitsuManga.titles.en || kitsuManga.titles.en_jp || kitsuManga.canonicalTitle || '--';
+		const title = kitsuManga.titles.en || kitsuManga.titles.en_jp || kitsuManga.titles.canonical;
 
 		const englishTitle = kitsuManga.titles.en || kitsuManga.titles.en_us || t(LanguageKeys.Common.None);
 		const japaneseTitle = kitsuManga.titles.ja_jp || t(LanguageKeys.Common.None);
-		const canonicalTitle = kitsuManga.canonicalTitle || t(LanguageKeys.Common.None);
+		const canonicalTitle = kitsuManga.titles.canonical || t(LanguageKeys.Common.None);
 
 		const embedData = t(LanguageKeys.Commands.Kitsu.Manga.EmbedData);
 
@@ -114,7 +88,7 @@ export class UserCommand extends Command {
 					synopsis: synopsis ?? t(LanguageKeys.Common.NoSynopsis)
 				})
 			)
-			.setThumbnail(kitsuManga.posterImage?.original || '')
+			.setThumbnail(kitsuManga.poster || '')
 			.addFields(
 				{
 					name: embedData.type,
@@ -148,107 +122,75 @@ export class UserCommand extends Command {
 		return { embeds: [embed] };
 	}
 
-	private buildAnilistResponse(anilistManga: Media, interaction: Command.ChatInputInteraction) {
+	private buildAnilistResponse(value: AnilistEntry, interaction: Command.ChatInputInteraction) {
 		const embed = new EmbedBuilder();
 
 		const t = getSupportedLanguageT(interaction);
 
 		const anilistTitles = t(LanguageKeys.Commands.AniList.EmbedTitles);
-
-		const englishTitle = anilistManga.title?.english || t(LanguageKeys.Common.None);
-		const nativeTitle = anilistManga.title?.native || t(LanguageKeys.Common.None);
-		const romajiTitle = anilistManga.title?.romaji || t(LanguageKeys.Common.None);
-
 		const description = [
-			`**${anilistTitles.romajiName}**: ${romajiTitle}`,
-			`**${anilistTitles.englishName}**: ${englishTitle}`,
-			`**${anilistTitles.nativeName}**: ${nativeTitle}`
+			`**${anilistTitles.romajiName}**: ${value.title?.romaji || t(LanguageKeys.Common.None)}`,
+			`**${anilistTitles.englishName}**: ${value.title?.english || t(LanguageKeys.Common.None)}`,
+			`**${anilistTitles.nativeName}**: ${value.title?.native || t(LanguageKeys.Common.None)}`
 		];
 
-		if (anilistManga.countryOfOrigin) {
-			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${anilistManga.countryOfOrigin}`);
+		if (value.countryOfOrigin) {
+			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${value.countryOfOrigin}`);
 		}
 
-		if (anilistManga.chapters) {
-			description.push(`${bold(anilistTitles.chapters)}: ${t(LanguageKeys.Common.FormatNumber, { value: anilistManga.chapters })}`);
+		if (value.chapters) {
+			description.push(`${bold(anilistTitles.chapters)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.chapters })}`);
 		}
 
-		if (anilistManga.volumes) {
-			description.push(`${bold(anilistTitles.volumes)}: ${t(LanguageKeys.Common.FormatNumber, { value: anilistManga.volumes })}`);
+		if (value.volumes) {
+			description.push(`${bold(anilistTitles.volumes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.volumes })}`);
 		}
 
-		if (anilistManga.duration) {
-			description.push(`${bold(anilistTitles.episodeLength)}: ${durationFormatter.format(minutes(anilistManga.duration), 1)}`);
+		if (value.duration) {
+			description.push(`${bold(anilistTitles.episodeLength)}: ${durationFormatter.format(minutes(value.duration), 1)}`);
 		}
 
-		if (anilistManga.externalLinks?.length) {
-			const externalLinks = anilistManga.externalLinks
-				.map((link) => {
-					if (link?.url && link.site) {
-						return hyperlink(link.site, hideLinkEmbed(link.url));
-					}
-
-					return undefined;
-				})
+		if (value.externalLinks?.length) {
+			const externalLinks = value.externalLinks
+				.map((link) => (link?.url && link.site ? hyperlink(link.site, hideLinkEmbed(link.url)) : undefined))
 				.filter(filterNullish);
 
 			description.push(`${bold(anilistTitles.externalLinks)}: ${t(LanguageKeys.Common.FormatList, { value: externalLinks })}`);
 		}
 
-		if (anilistManga.description) {
-			description.push('', parseAniListDescription(anilistManga.description));
+		if (value.description) {
+			description.push('', parseAniListDescription(value.description));
 		}
 
-		if (anilistManga.siteUrl) {
-			embed.setURL(anilistManga.siteUrl);
+		if (value.siteUrl) {
+			embed.setURL(value.siteUrl);
 		}
 
 		return {
 			embeds: [
 				embed
 					.setColor(BrandingColors.Primary)
-					.setTitle(anilistManga.title?.english ?? anilistManga.title?.romaji ?? anilistManga.title?.native ?? '') //
+					.setTitle(value.title?.english ?? value.title?.romaji ?? value.title?.native ?? '') //
 					.setDescription(description.join('\n'))
-					.setImage(`https://img.anili.st/media/${anilistManga.id}`)
+					.setImage(`https://img.anili.st/media/${value.id}`)
 					.toJSON()
 			]
 		};
 	}
 
 	private async kitsuAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
-		const result = await fetchKitsuApi('manga', options.manga);
-		return result.match({
-			ok: async (value) => {
-				const redisInsertPromises: Promise<'OK'>[] = [];
-				const results: APIApplicationCommandOptionChoice[] = [];
-
-				for (const [index, hit] of value.hits?.entries() ?? []) {
-					redisInsertPromises.push(
-						this.container.redis.insertFor60Seconds<KitsuHit>(
-							RedisKeys.KitsuManga,
-							interaction.user?.id,
-							options.manga,
-							index.toString(),
-							hit
-						)
-					);
-
-					results.push({
-						name: cutText(hit.titles.en || hit.titles.en_jp || hit.canonicalTitle || hit.slug, 100),
-						value: `${RedisKeys.KitsuManga}:${options.manga}:${index}`
-					});
-				}
-
-				if (redisInsertPromises.length) {
-					await Promise.all(redisInsertPromises);
-				}
-
-				return interaction.reply({
-					choices: results.slice(0, 24)
+		const result = await kitsuMangaSearch(options.manga);
+		const entries = result.match({
+			ok: (values) => {
+				return values.map((value) => {
+					const name = cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100);
+					return { name, value: name };
 				});
 			},
-			err: () => interaction.replyEmpty()
+			err: () => []
 		});
+
+		return interaction.reply({ choices: entries });
 	}
 
 	private async aniListAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
@@ -267,7 +209,7 @@ export class UserCommand extends Command {
 	}
 
 	private handleError(interaction: Command.ChatInputInteraction) {
-		return { content: resolveKey(interaction, LanguageKeys.Common.MangaError) };
+		return { content: resolveKey(interaction, LanguageKeys.Common.MangaError), flags: MessageFlags.Ephemeral };
 	}
 }
 

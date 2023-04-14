@@ -668,6 +668,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@skyra/logger@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@skyra/logger@npm:2.0.0"
+  dependencies:
+    colorette: 2.0.19
+  checksum: 068cd77de677d8c28d636278aa16d3b6cb7f7833aaa5e63e8e6a15577ffa17244930366a626b80eb1c98f8a7aa8afadd76800cb742a8dbe6fdada9cdb9b9e192
+  languageName: node
+  linkType: hard
+
 "@skyra/nekokai@workspace:.":
   version: 0.0.0-use.local
   resolution: "@skyra/nekokai@workspace:."
@@ -685,6 +694,7 @@ __metadata:
     "@skyra/env-utilities": ^1.2.0
     "@skyra/http-framework": ^1.0.0
     "@skyra/http-framework-i18n": ^1.0.0
+    "@skyra/logger": ^2.0.0
     "@skyra/safe-fetch": ^1.1.1
     "@skyra/shared-http-pieces": ^1.0.0
     "@skyra/start-banner": ^2.0.0
@@ -1392,7 +1402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.19":
+"colorette@npm:2.0.19, colorette@npm:^2.0.19":
   version: 2.0.19
   resolution: "colorette@npm:2.0.19"
   checksum: 888cf5493f781e5fcf54ce4d49e9d7d698f96ea2b2ef67906834bb319a392c667f9ec69f4a10e268d2946d13a9503d2d19b3abaaaf174e3451bfe91fb9d82427

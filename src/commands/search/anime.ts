@@ -1,15 +1,14 @@
 import { parseAniListDescription } from '#lib/apis/anilist/anilist-constants';
-import type { Media } from '#lib/apis/anilist/anilist-types';
+import type { AnilistEntry } from '#lib/apis/anilist/anilist-types';
 import { anilistAnimeGet, anilistAnimeSearch } from '#lib/apis/anilist/anilist-utilities';
-import { fetchKitsuApi } from '#lib/apis/kitsu/kitsu-constants';
-import type { KitsuHit } from '#lib/apis/kitsu/kitsu-types';
+import { kitsuAnimeGet, kitsuAnimeSearch, type KitsuAnime } from '#lib/apis/kitsu/kitsu-utilities';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { RedisKeys } from '#lib/redis-cache/RedisCacheClient';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { buildAnimeSubcommand, checkIsKitsuSubcommand } from '#lib/utilities/search-command-helpers';
 import { minutes } from '#lib/utilities/time-utilities';
 import { EmbedBuilder, TimestampStyles, bold, hideLinkEmbed, hyperlink, time } from '@discordjs/builders';
+import { Time } from '@sapphire/time-utilities';
 import { cutText, filterNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import {
 	Command,
@@ -19,14 +18,14 @@ import {
 	type InteractionArguments
 } from '@skyra/http-framework';
 import { applyLocalizedBuilder, getSupportedLanguageT, resolveKey } from '@skyra/http-framework-i18n';
-import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
+import { MessageFlags } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Common.AnimeName, LanguageKeys.Common.AnimeDescription))
 export class UserCommand extends Command {
 	public override async autocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
 		switch (options.subCommand as 'kitsu' | 'anilist') {
 			case 'kitsu':
-				return isNullishOrEmpty(options.anime) ? interaction.replyEmpty() : this.kitsuAutocompleteRun(interaction, options);
+				return this.kitsuAutocompleteRun(interaction, options);
 			case 'anilist':
 				return this.aniListAutocompleteRun(interaction, options);
 		}
@@ -37,44 +36,20 @@ export class UserCommand extends Command {
 	public async sharedRun(interaction: Command.ChatInputInteraction, { subCommand, anime }: InteractionArguments<Options>) {
 		const isKitsuSubcommand = checkIsKitsuSubcommand(subCommand);
 
-		const [packageFromAutocomplete, nthResult] = anime.split(':');
-		const hitFromRedisCache = await this.container.redis.fetch<KitsuHit | Media>(
-			isKitsuSubcommand ? RedisKeys.KitsuAnime : RedisKeys.AnilistAnime,
-			interaction.user?.id,
-			packageFromAutocomplete,
-			nthResult
-		);
-
-		if (hitFromRedisCache) {
-			return interaction.reply(
-				isKitsuSubcommand
-					? this.buildKitsuResponse(hitFromRedisCache as KitsuHit, interaction)
-					: this.buildAnilistResponse(hitFromRedisCache as Media, interaction)
-			);
-		}
-
-		const message = await interaction.defer();
-		const result = isKitsuSubcommand ? await fetchKitsuApi('anime', packageFromAutocomplete ?? anime, 1) : await anilistAnimeGet(anime);
-
+		const result = isKitsuSubcommand ? await kitsuAnimeGet(anime) : await anilistAnimeGet(anime);
 		const response = result.match({
-			ok: (value) => {
-				if (checkIsKitsuSubcommand(subCommand, value!)) {
-					return isNullishOrEmpty(value.hits) //
-						? this.handleError(interaction)
-						: this.buildKitsuResponse(value.hits[0], interaction);
-				}
-
-				return isNullishOrEmpty(value) //
+			ok: (value) =>
+				isNullishOrEmpty(value) //
 					? this.handleError(interaction)
-					: this.buildAnilistResponse(value, interaction);
-			},
+					: checkIsKitsuSubcommand(subCommand, value!)
+					? this.buildKitsuResponse(value, interaction)
+					: this.buildAnilistResponse(value, interaction),
 			err: () => this.handleError(interaction)
 		});
-
-		return message.update(response);
+		return interaction.reply(response);
 	}
 
-	private buildKitsuResponse(kitsuAnime: KitsuHit, interaction: Command.ChatInputInteraction) {
+	private buildKitsuResponse(kitsuAnime: KitsuAnime, interaction: Command.ChatInputInteraction) {
 		const t = getSupportedLanguageT(interaction);
 
 		const description =
@@ -94,11 +69,11 @@ export class UserCommand extends Command {
 		const score = `${kitsuAnime.averageRating}%`;
 		const animeURL = `https://kitsu.io/anime/${kitsuAnime.id}`;
 		const type = kitsuAnime.subtype;
-		const title = kitsuAnime.titles.en || kitsuAnime.titles.en_jp || kitsuAnime.canonicalTitle || '--';
+		const title = kitsuAnime.titles.en || kitsuAnime.titles.en_jp || kitsuAnime.titles.canonical;
 
 		const englishTitle = kitsuAnime.titles.en || kitsuAnime.titles.en_us || t(LanguageKeys.Common.None);
 		const japaneseTitle = kitsuAnime.titles.ja_jp || t(LanguageKeys.Common.None);
-		const canonicalTitle = kitsuAnime.canonicalTitle || t(LanguageKeys.Common.None);
+		const canonicalTitle = kitsuAnime.titles.canonical || t(LanguageKeys.Common.None);
 
 		const embedData = t(LanguageKeys.Commands.Kitsu.Anime.EmbedData);
 
@@ -114,7 +89,7 @@ export class UserCommand extends Command {
 					synopsis: synopsis ?? t(LanguageKeys.Common.NoSynopsis)
 				})
 			)
-			.setThumbnail(kitsuAnime.posterImage?.original || '')
+			.setThumbnail(kitsuAnime.poster || '')
 			.addFields(
 				{
 					name: embedData.type,
@@ -133,7 +108,7 @@ export class UserCommand extends Command {
 				},
 				{
 					name: embedData.episodeLength,
-					value: durationFormatter.format(kitsuAnime.episodeLength * 60 * 1000),
+					value: kitsuAnime.episodeLength ? durationFormatter.format(kitsuAnime.episodeLength * Time.Minute) : t(LanguageKeys.Common.None),
 					inline: true
 				},
 				{
@@ -143,7 +118,7 @@ export class UserCommand extends Command {
 				},
 				{
 					name: embedData.firstAirDate,
-					value: time(kitsuAnime.startDate, TimestampStyles.ShortDate),
+					value: time(new Date(kitsuAnime.startDate), TimestampStyles.ShortDate),
 					inline: true
 				},
 				{
@@ -158,7 +133,7 @@ export class UserCommand extends Command {
 		return { embeds: [embed] };
 	}
 
-	private buildAnilistResponse(anilistAnime: Media, interaction: Command.ChatInputInteraction) {
+	private buildAnilistResponse(anilistAnime: AnilistEntry, interaction: Command.ChatInputInteraction) {
 		const embed = new EmbedBuilder();
 
 		const t = getSupportedLanguageT(interaction);
@@ -222,39 +197,18 @@ export class UserCommand extends Command {
 	}
 
 	private async kitsuAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
-		const result = await fetchKitsuApi('anime', options.anime);
-		return result.match({
-			ok: async (value) => {
-				const redisInsertPromises: Promise<'OK'>[] = [];
-				const results: APIApplicationCommandOptionChoice[] = [];
-
-				for (const [index, hit] of value.hits?.entries() ?? []) {
-					redisInsertPromises.push(
-						this.container.redis.insertFor60Seconds<KitsuHit>(
-							RedisKeys.KitsuAnime,
-							interaction.user?.id,
-							options.anime,
-							index.toString(),
-							hit
-						)
-					);
-
-					results.push({
-						name: cutText(hit.titles.en || hit.titles.en_jp || hit.canonicalTitle || hit.slug, 100),
-						value: `${RedisKeys.KitsuAnime}:${options.anime}:${index}`
-					});
-				}
-
-				if (redisInsertPromises.length) {
-					await Promise.all(redisInsertPromises);
-				}
-
-				return interaction.reply({
-					choices: results.slice(0, 24)
+		const result = await kitsuAnimeSearch(options.anime);
+		const entries = result.match({
+			ok: (values) => {
+				return values.map((value) => {
+					const name = cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100);
+					return { name, value: name };
 				});
 			},
-			err: () => interaction.replyEmpty()
+			err: () => []
 		});
+
+		return interaction.reply({ choices: entries });
 	}
 
 	private async aniListAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
@@ -273,7 +227,7 @@ export class UserCommand extends Command {
 	}
 
 	private handleError(interaction: Command.ChatInputInteraction) {
-		return { content: resolveKey(interaction, LanguageKeys.Common.AnimeError) };
+		return { content: resolveKey(interaction, LanguageKeys.Common.AnimeError), flags: MessageFlags.Ephemeral };
 	}
 }
 

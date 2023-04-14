@@ -1,10 +1,5 @@
-/** Page of data */
-export interface Page {
-	readonly media?: readonly (Media | null)[] | null;
-}
-
 /** Anime or Manga */
-export interface Media {
+export interface AnilistEntry {
 	/** The id of the media */
 	readonly id: number;
 	/** The official titles of the media in various languages */

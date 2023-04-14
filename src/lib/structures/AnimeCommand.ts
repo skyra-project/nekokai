@@ -69,7 +69,7 @@ export class AnimeCommand extends Command {
 
 			// If we got an 4XX error code, warn the error:
 			if (response.status < 500) {
-				console.error(`Unexpected error in ${this.name}: [${response.status}] ${await response.text()}`);
+				this.container.logger.error(`Unexpected error in ${this.name}: [${response.status}] ${await response.text()}`);
 			}
 		}
 

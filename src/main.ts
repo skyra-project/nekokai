@@ -1,23 +1,15 @@
-import { RedisCacheClient } from '#lib/redis-cache/RedisCacheClient';
+import { setup } from '#lib/setup/all';
 import { registerCommands } from '#lib/utilities/register-commands';
-import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
+import { envParseInteger, envParseString } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
-import { initializeSentry, setInvite, setRepository } from '@skyra/shared-http-pieces';
-import '@skyra/shared-http-pieces/register';
 import { createBanner } from '@skyra/start-banner';
 import { blue, blueBright, bold } from 'colorette';
 
-setup(new URL('../src/.env', import.meta.url));
-
-setRepository('nekokai');
-setInvite('939613684592934992', '16384');
-initializeSentry();
+setup();
 
 await load(new URL('../src/locales', import.meta.url));
 await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false, returnObjects: true });
-
-new RedisCacheClient();
 
 const client = new Client();
 await client.load();
