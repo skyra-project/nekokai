@@ -8,7 +8,7 @@ export interface Media {
 	/** The id of the media */
 	readonly id: number;
 	/** The official titles of the media in various languages */
-	readonly title?: MediaTitle | null;
+	readonly title: MediaTitle;
 	/** Short description of the media's story and characters */
 	readonly description?: string | null;
 	/** The amount of episodes the anime has when complete */

@@ -685,6 +685,7 @@ __metadata:
     "@skyra/env-utilities": ^1.2.0
     "@skyra/http-framework": ^1.0.0
     "@skyra/http-framework-i18n": ^1.0.0
+    "@skyra/safe-fetch": ^1.1.1
     "@skyra/shared-http-pieces": ^1.0.0
     "@skyra/start-banner": ^2.0.0
     "@types/he": ^1.2.0
@@ -708,6 +709,15 @@ __metadata:
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
+
+"@skyra/safe-fetch@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@skyra/safe-fetch@npm:1.1.1"
+  dependencies:
+    "@sapphire/result": ^2.6.1
+  checksum: 7da7be067cadd7f9735d714340e7c5f3e257dc683edd1f703b3a576b735366d500b5dadcaabd2f3a32592cfb690024806ae9f0f6405b8d1f58fdc771da0e03ec
+  languageName: node
+  linkType: hard
 
 "@skyra/shared-http-pieces@npm:^1.0.0":
   version: 1.0.0

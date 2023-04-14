@@ -1,5 +1,6 @@
-import { fetchAniListApi, getAnime, parseAniListDescription } from '#lib/apis/anilist/anilist-constants';
+import { parseAniListDescription } from '#lib/apis/anilist/anilist-constants';
 import type { Media } from '#lib/apis/anilist/anilist-types';
+import { anilistAnimeGet, anilistAnimeSearch } from '#lib/apis/anilist/anilist-utilities';
 import { fetchKitsuApi } from '#lib/apis/kitsu/kitsu-constants';
 import type { KitsuHit } from '#lib/apis/kitsu/kitsu-types';
 import { BrandingColors } from '#lib/common/constants';
@@ -9,7 +10,7 @@ import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { buildAnimeSubcommand, checkIsKitsuSubcommand } from '#lib/utilities/search-command-helpers';
 import { minutes } from '#lib/utilities/time-utilities';
 import { EmbedBuilder, TimestampStyles, bold, hideLinkEmbed, hyperlink, time } from '@discordjs/builders';
-import { cutText, filterNullish, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import { cutText, filterNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import {
 	Command,
 	RegisterCommand,
@@ -23,13 +24,9 @@ import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 @RegisterCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Common.AnimeName, LanguageKeys.Common.AnimeDescription))
 export class UserCommand extends Command {
 	public override async autocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
-		if (!options.subCommand || options.focused !== 'anime' || isNullishOrEmpty(options.anime)) {
-			return interaction.replyEmpty();
-		}
-
 		switch (options.subCommand as 'kitsu' | 'anilist') {
 			case 'kitsu':
-				return this.kitsuAutocompleteRun(interaction, options);
+				return isNullishOrEmpty(options.anime) ? interaction.replyEmpty() : this.kitsuAutocompleteRun(interaction, options);
 			case 'anilist':
 				return this.aniListAutocompleteRun(interaction, options);
 		}
@@ -40,8 +37,8 @@ export class UserCommand extends Command {
 	public async sharedRun(interaction: Command.ChatInputInteraction, { subCommand, anime }: InteractionArguments<Options>) {
 		const isKitsuSubcommand = checkIsKitsuSubcommand(subCommand);
 
-		const [, packageFromAutocomplete, nthResult] = anime.split(':');
-		const hitFromRedisCache = await this.container.redisCache.fetch<KitsuHit | Media>(
+		const [packageFromAutocomplete, nthResult] = anime.split(':');
+		const hitFromRedisCache = await this.container.redis.fetch<KitsuHit | Media>(
 			isKitsuSubcommand ? RedisKeys.KitsuAnime : RedisKeys.AnilistAnime,
 			interaction.user?.id,
 			packageFromAutocomplete,
@@ -57,21 +54,19 @@ export class UserCommand extends Command {
 		}
 
 		const message = await interaction.defer();
-		const result = isKitsuSubcommand
-			? await fetchKitsuApi('anime', packageFromAutocomplete ?? anime, 1)
-			: await fetchAniListApi(getAnime, { search: anime });
+		const result = isKitsuSubcommand ? await fetchKitsuApi('anime', packageFromAutocomplete ?? anime, 1) : await anilistAnimeGet(anime);
 
 		const response = result.match({
 			ok: (value) => {
-				if (checkIsKitsuSubcommand(subCommand, value)) {
+				if (checkIsKitsuSubcommand(subCommand, value!)) {
 					return isNullishOrEmpty(value.hits) //
 						? this.handleError(interaction)
 						: this.buildKitsuResponse(value.hits[0], interaction);
 				}
 
-				return isNullishOrEmpty(value.data.Page.media) //
+				return isNullishOrEmpty(value) //
 					? this.handleError(interaction)
-					: this.buildAnilistResponse(value.data.Page.media[0]!, interaction);
+					: this.buildAnilistResponse(value, interaction);
 			},
 			err: () => this.handleError(interaction)
 		});
@@ -235,7 +230,7 @@ export class UserCommand extends Command {
 
 				for (const [index, hit] of value.hits?.entries() ?? []) {
 					redisInsertPromises.push(
-						this.container.redisCache.insertFor60Seconds<KitsuHit>(
+						this.container.redis.insertFor60Seconds<KitsuHit>(
 							RedisKeys.KitsuAnime,
 							interaction.user?.id,
 							options.anime,
@@ -263,42 +258,18 @@ export class UserCommand extends Command {
 	}
 
 	private async aniListAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AutocompleteInteractionArguments<Options>) {
-		const result = await fetchAniListApi(getAnime, { search: options.anime });
-
-		return result.match({
-			ok: async (value) => {
-				const redisInsertPromises: Promise<'OK'>[] = [];
-				const results: APIApplicationCommandOptionChoice[] = [];
-
-				for (const [index, hit] of value.data.Page.media?.entries() ?? []) {
-					if (isNullish(hit)) continue;
-
-					redisInsertPromises.push(
-						this.container.redisCache.insertFor60Seconds<Media>(
-							RedisKeys.AnilistAnime,
-							interaction.user.id,
-							options.anime,
-							index.toString(),
-							hit
-						)
-					);
-
-					results.push({
-						name: cutText(hit.title?.english || hit.title?.romaji || hit.title?.native || hit.id.toString(), 100),
-						value: `${RedisKeys.AnilistAnime}:${options.anime}:${index}`
-					});
-				}
-
-				if (redisInsertPromises.length) {
-					await Promise.all(redisInsertPromises);
-				}
-
-				return interaction.reply({
-					choices: results.slice(0, 24)
+		const result = await anilistAnimeSearch(options.anime);
+		const entries = result.match({
+			ok: (values) => {
+				return values.map((value) => {
+					const name = cutText(value.title.english || value.title.romaji || value.title.native || value.id.toString(), 100);
+					return { name, value: name };
 				});
 			},
-			err: () => interaction.replyEmpty()
+			err: () => []
 		});
+
+		return interaction.reply({ choices: entries });
 	}
 
 	private handleError(interaction: Command.ChatInputInteraction) {

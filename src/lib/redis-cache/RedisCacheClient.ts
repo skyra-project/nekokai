@@ -20,7 +20,7 @@ export class RedisCacheClient extends Redis {
 			db: envParseInteger('REDIS_CACHE_DB')
 		});
 
-		container.redisCache = this;
+		container.redis = this;
 	}
 
 	public async fetch<T>(key: RedisKeys, userId: string | undefined, query: string, nthResult: string): Promise<T | null> {
@@ -42,6 +42,6 @@ export class RedisCacheClient extends Redis {
 
 declare module '@sapphire/pieces' {
 	interface Container {
-		redisCache: RedisCacheClient;
+		redis: RedisCacheClient;
 	}
 }
