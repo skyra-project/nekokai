@@ -4,12 +4,54 @@ import { Time } from '@sapphire/time-utilities';
 import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
 import { container } from '@skyra/http-framework';
 import { Json, safeTimedFetch, type FetchError } from '@skyra/safe-fetch';
+import he from 'he';
+
+/**
+ * Regex to remove excessive new lines from the Anime or Manga description
+ */
+const excessiveNewLinesRegex = /\n{3,}/g;
+
+/**
+ * Regex to remove HTML entities from the Anime or Manga description
+ */
+const htmlEntityRegex = /<\/?(i|em|var|b|br|code|pre|mark|kbd|s|wbr|u)>/g;
+
+/**
+ * Replacements for HTML entities
+ */
+const htmlEntityReplacements = Object.freeze({
+	i: '_',
+	em: '_',
+	var: '_',
+	b: '**',
+	br: '\n',
+	code: '```',
+	pre: '`',
+	mark: '`',
+	kbd: '`',
+	s: '~~',
+	wbr: '',
+	u: '__'
+} as const);
 
 export enum AnilistKeys {
 	AnimeSearch = 'aas',
 	AnimeResult = 'aar',
 	MangaSearch = 'ams',
 	MangaResult = 'amr'
+}
+
+export function parseAniListDescription(description: string) {
+	return cutText(
+		he
+			.decode(
+				description
+					.replaceAll('\r\n', '\n')
+					.replace(htmlEntityRegex, (_, type: keyof typeof htmlEntityReplacements) => htmlEntityReplacements[type])
+			)
+			.replace(excessiveNewLinesRegex, '\n\n'),
+		500
+	);
 }
 
 export async function anilistAnimeGet(query: string): Promise<Result<AnilistEntry | null, FetchError>> {

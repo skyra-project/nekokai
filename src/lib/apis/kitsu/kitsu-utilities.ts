@@ -1,8 +1,8 @@
-import { KitsuApiUrl, KitsuHeaders } from '#lib/apis/kitsu/kitsu-constants';
 import type { AnimeDatum, Description, KitsuHit, KitsuResult, KitsuTrendingAnime, KitsuTrendingManga, MangaDatum } from '#lib/apis/kitsu/kitsu-types';
 import { ok, type Result } from '@sapphire/result';
 import { Time } from '@sapphire/time-utilities';
 import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import { container } from '@skyra/http-framework';
 import { Json, safeTimedFetch, type FetchError } from '@skyra/safe-fetch';
 import { stringify } from 'node:querystring';
@@ -13,6 +13,13 @@ export enum KitsuKeys {
 	MangaSearch = 'kms',
 	MangaResult = 'kmr'
 }
+
+const KitsuApiUrl = `https://${envParseString('KITSU_ID')}-dsn.algolia.net/1/indexes/production_media/query`;
+const KitsuHeaders = {
+	'Content-Type': 'application/json',
+	'X-Algolia-API-Key': envParseString('KITSU_TOKEN'),
+	'X-Algolia-Application-Id': envParseString('KITSU_ID')
+} as const;
 
 export async function kitsuAnimeGet(query: string): Promise<Result<KitsuAnime | null, FetchError>> {
 	const key = `${KitsuKeys.AnimeResult}:${query.toLowerCase()}`;

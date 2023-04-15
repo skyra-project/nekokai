@@ -1,5 +1,5 @@
-import { parseAniListDescription } from '#lib/apis/anilist/anilist-constants';
 import type { AnilistEntry } from '#lib/apis/anilist/anilist-types';
+import { parseAniListDescription } from '#lib/apis/anilist/anilist-utilities';
 import type { KitsuAnime, KitsuManga } from '#lib/apis/kitsu/kitsu-utilities';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
@@ -112,10 +112,6 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			if (externalLinks.length) {
 				description.push(`${bold(anilistTitles.externalLinks)}: ${t(LanguageKeys.Common.FormatList, { value: externalLinks })}`);
 			}
-		}
-
-		if (value.description) {
-			description.push('', parseAniListDescription(value.description));
 		}
 
 		if (value.description) {
