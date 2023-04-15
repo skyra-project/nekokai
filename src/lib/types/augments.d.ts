@@ -17,6 +17,6 @@ declare module '@skyra/env-utilities' {
 		REDIS_PORT: IntegerString;
 		REDIS_PASSWORD: string;
 		REDIS_HOST: string;
-		REDIS_CACHE_DB: IntegerString;
+		REDIS_DB: IntegerString;
 	}
 }

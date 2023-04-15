@@ -8,8 +8,7 @@
 	"main": "dist/main.js",
 	"type": "module",
 	"imports": {
-		"#lib/*": "./dist/lib/*.js",
-		"#lib/structures": "./dist/lib/structures/index.js"
+		"#lib/*": "./dist/lib/*.js"
 	},
 	"scripts": {
 		"build": "tsc -b src",
@@ -32,6 +31,8 @@
 		"@skyra/env-utilities": "^1.2.0",
 		"@skyra/http-framework": "^1.0.0",
 		"@skyra/http-framework-i18n": "^1.0.0",
+		"@skyra/logger": "^2.0.0",
+		"@skyra/safe-fetch": "^1.1.1",
 		"@skyra/shared-http-pieces": "^1.0.0",
 		"@skyra/start-banner": "^2.0.0",
 		"colorette": "^2.0.19",

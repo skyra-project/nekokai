@@ -1,105 +1,205 @@
+import type { AnilistEntry } from '#lib/apis/anilist/anilist-types';
+import { parseAniListDescription } from '#lib/apis/anilist/anilist-utilities';
+import type { KitsuAnime, KitsuManga } from '#lib/apis/kitsu/kitsu-utilities';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { isNsfwChannel } from '#lib/utilities/discord-utilities';
-import { EmbedBuilder, userMention } from '@discordjs/builders';
-import { Result } from '@sapphire/result';
-import { envParseString } from '@skyra/env-utilities';
-import { Command, type TransformedArguments } from '@skyra/http-framework';
-import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
+import { durationFormatter } from '#lib/utilities/duration-formatter';
+import { minutes } from '#lib/utilities/time-utilities';
+import { EmbedBuilder, TimestampStyles, bold, hideLinkEmbed, hyperlink, time } from '@discordjs/builders';
+import type { Result } from '@sapphire/result';
+import { Time } from '@sapphire/time-utilities';
+import { cutText, filterNullish } from '@sapphire/utilities';
+import { Command, type AutocompleteInteractionArguments, type InteractionArguments } from '@skyra/http-framework';
+import { resolveUserKey, type TFunction } from '@skyra/http-framework-i18n';
+import type { FetchError } from '@skyra/safe-fetch';
 import { MessageFlags } from 'discord-api-types/v10';
-import { elementAt } from 'ix/iterable/elementat.js';
-import { platform, release } from 'node:os';
-import { setTimeout } from 'node:timers';
 
-export class AnimeCommand extends Command {
-	private readonly type: string;
-	private readonly cache = new Set<string>();
+const { AniList, Kitsu } = LanguageKeys.Commands;
 
-	public constructor(context: Command.Context, options: AnimeCommand.Options) {
-		super(context, options);
-		this.type = options.type;
+export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Command {
+	public override autocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
+		switch (options.subCommand as 'kitsu' | 'anilist') {
+			case 'kitsu':
+				return this.kitsuAutocompleteRun(interaction, options);
+			case 'anilist':
+				return this.anilistAutocompleteRun(interaction, options);
+		}
 	}
 
-	protected override async chatInputRun(interaction: Command.ChatInputInteraction, args: AnimeCommandArgs) {
-		const query = new URL('https://api.weeb.sh/images/random');
-		query.searchParams.append('type', this.type);
-		query.searchParams.append('nsfw', isNsfwChannel(interaction.channel).toString());
+	protected createAnilistResponse(value: AnilistEntry, t: TFunction) {
+		return { embeds: [this.createAnilistEmbed(value, t).toJSON()] };
+	}
 
-		const result = await this.get(query);
-		return result.match({
-			ok: (value) => this.handleSuccess(interaction, value, args),
-			err: (error) => this.handleError(interaction, error)
+	protected createKitsuResponse(value: KitsuAnime | KitsuManga, kind: Kind, t: TFunction) {
+		return { embeds: [this.createKitsuEmbed(value, kind, t).toJSON()] };
+	}
+
+	protected createErrorResponse(interaction: Command.ChatInputInteraction) {
+		return { content: resolveUserKey(interaction, LanguageKeys.Common.AnimeError), flags: MessageFlags.Ephemeral };
+	}
+
+	protected abstract anilistAutocompleteFetch(
+		options: AnimeCommand.AutocompleteArguments<Kind>
+	): Promise<Result<readonly AnilistEntry[], FetchError>>;
+
+	protected async anilistAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
+		const result = await this.anilistAutocompleteFetch(options);
+		const entries = result.match({
+			ok: (values) => {
+				return values.map((value) => {
+					const name = cutText(value.title.english || value.title.romaji || value.title.native || value.id.toString(), 100);
+					return { name, value: name };
+				});
+			},
+			err: () => []
 		});
+
+		return interaction.reply({ choices: entries });
 	}
 
-	private handleSuccess(interaction: Command.ChatInputInteraction, url: string, args: AnimeCommandArgs) {
-		const content = args.user ? userMention(args.user.user.id) : undefined;
-		const embed = new EmbedBuilder()
-			.setTitle('→')
-			.setURL(url)
+	protected abstract kitsuAutocompleteFetch(
+		options: AnimeCommand.AutocompleteArguments<Kind>
+	): Promise<Result<readonly (KitsuAnime | KitsuManga)[], FetchError>>;
+
+	protected async kitsuAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
+		const result = await this.kitsuAutocompleteFetch(options);
+		const entries = result.match({
+			ok: (values) => {
+				return values.map((value) => {
+					const name = cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100);
+					return { name, value: name };
+				});
+			},
+			err: () => []
+		});
+
+		return interaction.reply({ choices: entries });
+	}
+
+	private createAnilistEmbed(value: AnilistEntry, t: TFunction) {
+		const anilistTitles = t(AniList.EmbedTitles);
+		const description = [
+			`**${anilistTitles.romajiName}**: ${value.title.romaji || t(LanguageKeys.Common.None)}`,
+			`**${anilistTitles.englishName}**: ${value.title.english || t(LanguageKeys.Common.None)}`,
+			`**${anilistTitles.nativeName}**: ${value.title.native || t(LanguageKeys.Common.None)}`
+		];
+
+		if (value.countryOfOrigin) {
+			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${value.countryOfOrigin}`);
+		}
+
+		if (value.episodes) {
+			description.push(`${bold(anilistTitles.episodes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.episodes })}`);
+		}
+
+		if (value.chapters) {
+			description.push(`${bold(anilistTitles.chapters)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.chapters })}`);
+		}
+
+		if (value.volumes) {
+			description.push(`${bold(anilistTitles.volumes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.volumes })}`);
+		}
+
+		if (value.duration) {
+			description.push(`${bold(anilistTitles.episodeLength)}: ${durationFormatter.format(minutes(value.duration), 1)}`);
+		}
+
+		if (value.externalLinks?.length) {
+			const externalLinks = value.externalLinks
+				.map((link) => (link?.url && link.site ? hyperlink(link.site, hideLinkEmbed(link.url)) : undefined))
+				.filter(filterNullish);
+
+			if (externalLinks.length) {
+				description.push(`${bold(anilistTitles.externalLinks)}: ${t(LanguageKeys.Common.FormatList, { value: externalLinks })}`);
+			}
+		}
+
+		if (value.description) {
+			description.push('', parseAniListDescription(value.description));
+		}
+
+		return new EmbedBuilder()
 			.setColor(BrandingColors.Primary)
-			.setImage(url)
-			.setFooter({ text: resolveKey(interaction, LanguageKeys.Commands.Anime.PoweredByWeebSh) });
-		return interaction.reply({ content, embeds: [embed.toJSON()] });
+			.setTitle(value.title.english ?? value.title.romaji ?? value.title.native!)
+			.setURL(value.siteUrl ?? null)
+			.setDescription(description.join('\n'))
+			.setImage(`https://img.anili.st/media/${value.id}`)
+			.setFooter({ text: '© anilist.co' });
 	}
 
-	private handleError(interaction: Command.ChatInputInteraction, error: TypedT) {
-		const content = resolveUserKey(interaction, error);
-		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
-	}
+	private createKitsuEmbed(value: KitsuAnime | KitsuManga, kind: Kind, t: TFunction) {
+		const titles = t(Kitsu.EmbedTitles);
+		const description = [
+			`${bold(titles.romajiName)}: ${value.titles.en_jp || t(LanguageKeys.Common.None)}`,
+			`${bold(titles.englishName)}: ${value.titles.en || value.titles.en_us || t(LanguageKeys.Common.None)}`,
+			`${bold(titles.nativeName)}: ${value.titles.ja_jp || t(LanguageKeys.Common.None)}`,
+			`${bold(titles.type)}: ${t(Kitsu.Types)[value.subtype.toLowerCase()] || value.subtype}`,
+			`${bold(titles.score)}: ${value.averageRating}%`
+		];
 
-	private async get(url: URL): Promise<Result<string, TypedT>> {
-		// We will abort requests that take longer than 2 seconds, to be safe with the 3 second limit:
-		const abort = new AbortController();
-		const timer = setTimeout(() => abort.abort('TimeoutError'), 2000);
+		if (isKitsuAnime(kind, value)) {
+			const episodes = value.episodeCount ? t(LanguageKeys.Common.FormatNumber, { value: value.episodeCount }) : titles.stillAiring;
+			description.push(`${bold(titles.episodes)}: ${episodes}`);
 
-		const result = await Result.fromAsync(fetch(url.href, { headers: AnimeCommand.headers, signal: abort.signal }));
-		clearTimeout(timer);
+			const episodeLength = value.episodeLength ? durationFormatter.format(value.episodeLength * Time.Minute) : t(LanguageKeys.Common.None);
+			description.push(`${bold(titles.episodeLength)}: ${episodeLength}`);
+		} else {
+			const chapters = value.chapterCount ? t(LanguageKeys.Common.FormatNumber, { value: value.chapterCount }) : t(LanguageKeys.Common.None);
+			description.push(`${bold(titles.chapters)}: ${chapters}`);
 
-		// Handle cases in which we have a Response:
-		if (result.isOk()) {
-			const response = result.unwrap();
-
-			// If 2XX, deserialize the data, cache the URL, and return it:
-			if (response.ok) {
-				const data = (await response.json()) as AnimeCommandFetchResult;
-				this.cache.add(data.url);
-				return Result.ok(data.url);
-			}
-
-			// If we got an 4XX error code, warn the error:
-			if (response.status < 500) {
-				console.error(`Unexpected error in ${this.name}: [${response.status}] ${await response.text()}`);
-			}
+			const volumes = value.volumeCount ? t(LanguageKeys.Common.FormatNumber, { value: value.volumeCount }) : t(LanguageKeys.Common.None);
+			description.push(`${bold(titles.volumes)}: ${volumes}`);
 		}
 
-		if (this.cache.size === 0) {
-			const key = result.isOkAnd((value) => value.status >= 500)
-				? LanguageKeys.Commands.Anime.UnavailableError
-				: LanguageKeys.Commands.Anime.UnexpectedError;
-			return Result.err(key);
+		description.push(`${bold(titles.ageRating)}: ${value.ageRating ?? t(LanguageKeys.Common.None)}`);
+
+		const url = `https://kitsu.io/${kind}/${value.id}`;
+		const title = value.titles.en || value.titles.en_jp || value.titles.canonical;
+		const releaseDate = time(value.startDate, TimestampStyles.ShortDate);
+		const maskedLink = bold(hyperlink(title, hideLinkEmbed(url)));
+		if (isKitsuAnime(kind, value)) {
+			description.push(`${bold(titles.firstAirDate)}: ${releaseDate}`);
+			description.push(`${bold(titles.watchIt)}: ${maskedLink}`);
+		} else {
+			description.push(`${bold(titles.firstPublishDate)}: ${releaseDate}`);
+			description.push(`${bold(titles.readIt)}: ${maskedLink}`);
 		}
 
-		return Result.ok(elementAt(this.cache.values(), Math.floor(Math.random() * this.cache.size))!);
-	}
+		const synopsis =
+			// Prefer the synopsis
+			value.synopsis ||
+			// Then prefer the English description
+			value.description?.en ||
+			// Then prefer the English-us description
+			value.description?.en_us ||
+			// Then prefer the latinized Japanese description
+			value.description?.en_jp ||
+			// Then the description in kanji / hiragana / katakana
+			value.description?.ja_jp ||
+			// If all fails just get the first key of the description
+			value.description?.[Object.keys(value.description!)[0]];
+		if (synopsis) {
+			description.push('', cutText(synopsis.replace(/(.+)[\r\n\t](.+)/gim, '$1 $2').split('\r\n')[0], 750));
+		}
 
-	private static readonly headers = {
-		Authorization: `Wolke ${envParseString('WEEB_SH_TOKEN')}`,
-		'User-Agent': `Skyra/${envParseString('CLIENT_VERSION')} (fetch) ${platform()}/${release()} (https://github.com/skyra-project/nekokai)`
-	} as const;
+		return new EmbedBuilder()
+			.setColor(BrandingColors.Primary)
+			.setTitle(title)
+			.setURL(url)
+			.setDescription(description.join('\n'))
+			.setThumbnail(value.poster || '')
+			.setFooter({ text: '© kitsu.io' });
+	}
 }
 
 export namespace AnimeCommand {
 	export type Context = Command.Context;
-	export interface Options extends Command.Options {
-		type: string;
-	}
+	export type Options = Command.Options;
+	export type Arguments<Kind extends 'anime' | 'manga'> = InteractionArguments<Kind extends 'anime' ? { anime: string } : { manga: string }>;
+	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<Arguments<Kind>>;
 }
 
-interface AnimeCommandArgs {
-	user?: TransformedArguments.User;
-}
-
-interface AnimeCommandFetchResult {
-	url: string;
+function isKitsuAnime(kind: 'anime' | 'manga', value: KitsuAnime | KitsuManga): value is KitsuAnime;
+function isKitsuAnime(kind: 'anime' | 'manga') {
+	return kind === 'anime';
 }
