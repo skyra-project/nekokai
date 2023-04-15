@@ -1,5 +1,5 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { WeebCommand } from '#lib/structures';
+import { WeebCommand } from '#lib/structures/WeebCommand';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { isNullish } from '@sapphire/utilities';
 import { RegisterCommand } from '@skyra/http-framework';
