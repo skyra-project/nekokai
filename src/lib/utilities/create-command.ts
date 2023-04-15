@@ -1,11 +1,11 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { AnimeCommand } from '#lib/structures';
+import { WeebCommand } from '#lib/structures';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { isNullish } from '@sapphire/utilities';
 import { RegisterCommand } from '@skyra/http-framework';
 import { applyLocalizedBuilder } from '@skyra/http-framework-i18n';
 
-export function createCommand(options: createCommand.Options): typeof AnimeCommand {
+export function createCommand(options: createCommand.Options): typeof WeebCommand {
 	const name = new URL(options.path).searchParams.get('name');
 	if (isNullish(name)) throw new TypeError('The provided path lacks of a "name" querystring parameter.');
 
@@ -25,8 +25,8 @@ export function createCommand(options: createCommand.Options): typeof AnimeComma
 	const type = options.type ?? name;
 
 	@RegisterCommand(builder)
-	class UserAnimeCommand extends AnimeCommand {
-		public constructor(context: AnimeCommand.Context) {
+	class UserAnimeCommand extends WeebCommand {
+		public constructor(context: WeebCommand.Context) {
 			super(context, { type });
 		}
 	}

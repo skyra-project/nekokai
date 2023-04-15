@@ -1,14 +1,5 @@
 import { KitsuApiUrl, KitsuHeaders } from '#lib/apis/kitsu/kitsu-constants';
-import type {
-	AnimeDatum,
-	DateString,
-	Description,
-	KitsuHit,
-	KitsuResult,
-	KitsuTrendingAnime,
-	KitsuTrendingManga,
-	MangaDatum
-} from '#lib/apis/kitsu/kitsu-types';
+import type { AnimeDatum, Description, KitsuHit, KitsuResult, KitsuTrendingAnime, KitsuTrendingManga, MangaDatum } from '#lib/apis/kitsu/kitsu-types';
 import { ok, type Result } from '@sapphire/result';
 import { Time } from '@sapphire/time-utilities';
 import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
@@ -141,7 +132,7 @@ function transformAlgoliaAnime(data: KitsuHit): KitsuAnime {
 		titles: { ...data.titles, canonical: data.canonicalTitle },
 		poster: data.posterImage.original,
 		ageRating: data.ageRating,
-		startDate: data.startDate as unknown as DateString,
+		startDate: data.startDate,
 		episodeCount: data.episodeCount!,
 		episodeLength: data.episodeLength!
 	};
@@ -157,7 +148,7 @@ function transformAlgoliaManga(data: KitsuHit): KitsuManga {
 		titles: { ...data.titles, canonical: data.canonicalTitle },
 		poster: data.posterImage.original,
 		ageRating: data.ageRating,
-		startDate: data.startDate as unknown as DateString,
+		startDate: data.startDate,
 		chapterCount: data.chapterCount!,
 		volumeCount: data.volumeCount!
 	};

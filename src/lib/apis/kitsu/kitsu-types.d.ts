@@ -67,9 +67,9 @@ interface BaseAttributes {
 	ratingFrequencies: { [key: string]: string };
 	userCount: number;
 	favoritesCount: number;
-	startDate: DateString;
-	endDate: DateString | null;
-	nextRelease: DateString | null;
+	startDate: number;
+	endDate: number | null;
+	nextRelease: number | null;
 	popularityRank: number;
 	ratingRank: number | null;
 	ageRating: AgeRating | null;

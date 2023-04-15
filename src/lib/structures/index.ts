@@ -1,1 +1,1 @@
-export * from '#lib/structures/AnimeCommand';
+export * from '#lib/structures/WeebCommand';
