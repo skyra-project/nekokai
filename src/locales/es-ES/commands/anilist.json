@@ -1,6 +1,6 @@
 {
-	"animeDescription": "",
-	"mangaDescription": "",
+	"animeDescription": "Obtiene datos de cualquier anime en AniList",
+	"mangaDescription": "Obtiene datos de cualquier manga en AniList",
 	"subcommandName": "anilist",
 	"embedTitles": {
 		"chapters": "Cantidad de capítulos",
