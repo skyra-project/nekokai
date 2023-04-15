@@ -1,0 +1,37 @@
+{
+	"animeDescription": "",
+	"mangaDescription": "",
+	"subcommandName": "",
+	"embedTitles": {
+		"romajiName": "",
+		"englishName": "",
+		"nativeName": "",
+		"type": "",
+		"score": "",
+		"episodes": "",
+		"episodeLength": "",
+		"chapters": "",
+		"volumes": "",
+		"ageRating": "",
+		"firstAirDate": "",
+		"watchIt": "",
+		"stillAiring": "",
+		"firstPublishDate": "",
+		"readIt": ""
+	},
+	"types": {
+		"movie": "",
+		"music": "",
+		"ona": "",
+		"ova": "",
+		"special": "",
+		"tv": "",
+		"doujin": "",
+		"manga": "",
+		"manhua": "",
+		"manhwa": "",
+		"novel": "",
+		"oel": "",
+		"oneshot": ""
+	}
+}
