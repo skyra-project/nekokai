@@ -1,5 +1,7 @@
 {
 	"animeDescription": "",
+	"mangaDescription": "",
+	"subcommandName": "",
 	"embedTitles": {
 		"chapters": "",
 		"countryOfOrigin": "",
@@ -10,7 +12,5 @@
 		"nativeName": "",
 		"romajiName": "",
 		"volumes": ""
-	},
-	"mangaDescription": "",
-	"subcommandName": ""
+	}
 }
