@@ -1,42 +1,37 @@
 {
-	"animeDescription": "Obtiene datos de cualquier anime en Kitsu.",
-	"animeEmbedData": {
-		"ageRating": "Clasificación por edad",
-		"episodeLength": "Longitud del episodio",
-		"episodes": "Episodio(s)",
-		"firstAirDate": "Primera fecha de emisión",
-		"score": "Puntuación",
-		"stillAiring": "Sigue emitiendo",
-		"type": "Tipo",
-		"watchIt": "Véalo aquí:"
+	"animeDescription": "",
+	"mangaDescription": "",
+	"subcommandName": "kitsu",
+	"embedTitles": {
+		"romajiName": "",
+		"englishName": "",
+		"nativeName": "",
+		"type": "",
+		"score": "",
+		"episodes": "",
+		"episodeLength": "",
+		"chapters": "",
+		"volumes": "",
+		"ageRating": "",
+		"firstAirDate": "",
+		"watchIt": "",
+		"stillAiring": "",
+		"firstPublishDate": "",
+		"readIt": ""
 	},
-	"animeEpisodeCount": "{{episodeCount, number(maximumFractionDigits: 2)}}",
-	"animeOutputDescription": "**Título inglés:** {{englishTitle}}\n**Título japonés:** {{japaneseTitle}}\n**Título canónico:** {{canonicalTitle}}\n{{synopsis}}",
-	"animeTypes": {
-		"movie": "🎥 Película",
-		"music": "🎵 Música",
-		"ona": "🌏 Animación de Red Original",
-		"ova": "📼 Animación de Vídeo Original",
-		"special": "🎴 Especial",
-		"tv": "📺 TV"
-	},
-	"mangaDescription": "Obtiene datos de cualquier manga en Kitsu.",
-	"mangaEmbedData": {
-		"ageRating": "Clasificación por edad",
-		"firstPublishDate": "Publicado originalmente",
-		"readIt": "Léalo aquí:",
-		"score": "Puntuación",
-		"type": "Subtipo"
-	},
-	"mangaOutputDescription": "**Título inglés:** {{englishTitle}}\n**Título japonés:** {{japaneseTitle}}\n**Título canónico:** {{canonicalTitle}}\n{{synopsis}}",
-	"mangaTypes": {
-		"doujin": "📘 Doujin",
-		"manga": "📘 Manga",
-		"manhua": "🇨🇳 Manhua",
-		"manhwa": "🇰🇷 Manhwa",
-		"novel": "📕 Novela",
-		"oel": "🇬🇧 Manga Original en Inglés",
-		"oneshot": "☄ One Shot"
-	},
-	"subcommandName": "kitsu"
+	"types": {
+		"movie": "",
+		"music": "",
+		"ona": "",
+		"ova": "",
+		"special": "",
+		"tv": "",
+		"doujin": "",
+		"manga": "",
+		"manhua": "",
+		"manhwa": "",
+		"novel": "",
+		"oel": "",
+		"oneshot": ""
+	}
 }
