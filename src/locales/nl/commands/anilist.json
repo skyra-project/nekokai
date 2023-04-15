@@ -1,5 +1,7 @@
 {
-	"animeDescription": "Zoek je favoriete anime op AniList met dit command.",
+	"animeDescription": "Zoek je favoriete anime op AniList met dit command",
+	"mangaDescription": "Zoek je favoriete manga op AniList met dit command",
+	"subcommandName": "anilist",
 	"embedTitles": {
 		"chapters": "Aantal hoofdstukken",
 		"countryOfOrigin": "Land van oorsprong",
@@ -10,7 +12,5 @@
 		"nativeName": "Oorspronkelijke naam",
 		"romajiName": "Geromaniseerde naam",
 		"volumes": "Aantal volumes"
-	},
-	"mangaDescription": "Zoek je favoriete manga op AniList met dit command.",
-	"subcommandName": "anilist"
+	}
 }

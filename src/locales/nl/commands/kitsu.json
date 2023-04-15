@@ -1,35 +1,31 @@
 {
-	"animeDescription": "Zoek je favoriete anime op Kitsu met dit command.",
-	"animeEmbedData": {
-		"ageRating": "Leeftijd beoordeling",
-		"episodeLength": "Aflevering lengte",
-		"episodes": "Aflevering(en)",
-		"firstAirDate": "Eerste uitzenddatum",
-		"score": "Score",
-		"stillAiring": "Draait nog steeds",
+	"animeDescription": "Zoek je favoriete anime op Kitsu met dit command",
+	"mangaDescription": "Zoek je favoriete manga op Kitsu met dit command",
+	"subcommandName": "kitsu",
+	"embedTitles": {
+		"romajiName": "Geromaniseerde naam",
+		"englishName": "Engelse naam",
+		"nativeName": "Oorspronkelijke naam",
 		"type": "Type",
-		"watchIt": "Kijk het hier:"
+		"score": "Score",
+		"episodes": "Aantal afleveringen",
+		"episodeLength": "Aflevering lengte",
+		"chapters": "Aantal hoofdstukken",
+		"volumes": "Aantal volumes",
+		"ageRating": "Leeftijd beoordeling",
+		"firstAirDate": "Eerste uitzenddatum",
+		"watchIt": "Kijk het hier",
+		"stillAiring": "Draait nog steeds",
+		"firstPublishDate": "Eerste gepubliceerd op",
+		"readIt": "Lees het hier"
 	},
-	"animeEpisodeCount": "{{episodeCount, number(maximumFractionDigits: 2)}}",
-	"animeOutputDescription": "**Engelse titel:** {{englishTitle}}\n**Japanse titel:** {{japaneseTitle}}\n**Canonieke titel:** {{canonicalTitle}}\n{{synopsis}}",
-	"animeTypes": {
+	"types": {
 		"movie": "🎥 Film",
 		"music": "🎵 Muziek",
 		"ona": "🌏 Originele Net Animatie",
 		"ova": "📼 Originele Video Animatie",
 		"special": "🎴 Special",
-		"tv": "📺 TV"
-	},
-	"mangaDescription": "Zoek je favoriete manga op Kitsu met dit command.",
-	"mangaEmbedData": {
-		"ageRating": "Leeftijdsclassificatie",
-		"firstPublishDate": "Eerste gepubliceerd op",
-		"readIt": "Lees het hier:",
-		"score": "Score",
-		"type": "Subgenre"
-	},
-	"mangaOutputDescription": "**Engelse titel:** {{englishTitle}}\n**Japanse titel:** {{japaneseTitle}}\n**Canonieke titel:** {{canonicalTitle}}\n{{synopsis}}",
-	"mangaTypes": {
+		"tv": "📺 TV",
 		"doujin": "📘 Doujin",
 		"manga": "📘 Manga",
 		"manhua": "🇨🇳 Manhua",
@@ -37,6 +33,5 @@
 		"novel": "📕 Novel",
 		"oel": "🇬🇧 Origineel Engelstalige manga",
 		"oneshot": "☄ One Shot"
-	},
-	"subcommandName": "kitsu"
+	}
 }

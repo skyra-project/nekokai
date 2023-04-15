@@ -1,35 +1,31 @@
 {
-	"animeDescription": "Obtiene datos de cualquier anime en Kitsu.",
-	"animeEmbedData": {
-		"ageRating": "Clasificación por edad",
-		"episodeLength": "Longitud del episodio",
-		"episodes": "Episodio(s)",
-		"firstAirDate": "Primera fecha de emisión",
-		"score": "Puntuación",
-		"stillAiring": "Sigue emitiendo",
+	"animeDescription": "Obtiene datos de cualquier anime en Kitsu",
+	"mangaDescription": "Obtiene datos de cualquier manga en Kitsu",
+	"subcommandName": "kitsu",
+	"embedTitles": {
+		"romajiName": "Nombre romanizado",
+		"englishName": "Nombre inglés",
+		"nativeName": "Nombre nativo",
 		"type": "Tipo",
-		"watchIt": "Véalo aquí:"
+		"score": "Puntuación",
+		"episodes": "Cantidad de episodios",
+		"episodeLength": "Longitud del episodio",
+		"chapters": "Cantidad de capítulos",
+		"volumes": "Cantidad de volúmenes",
+		"ageRating": "Clasificación por edad",
+		"firstAirDate": "Primera fecha de emisión",
+		"watchIt": "Véalo aquí",
+		"stillAiring": "Sigue emitiendo",
+		"firstPublishDate": "Publicado originalmente",
+		"readIt": "Léalo aquí"
 	},
-	"animeEpisodeCount": "{{episodeCount, number(maximumFractionDigits: 2)}}",
-	"animeOutputDescription": "**Título inglés:** {{englishTitle}}\n**Título japonés:** {{japaneseTitle}}\n**Título canónico:** {{canonicalTitle}}\n{{synopsis}}",
-	"animeTypes": {
+	"types": {
 		"movie": "🎥 Película",
 		"music": "🎵 Música",
 		"ona": "🌏 Animación de Red Original",
 		"ova": "📼 Animación de Vídeo Original",
 		"special": "🎴 Especial",
-		"tv": "📺 TV"
-	},
-	"mangaDescription": "Obtiene datos de cualquier manga en Kitsu.",
-	"mangaEmbedData": {
-		"ageRating": "Clasificación por edad",
-		"firstPublishDate": "Publicado originalmente",
-		"readIt": "Léalo aquí:",
-		"score": "Puntuación",
-		"type": "Subtipo"
-	},
-	"mangaOutputDescription": "**Título inglés:** {{englishTitle}}\n**Título japonés:** {{japaneseTitle}}\n**Título canónico:** {{canonicalTitle}}\n{{synopsis}}",
-	"mangaTypes": {
+		"tv": "📺 TV",
 		"doujin": "📘 Doujin",
 		"manga": "📘 Manga",
 		"manhua": "🇨🇳 Manhua",
@@ -37,6 +33,5 @@
 		"novel": "📕 Novela",
 		"oel": "🇬🇧 Manga Original en Inglés",
 		"oneshot": "☄ One Shot"
-	},
-	"subcommandName": "kitsu"
+	}
 }

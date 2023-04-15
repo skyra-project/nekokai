@@ -1,5 +1,7 @@
 {
-	"animeDescription": "Get data for any anime on AniList.",
+	"animeDescription": "Get data for any anime on AniList",
+	"mangaDescription": "Get data for any manga on AniList",
+	"subcommandName": "anilist",
 	"embedTitles": {
 		"chapters": "Amount of chapters",
 		"countryOfOrigin": "Country of origin",
@@ -10,7 +12,5 @@
 		"nativeName": "Native name",
 		"romajiName": "Romanized name",
 		"volumes": "Amount of volumes"
-	},
-	"mangaDescription": "Get data for any manga on AniList.",
-	"subcommandName": "anilist"
+	}
 }
