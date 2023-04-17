@@ -118,9 +118,13 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			description.push('', parseAniListDescription(value.description));
 		}
 
+		const locale = t.lng as LocaleString;
+		const title = this.anilistShouldUseNative(locale, value.countryOfOrigin ?? 'JP')
+			? value.title.native ?? value.title.english ?? value.title.romaji!
+			: value.title.english ?? value.title.romaji ?? value.title.native!;
 		return new EmbedBuilder()
 			.setColor(BrandingColors.Primary)
-			.setTitle(value.title.english ?? value.title.romaji ?? value.title.native!)
+			.setTitle(title)
 			.setURL(value.siteUrl ?? null)
 			.setDescription(description.join('\n'))
 			.setImage(`https://img.anili.st/media/${value.id}`)
@@ -155,7 +159,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 
 		const locale = t.lng as LocaleString;
 		const url = `https://kitsu.io/${kind}/${value.id}`;
-		const title = this.getTitle(locale, value.titles) ?? value.titles.canonical;
+		const title = this.kitsuGetTitle(locale, value.titles) ?? value.titles.canonical;
 		const releaseDate = time(value.startDate, TimestampStyles.ShortDate);
 		const maskedLink = bold(hyperlink(title, hideLinkEmbed(url)));
 		if (isKitsuAnime(kind, value)) {
@@ -179,7 +183,14 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			.setFooter({ text: '© kitsu.io' });
 	}
 
-	private getTitle(locale: LocaleString, entries: Record<string, string>): string | null {
+	private anilistShouldUseNative(locale: LocaleString, origin: string) {
+		if (locale === 'ja') return origin === 'JP';
+		if (locale === 'zh-CN') return origin === 'CN';
+		if (locale === 'ko') return origin === 'KR';
+		return false;
+	}
+
+	private kitsuGetTitle(locale: LocaleString, entries: Record<string, string>): string | null {
 		const keys = AnimeCommand.KitsuDescriptionMappings[locale] ?? [];
 
 		for (const key of keys) {
