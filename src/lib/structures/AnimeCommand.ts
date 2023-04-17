@@ -1,4 +1,4 @@
-import type { AnilistEntry } from '#lib/apis/anilist/anilist-types';
+import type { AnilistEntry, MediaTitle } from '#lib/apis/anilist/anilist-types';
 import { parseAniListDescription } from '#lib/apis/anilist/anilist-utilities';
 import type { KitsuAnime, KitsuManga } from '#lib/apis/kitsu/kitsu-utilities';
 import { BrandingColors } from '#lib/common/constants';
@@ -10,7 +10,7 @@ import type { Result } from '@sapphire/result';
 import { Time } from '@sapphire/time-utilities';
 import { cutText, filterNullish } from '@sapphire/utilities';
 import { Command, type AutocompleteInteractionArguments, type InteractionArguments } from '@skyra/http-framework';
-import { resolveUserKey, type TFunction } from '@skyra/http-framework-i18n';
+import { getSupportedUserLanguageName, resolveUserKey, type TFunction } from '@skyra/http-framework-i18n';
 import type { FetchError } from '@skyra/safe-fetch';
 import { MessageFlags, type LocaleString } from 'discord-api-types/v10';
 
@@ -44,12 +44,13 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 
 	protected async anilistAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
 		const result = await this.anilistAutocompleteFetch(options);
+		const locale = getSupportedUserLanguageName(interaction);
 		const entries = result.match({
 			ok: (values) => {
-				return values.map((value) => {
-					const name = cutText(value.title.english || value.title.romaji || value.title.native || value.id.toString(), 100);
-					return { name, value: name };
-				});
+				return values.map((value) => ({
+					name: cutText(this.anilistGetTitle(value.title, locale, value.countryOfOrigin), 100),
+					value: cutText(value.title.english || value.title.romaji || value.title.native!, 100)
+				}));
 			},
 			err: () => []
 		});
@@ -63,11 +64,14 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 
 	protected async kitsuAutocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
 		const result = await this.kitsuAutocompleteFetch(options);
+		const locale = getSupportedUserLanguageName(interaction);
 		const entries = result.match({
 			ok: (values) => {
 				return values.map((value) => {
-					const name = cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100);
-					return { name, value: name };
+					return {
+						name: cutText(this.kitsuGetTitle(locale, value.titles), 100),
+						value: cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100)
+					};
 				});
 			},
 			err: () => []
@@ -119,12 +123,9 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		}
 
 		const locale = t.lng as LocaleString;
-		const title = this.anilistShouldUseNative(locale, value.countryOfOrigin ?? 'JP')
-			? value.title.native ?? value.title.english ?? value.title.romaji!
-			: value.title.english ?? value.title.romaji ?? value.title.native!;
 		return new EmbedBuilder()
 			.setColor(BrandingColors.Primary)
-			.setTitle(title)
+			.setTitle(this.anilistGetTitle(value.title, locale, value.countryOfOrigin))
 			.setURL(value.siteUrl ?? null)
 			.setDescription(description.join('\n'))
 			.setImage(`https://img.anili.st/media/${value.id}`)
@@ -159,7 +160,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 
 		const locale = t.lng as LocaleString;
 		const url = `https://kitsu.io/${kind}/${value.id}`;
-		const title = this.kitsuGetTitle(locale, value.titles) ?? value.titles.canonical;
+		const title = this.kitsuGetTitle(locale, value.titles);
 		const releaseDate = time(value.startDate, TimestampStyles.ShortDate);
 		const maskedLink = bold(hyperlink(title, hideLinkEmbed(url)));
 		if (isKitsuAnime(kind, value)) {
@@ -183,6 +184,12 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			.setFooter({ text: '© kitsu.io' });
 	}
 
+	private anilistGetTitle(title: MediaTitle, locale: LocaleString, origin: string | null | undefined) {
+		return this.anilistShouldUseNative(locale, origin ?? 'JP')
+			? title.native ?? title.english ?? title.romaji!
+			: title.english ?? title.romaji ?? title.native!;
+	}
+
 	private anilistShouldUseNative(locale: LocaleString, origin: string) {
 		if (locale === 'ja') return origin === 'JP';
 		if (locale === 'zh-CN') return origin === 'CN';
@@ -190,14 +197,14 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		return false;
 	}
 
-	private kitsuGetTitle(locale: LocaleString, entries: Record<string, string>): string | null {
+	private kitsuGetTitle(locale: LocaleString, entries: Record<string, string>): string {
 		const keys = AnimeCommand.KitsuDescriptionMappings[locale] ?? [];
 
 		for (const key of keys) {
 			if (entries[key]) return entries[key]!;
 		}
 
-		return null;
+		return entries.canonical;
 	}
 
 	private static readonly KitsuDescriptionMappings = {
