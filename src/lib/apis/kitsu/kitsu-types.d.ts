@@ -67,8 +67,8 @@ interface BaseAttributes {
 	ratingFrequencies: { [key: string]: string };
 	userCount: number;
 	favoritesCount: number;
-	startDate: number;
-	endDate: number | null;
+	startDate: string;
+	endDate: string | null;
 	nextRelease: number | null;
 	popularityRank: number;
 	ratingRank: number | null;
@@ -152,52 +152,12 @@ interface CoverImageDimensions {
 }
 
 interface Titles {
-	ar?: string;
-	de_de?: string;
-	en_cn?: string;
-	en_jp?: string;
-	en_kr?: string;
-	en_us?: string;
-	en?: string;
-	fa_ir?: string;
-	fr_fr?: string;
-	he_il?: string;
-	id_id?: string;
-	ja_jp?: string;
-	ko_kr?: string;
-	lt_lt?: string;
-	pl_pl?: string;
-	ru_ru?: string;
-	th_th?: string;
-	tr_tr?: string;
-	vi_vn?: string;
-	zh_cn?: string;
-	zh_tw?: string;
+	canonical: string;
+	[key: string]: string;
 }
 
 interface Description {
-	ar?: string;
-	de_de?: string;
-	en_cn?: string;
-	en_jp?: string;
-	en_kr?: string;
-	en_us?: string;
-	en?: string;
-	fa_ir?: string;
-	fr_fr?: string;
-	he_il?: string;
-	id_id?: string;
-	ja_jp?: string;
-	ko_kr?: string;
-	lt_lt?: string;
-	pl_pl?: string;
-	ru_ru?: string;
-	th_th?: string;
-	tr_tr?: string;
-	vi_vn?: string;
-	zh_cn?: string;
-	zh_tw?: string;
-	[key: string]: string | undefined;
+	[key: string]: string;
 }
 
 declare enum Status {
