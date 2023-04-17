@@ -12,7 +12,7 @@ import { cutText, filterNullish } from '@sapphire/utilities';
 import { Command, type AutocompleteInteractionArguments, type InteractionArguments } from '@skyra/http-framework';
 import { resolveUserKey, type TFunction } from '@skyra/http-framework-i18n';
 import type { FetchError } from '@skyra/safe-fetch';
-import { MessageFlags } from 'discord-api-types/v10';
+import { MessageFlags, type LocaleString } from 'discord-api-types/v10';
 
 const { AniList, Kitsu } = LanguageKeys.Commands;
 
@@ -153,8 +153,9 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 
 		description.push(`${bold(titles.ageRating)}: ${value.ageRating ?? t(LanguageKeys.Common.None)}`);
 
+		const locale = t.lng as LocaleString;
 		const url = `https://kitsu.io/${kind}/${value.id}`;
-		const title = value.titles.en || value.titles.en_jp || value.titles.canonical;
+		const title = this.getTitle(locale, value.titles) ?? value.titles.canonical;
 		const releaseDate = time(value.startDate, TimestampStyles.ShortDate);
 		const maskedLink = bold(hyperlink(title, hideLinkEmbed(url)));
 		if (isKitsuAnime(kind, value)) {
@@ -165,21 +166,8 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			description.push(`${bold(titles.readIt)}: ${maskedLink}`);
 		}
 
-		const synopsis =
-			// Prefer the synopsis
-			value.synopsis ||
-			// Then prefer the English description
-			value.description?.en ||
-			// Then prefer the English-us description
-			value.description?.en_us ||
-			// Then prefer the latinized Japanese description
-			value.description?.en_jp ||
-			// Then the description in kanji / hiragana / katakana
-			value.description?.ja_jp ||
-			// If all fails just get the first key of the description
-			value.description?.[Object.keys(value.description!)[0]];
-		if (synopsis) {
-			description.push('', cutText(synopsis.replace(/(.+)[\r\n\t](.+)/gim, '$1 $2').split('\r\n')[0], 750));
+		if (value.synopsis) {
+			description.push('', cutText(value.synopsis.replace(/(.+)[\r\n\t](.+)/gim, '$1 $2').split('\r\n')[0], 750));
 		}
 
 		return new EmbedBuilder()
@@ -190,6 +178,50 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			.setThumbnail(value.poster || '')
 			.setFooter({ text: '© kitsu.io' });
 	}
+
+	private getTitle(locale: LocaleString, entries: Record<string, string>): string | null {
+		const keys = AnimeCommand.KitsuDescriptionMappings[locale] ?? [];
+
+		for (const key of keys) {
+			if (entries[key]) return entries[key]!;
+		}
+
+		return null;
+	}
+
+	private static readonly KitsuDescriptionMappings = {
+		bg: ['bg_bg', 'bg'],
+		cs: ['cs_cz', 'cs'],
+		da: ['da_dk', 'da'],
+		de: ['de_de', 'de'],
+		el: ['el_gr', 'el'],
+		'en-GB': ['en_gb', 'en'],
+		'en-US': ['en_us', 'en'],
+		'es-ES': ['es_es', 'es'],
+		fi: ['fi_fi', 'fi'],
+		fr: ['fr_fr', 'fr'],
+		hi: ['hi_in', 'hi'],
+		hr: ['hr_hr', 'hr', 'hr_ba'],
+		hu: ['hu_hu', 'hu'],
+		id: ['id_id', 'id'],
+		it: ['it_it', 'it', 'it_ch'],
+		ja: ['ja_jp', 'ja', 'en_jp'],
+		ko: ['ko_kr', 'ko', 'en_kr'],
+		lt: ['lt_lt', 'lt'],
+		nl: ['nl_nl', 'nl', 'nl_be'],
+		no: [],
+		pl: ['pl_pl', 'pl'],
+		'pt-BR': ['pt_br', 'pt', 'pt_pt'],
+		ro: ['ro_ro', 'ro'],
+		ru: ['ru_ru', 'ru'],
+		'sv-SE': ['sv_se', 'sv'],
+		th: ['th_th', 'th'],
+		tr: ['tr_tr', 'tr'],
+		uk: ['uk_ua', 'uk'],
+		vi: ['vi_vn', 'vi'],
+		'zh-CN': ['zh_cn', 'en_cn'],
+		'zh-TW': ['zh_tw']
+	} satisfies Record<LocaleString, readonly string[]>;
 }
 
 export namespace AnimeCommand {

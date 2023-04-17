@@ -1,4 +1,4 @@
-import type { AnimeDatum, Description, KitsuHit, KitsuResult, KitsuTrendingAnime, KitsuTrendingManga, MangaDatum } from '#lib/apis/kitsu/kitsu-types';
+import type { AnimeDatum, KitsuHit, KitsuResult, KitsuTrendingAnime, KitsuTrendingManga, MangaDatum, Titles } from '#lib/apis/kitsu/kitsu-types';
 import { ok, type Result } from '@sapphire/result';
 import { Time } from '@sapphire/time-utilities';
 import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
@@ -79,13 +79,12 @@ function transformTrendingAnime(data: AnimeDatum) {
 	return {
 		id: Number(data.id),
 		synopsis: data.attributes.synopsis,
-		description: { en: data.attributes.description } as Description,
 		averageRating: Number(data.attributes.averageRating),
 		subtype: data.attributes.subtype,
-		titles: { ...data.attributes.titles, canonical: data.attributes.canonicalTitle },
+		titles: { ...data.attributes.titles, canonical: data.attributes.canonicalTitle } as Titles,
 		poster: data.attributes.posterImage.original,
 		ageRating: data.attributes.ageRating,
-		startDate: data.attributes.startDate,
+		startDate: Math.floor(Date.parse(data.attributes.startDate) / 1000),
 		episodeCount: data.attributes.episodeCount,
 		episodeLength: data.attributes.episodeLength
 	};
@@ -97,13 +96,12 @@ function transformTrendingManga(data: MangaDatum) {
 	return {
 		id: Number(data.id),
 		synopsis: data.attributes.synopsis,
-		description: { en: data.attributes.description } as Description,
 		averageRating: Number(data.attributes.averageRating),
 		subtype: data.attributes.subtype,
-		titles: { ...data.attributes.titles, canonical: data.attributes.canonicalTitle },
+		titles: { ...data.attributes.titles, canonical: data.attributes.canonicalTitle } as Titles,
 		poster: data.attributes.posterImage.original,
 		ageRating: data.attributes.ageRating,
-		startDate: data.attributes.startDate,
+		startDate: Math.floor(Date.parse(data.attributes.startDate) / 1000),
 		chapterCount: data.attributes.chapterCount,
 		volumeCount: data.attributes.volumeCount
 	};
@@ -133,7 +131,6 @@ function transformAlgoliaAnime(data: KitsuHit): KitsuAnime {
 	return {
 		id: data.id,
 		synopsis: data.synopsis ?? '',
-		description: data.description ?? {},
 		averageRating: data.averageRating,
 		subtype: data.subtype,
 		titles: { ...data.titles, canonical: data.canonicalTitle },
@@ -149,7 +146,6 @@ function transformAlgoliaManga(data: KitsuHit): KitsuManga {
 	return {
 		id: data.id,
 		synopsis: data.synopsis ?? '',
-		description: data.description ?? {},
 		averageRating: data.averageRating,
 		subtype: data.subtype,
 		titles: { ...data.titles, canonical: data.canonicalTitle },
