@@ -67,12 +67,10 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		const locale = getSupportedUserLanguageName(interaction);
 		const entries = result.match({
 			ok: (values) => {
-				return values.map((value) => {
-					return {
-						name: cutText(this.kitsuGetTitle(locale, value.titles), 100),
-						value: cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100)
-					};
-				});
+				return values.map((value) => ({
+					name: cutText(this.kitsuGetTitle(locale, value.titles), 100),
+					value: cutText(value.titles.en || value.titles.en_us || value.titles.en_jp || value.titles.canonical, 100)
+				}));
 			},
 			err: () => []
 		});
