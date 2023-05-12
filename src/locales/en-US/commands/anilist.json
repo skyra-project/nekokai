@@ -12,5 +12,9 @@
 		"nativeName": "Native name",
 		"romajiName": "Romanized name",
 		"volumes": "Amount of volumes"
-	}
+	},
+	"countryChina": "China",
+	"countryJapan": "Japan",
+	"countryKorea": "South Korea",
+	"countryTaiwan": "Taiwan"
 }
