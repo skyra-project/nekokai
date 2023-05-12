@@ -13,8 +13,8 @@
 		"romajiName": "Geromaniseerde naam",
 		"volumes": "Aantal volumes"
 	},
-	"countryChina": "",
-	"countryJapan": "",
-	"countryKorea": "",
-	"countryTaiwan": ""
+	"countryChina": "China",
+	"countryJapan": "Japan",
+	"countryKorea": "Zuid-Korea",
+	"countryTaiwan": "Taiwan"
 }
