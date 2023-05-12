@@ -15,3 +15,8 @@ export const EmbedTitles = T<{
 	nativeName: string;
 	romajiName: string;
 }>('commands/anilist:embedTitles');
+
+export const CountryChina = T('commands/anilist:countryChina');
+export const CountryJapan = T('commands/anilist:countryJapan');
+export const CountryKorea = T('commands/anilist:countryKorea');
+export const CountryTaiwan = T('commands/anilist:countryTaiwan');

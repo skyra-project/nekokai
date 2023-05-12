@@ -87,7 +87,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		];
 
 		if (value.countryOfOrigin) {
-			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${value.countryOfOrigin}`);
+			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${this.getAnilistCountryFlag(t, value.countryOfOrigin)}`);
 		}
 
 		if (value.episodes) {
@@ -128,6 +128,22 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			.setDescription(description.join('\n'))
 			.setImage(`https://img.anili.st/media/${value.id}`)
 			.setFooter({ text: '© anilist.co' });
+	}
+
+	private getAnilistCountryFlag(t: TFunction, origin: NonNullable<AnilistEntry['countryOfOrigin']>) {
+		switch (origin) {
+			case 'CN':
+				return `${t(AniList.CountryChina)} 🇨🇳`;
+			case 'JP':
+				return `${t(AniList.CountryJapan)} 🇯🇵`;
+			case 'KR':
+				return `${t(AniList.CountryKorea)} 🇰🇷`;
+			case 'TW':
+				return `${t(AniList.CountryTaiwan)} 🇹🇼`;
+			default:
+				this.container.logger.warn(`[ANILIST] Received unknown origin: ${origin}`);
+				return origin;
+		}
 	}
 
 	private createKitsuEmbed(value: KitsuAnime | KitsuManga, kind: Kind, t: TFunction) {
