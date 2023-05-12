@@ -133,13 +133,13 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 	private getAnilistCountryFlag(t: TFunction, origin: NonNullable<AnilistEntry['countryOfOrigin']>) {
 		switch (origin) {
 			case 'CN':
-				return `${t(LanguageKeys.Commands.AniList.CountryChina)} 🇨🇳`;
+				return `${t(AniList.CountryChina)} 🇨🇳`;
 			case 'JP':
-				return `${t(LanguageKeys.Commands.AniList.CountryJapan)} 🇯🇵`;
+				return `${t(AniList.CountryJapan)} 🇯🇵`;
 			case 'KR':
-				return `${t(LanguageKeys.Commands.AniList.CountryKorea)} 🇰🇷`;
+				return `${t(AniList.CountryKorea)} 🇰🇷`;
 			case 'TW':
-				return `${t(LanguageKeys.Commands.AniList.CountryTaiwan)} 🇹🇼`;
+				return `${t(AniList.CountryTaiwan)} 🇹🇼`;
 			default:
 				this.container.logger.warn(`[ANILIST] Received unknown origin: ${origin}`);
 				return origin;
