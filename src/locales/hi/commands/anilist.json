@@ -12,5 +12,9 @@
 		"nativeName": "मूल नाम",
 		"romajiName": "रोमनकृत नाम",
 		"volumes": "मात्राओं की सांख्या"
-	}
+	},
+	"countryChina": "",
+	"countryJapan": "",
+	"countryKorea": "",
+	"countryTaiwan": ""
 }
