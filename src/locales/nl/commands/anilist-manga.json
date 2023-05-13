@@ -1,1 +1,7 @@
-{}
+{
+	"name": "manga",
+	"description": "Zoek je favoriete manga op AniList met dit command",
+	"optionsMangaName": "manga",
+	"optionsMangaDescription": "De Manga om te zoeken",
+	"searchError": "Er is een fout opgetreden tijdens het zoeken van de manga. Probeer misschien een andere?"
+}
