@@ -87,5 +87,6 @@
 	"tickleName": "hacer-cosquillas",
 	"tickleOptionDescription": "La persona a quien hacer cosquillas",
 	"wastedDescription": "Provee una imagen de usted quedando eliminado",
-	"wastedName": "eliminarme"
+	"wastedName": "eliminarme",
+	"userOptionName": "usuario"
 }
