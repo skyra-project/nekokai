@@ -87,5 +87,6 @@
 	"tickleName": "kutita",
 	"tickleOptionDescription": "Käyttäjä jota kutitat",
 	"wastedDescription": "Saa kuva jossa olet kännissä",
-	"wastedName": "känni"
+	"wastedName": "känni",
+	"userOptionName": "käyttäjä"
 }

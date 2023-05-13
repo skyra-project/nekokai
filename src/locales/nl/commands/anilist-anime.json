@@ -1,0 +1,7 @@
+{
+	"name": "anime",
+	"description": "Zoek je favoriete anime op AniList met dit command",
+	"optionsAnimeName": "anime",
+	"optionsAnimeDescription": "De anime om te zoeken",
+	"searchError": "Er is een fout opgetreden tijdens het zoeken van de anime. Probeer misschien een andere?"
+}

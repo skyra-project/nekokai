@@ -1,3 +1,4 @@
 {
-	"userOptionName": "käyttäjä"
+	"formatList": "{{value, list}}",
+	"formatNumber": "{{value, number(maximumFractionDigits: 2)}}"
 }

@@ -1,7 +1,4 @@
 {
-	"animeDescription": "AniList पर किसी भी एनीमे के लिए डेटा प्राप्त करें",
-	"mangaDescription": "AniList पर किसी भी मांगा के लिए डेटा प्राप्त करें",
-	"subcommandName": "anilist",
 	"embedTitles": {
 		"chapters": "अध्यायों की सांख्या",
 		"countryOfOrigin": "उद्गम देश",
@@ -12,5 +9,9 @@
 		"nativeName": "मूल नाम",
 		"romajiName": "रोमनकृत नाम",
 		"volumes": "मात्राओं की सांख्या"
-	}
+	},
+	"countryChina": "चीन",
+	"countryJapan": "जापान",
+	"countryKorea": "दक्षिण कोरिया",
+	"countryTaiwan": "ताइवान"
 }
