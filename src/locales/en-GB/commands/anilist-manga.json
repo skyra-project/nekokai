@@ -1,0 +1,7 @@
+{
+	"name": "manga",
+	"description": "Get data for any manga on AniList",
+	"optionsMangaName": "manga",
+	"optionsMangaDescription": "The manga to search",
+	"searchError": "An error occurred while trying to find the manga. Maybe try another one?"
+}
