@@ -1,3 +1,7 @@
 {
-	"name": "manga"
+	"name": "manga",
+	"description": "Obtiene datos de cualquier manga en AniList",
+	"optionsMangaName": "manga",
+	"optionsMangaDescription": "El manga a buscar",
+	"searchError": "Algo mal pasó mientras que buscaba el manga. ¿Tal vez funcione con otro?"
 }
