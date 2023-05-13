@@ -1,17 +1,5 @@
 {
-	"animeDescription": "Get data for any anime.",
-	"animeError": "An error occurred while trying to find the anime. Maybe try another one?",
-	"animeName": "anime",
 	"formatList": "{{value, list}}",
 	"formatNumber": "{{value, number(maximumFractionDigits: 2)}}",
-	"mangaDescription": "Get data for any manga.",
-	"mangaError": "An error occurred while trying to find the manga. Maybe try another one?",
-	"mangaName": "manga",
-	"none": "None",
-	"noSynopsis": "No synopsis available for this title.",
-	"optionsAnimeDescription": "The anime to search",
-	"optionsAnimeName": "anime",
-	"optionsMangaDescription": "The manga to search",
-	"optionsMangaName": "manga",
-	"userOptionName": "user"
+	"none": "None"
 }

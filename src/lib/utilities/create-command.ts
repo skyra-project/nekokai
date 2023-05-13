@@ -17,7 +17,7 @@ export function createCommand(options: createCommand.Options): typeof WeebComman
 
 	if (options.user) {
 		builder.addUserOption((builder) =>
-			applyLocalizedBuilder(builder, LanguageKeys.Common.UserOptionName, LanguageKeys.Commands.Anime.OptionDescription(name)) //
+			applyLocalizedBuilder(builder, LanguageKeys.Commands.Anime.UserOptionName, LanguageKeys.Commands.Anime.OptionDescription(name)) //
 				.setRequired(options.userRequired ?? false)
 		);
 	}
