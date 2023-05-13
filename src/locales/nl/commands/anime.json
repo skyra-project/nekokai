@@ -87,5 +87,6 @@
 	"tickleName": "kietelen",
 	"tickleOptionDescription": "Het persoon om te kietelen",
 	"wastedDescription": "Geeft een afbeelding waar je dronken bent",
-	"wastedName": "dronken"
+	"wastedName": "dronken",
+	"userOptionName": "gebruiker"
 }
