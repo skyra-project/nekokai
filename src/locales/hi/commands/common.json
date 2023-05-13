@@ -1,17 +1,5 @@
 {
-	"animeDescription": "किसी भी एनिमे के लिए डेटा प्राप्त करें।",
-	"animeError": "एनिमे को खोजने का प्रयास करते समय एक त्रुटि हुई। शायद कोई दूसरा प्रयास करें?",
-	"animeName": "एनिमे",
 	"formatList": "{{value, list}}",
 	"formatNumber": "{{value, number(maximumFractionDigits: 2)}}",
-	"mangaDescription": "किसी भी मांगा के लिए डेटा प्राप्त करें।",
-	"mangaError": "मांगा को खोजने का प्रयास करते समय एक त्रुटि हुई। शायद कोई दूसरा प्रयास करें?",
-	"mangaName": "मांगा",
-	"none": "कोई नहीं",
-	"noSynopsis": "इस शीर्षक के लिए कोई सारांश उपलब्ध नहीं है।",
-	"optionsAnimeDescription": "खोजने के लिए एनिमे",
-	"optionsAnimeName": "एनिमे",
-	"optionsMangaDescription": "खोजने के लिए मांगा",
-	"optionsMangaName": "मांगा",
-	"userOptionName": "उपयोगकर्ता"
+	"none": "कोई नहीं"
 }
