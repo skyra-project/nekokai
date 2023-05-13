@@ -1,0 +1,7 @@
+{
+	"name": "anime",
+	"description": "Get data for any anime on AniList",
+	"optionsAnimeName": "anime",
+	"optionsAnimeDescription": "The anime to search",
+	"searchError": "An error occurred while trying to find the anime. Maybe try another one?"
+}
