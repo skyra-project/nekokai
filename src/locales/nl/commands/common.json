@@ -1,17 +1,5 @@
 {
-	"animeDescription": "Zoek je favoriete anime met dit command.",
-	"animeError": "Er is een fout opgetreden tijdens het zoeken van de anime. Probeer misschien een andere?",
-	"animeName": "anime",
 	"formatList": "{{value, list}}",
 	"formatNumber": "{{value, number(maximumFractionDigits: 2)}}",
-	"mangaDescription": "Zoek je favoriete manga met dit command.",
-	"mangaError": "Er is een fout opgetreden tijdens het zoeken van de manga. Probeer misschien een andere?",
-	"mangaName": "manga",
-	"none": "Geen",
-	"noSynopsis": "Geen beschrijving beschikbaar.",
-	"optionsAnimeDescription": "De anime om te zoeken",
-	"optionsAnimeName": "anime",
-	"optionsMangaDescription": "De Manga om te zoeken",
-	"optionsMangaName": "manga",
-	"userOptionName": "gebruiker"
+	"none": "Geen"
 }
