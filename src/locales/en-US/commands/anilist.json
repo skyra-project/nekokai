@@ -1,7 +1,4 @@
 {
-	"animeDescription": "Get data for any anime on AniList",
-	"mangaDescription": "Get data for any manga on AniList",
-	"subcommandName": "anilist",
 	"embedTitles": {
 		"chapters": "Amount of chapters",
 		"countryOfOrigin": "Country of origin",
@@ -12,5 +9,9 @@
 		"nativeName": "Native name",
 		"romajiName": "Romanized name",
 		"volumes": "Amount of volumes"
-	}
+	},
+	"countryChina": "China",
+	"countryJapan": "Japan",
+	"countryKorea": "South Korea",
+	"countryTaiwan": "Taiwan"
 }

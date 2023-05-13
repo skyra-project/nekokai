@@ -11,9 +11,6 @@ declare module '@skyra/env-utilities' {
 
 		WEEB_SH_TOKEN: string;
 
-		KITSU_ID: string;
-		KITSU_TOKEN: string;
-
 		REDIS_PORT: IntegerString;
 		REDIS_PASSWORD: string;
 		REDIS_HOST: string;

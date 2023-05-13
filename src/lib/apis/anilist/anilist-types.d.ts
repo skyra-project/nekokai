@@ -15,7 +15,7 @@ export interface AnilistEntry {
 	/** The amount of volumes the manga has when complete */
 	readonly volumes?: number | null;
 	/** Where the media was created. (ISO 3166-1 alpha-2) */
-	readonly countryOfOrigin?: string | null;
+	readonly countryOfOrigin?: 'JP' | 'KR' | 'CN' | 'TW' | null;
 	/** External links to another site related to the media */
 	readonly externalLinks?: readonly (MediaExternalLink | null)[] | null;
 	/** The url for the media page on the AniList website */
