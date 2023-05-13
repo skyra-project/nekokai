@@ -1,17 +1,5 @@
 {
-	"animeDescription": "Obtiene datos de cualquier anime.",
-	"animeError": "Algo mal pasó mientras que buscaba el anime. ¿Tal vez funcione con otro?",
-	"animeName": "anime",
 	"formatList": "{{value, list}}",
 	"formatNumber": "{{value, number(maximumFractionDigits: 2)}}",
-	"mangaDescription": "Obtiene datos de cualquier manga.",
-	"mangaError": "Algo mal pasó mientras que buscaba el manga. ¿Tal vez funcione con otro?",
-	"mangaName": "manga",
-	"none": "Ninguno",
-	"noSynopsis": "No hay una sinopsis disponible para este título.",
-	"optionsAnimeDescription": "El anime a buscar",
-	"optionsAnimeName": "anime",
-	"optionsMangaDescription": "El manga a buscar",
-	"optionsMangaName": "manga",
-	"userOptionName": "usuario"
+	"none": "Ninguno"
 }
