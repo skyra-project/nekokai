@@ -6,3 +6,4 @@ export const UnexpectedError = T('commands/anime:unexpectedError');
 export const CommandName = (name: string) => T(`commands/anime:${name}Name`);
 export const CommandDescription = (name: string) => T(`commands/anime:${name}Description`);
 export const OptionDescription = (name: string) => T(`commands/anime:${name}OptionDescription`);
+export const UserOptionName = T('commands/anime:userOptionName');
