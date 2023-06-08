@@ -1,1 +1,3 @@
-{}
+{
+	"infoEmbedDescription": "Nekokai — это бот, предоставляющий информацию и медиаконтент, относящиеся к аниме и манге. Этот бот, использующий только HTTP, создан на основе [Skyra HTTP Framework](https://www.npmjs.com/package/@skyra/http-framework)."
+}
