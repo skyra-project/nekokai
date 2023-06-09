@@ -1,17 +1,17 @@
 {
 	"embedTitles": {
-		"chapters": "",
-		"countryOfOrigin": "",
-		"englishName": "",
-		"episodeLength": "",
-		"episodes": "",
-		"externalLinks": "",
-		"nativeName": "",
-		"romajiName": "",
-		"volumes": ""
+		"chapters": "Количество глав",
+		"countryOfOrigin": "Страна происхождения",
+		"englishName": "Название на английском",
+		"episodeLength": "Длительность эпизода",
+		"episodes": "Количество эпизодов",
+		"externalLinks": "Внешние ссылки",
+		"nativeName": "Оригинальное название",
+		"romajiName": "Ромадзи",
+		"volumes": "Количество томов"
 	},
-	"countryChina": "",
-	"countryJapan": "",
-	"countryKorea": "",
-	"countryTaiwan": ""
+	"countryChina": "Китай",
+	"countryJapan": "Япония",
+	"countryKorea": "Южная Корея",
+	"countryTaiwan": "Тайвань"
 }
