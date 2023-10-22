@@ -31,7 +31,7 @@ interface MediaExternalLink {
 }
 
 /** The official titles of the media in various languages */
-interface MediaTitle {
+export interface MediaTitle {
 	/** The romanization of the native language title */
 	readonly romaji?: string | null;
 	/** The official english title */
