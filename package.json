@@ -18,11 +18,11 @@
 		"start": "node --enable-source-maps dist/main.js",
 		"test": "eslint --ext ts src",
 		"lint": "eslint --fix --ext ts src",
-		"format": "prettier --write --loglevel=warn \"src/**/*.{js,ts,json}\"",
+		"format": "prettier --write --log-level=warn \"src/**/*.{js,ts,json}\"",
 		"update": "yarn upgrade-interactive"
 	},
 	"dependencies": {
-		"@discordjs/builders": "^1.6.5",
+		"@discordjs/builders": "^1.7.0",
 		"@discordjs/collection": "^1.5.3",
 		"@sapphire/result": "^2.6.4",
 		"@sapphire/time-utilities": "^1.7.10",
@@ -34,28 +34,28 @@
 		"@skyra/safe-fetch": "^1.1.2",
 		"@skyra/shared-http-pieces": "^1.1.0",
 		"@skyra/start-banner": "^2.0.0",
-		"discord-api-types": "^0.37.61",
+		"discord-api-types": "^0.37.63",
 		"he": "^1.2.0",
 		"ioredis": "^5.3.2",
 		"ix": "^5.0.0",
 		"tslib": "^2.6.2"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^18.2.0",
-		"@commitlint/config-conventional": "^18.1.0",
+		"@commitlint/cli": "^18.4.1",
+		"@commitlint/config-conventional": "^18.4.0",
 		"@sapphire/eslint-config": "^5.0.2",
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.0",
-		"@types/he": "^1.2.2",
-		"@types/node": "^20.8.9",
-		"@typescript-eslint/eslint-plugin": "^6.9.0",
-		"@typescript-eslint/parser": "^6.9.0",
+		"@types/he": "^1.2.3",
+		"@types/node": "^20.9.0",
+		"@typescript-eslint/eslint-plugin": "^6.11.0",
+		"@typescript-eslint/parser": "^6.11.0",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.52.0",
+		"eslint": "^8.53.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.1",
-		"lint-staged": "^15.0.2",
-		"prettier": "^3.0.3",
+		"lint-staged": "^15.1.0",
+		"prettier": "^3.1.0",
 		"typescript": "^5.2.2"
 	},
 	"resolutions": {
@@ -83,8 +83,8 @@
 	"eslintConfig": {
 		"extends": "@sapphire"
 	},
-	"packageManager": "yarn@4.0.1",
+	"packageManager": "yarn@4.0.2",
 	"volta": {
-		"node": "18.17.1"
+		"node": "20.9.0"
 	}
 }

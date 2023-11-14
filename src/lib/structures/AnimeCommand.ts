@@ -10,7 +10,7 @@ import { cutText, filterNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { Command, type AutocompleteInteractionArguments, type InteractionArguments } from '@skyra/http-framework';
 import { getSupportedLanguageT, getSupportedUserLanguageName, resolveUserKey, type TFunction } from '@skyra/http-framework-i18n';
 import type { FetchError } from '@skyra/safe-fetch';
-import { MessageFlags, type LocaleString } from 'discord-api-types/v10';
+import { MessageFlags, type APIEmbed, type LocaleString } from 'discord-api-types/v10';
 
 const Root = LanguageKeys.Commands.AniList;
 
@@ -42,7 +42,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		return interaction.reply(response);
 	}
 
-	protected createResponse(value: AnilistEntry, t: TFunction) {
+	protected createResponse(value: AnilistEntry, t: TFunction): { embeds: APIEmbed[] } {
 		return { embeds: [this.createEmbed(value, t).toJSON()] };
 	}
 
