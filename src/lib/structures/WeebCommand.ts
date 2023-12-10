@@ -20,7 +20,7 @@ export class WeebCommand extends Command {
 		this.type = options.type;
 	}
 
-	protected override async chatInputRun(interaction: Command.ChatInputInteraction, args: WeebCommandArgs) {
+	public override async chatInputRun(interaction: Command.ChatInputInteraction, args: WeebCommandArgs) {
 		const query = new URL('https://api.weeb.sh/images/random');
 		query.searchParams.append('type', this.type);
 		query.searchParams.append('nsfw', isNsfwChannel(interaction.channel).toString());
