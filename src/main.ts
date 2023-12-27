@@ -1,9 +1,9 @@
 import { setup } from '#lib/setup/all';
-import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString } from '@skyra/env-utilities';
 import { Client } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
 import { blue, blueBright, bold } from '@skyra/logger';
+import { registerCommands } from '@skyra/shared-http-pieces';
 import { createBanner } from '@skyra/start-banner';
 
 setup();
