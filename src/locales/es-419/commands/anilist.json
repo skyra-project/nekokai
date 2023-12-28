@@ -1,0 +1,17 @@
+{
+	"embedTitles": {
+		"chapters": "Cantidad de capítulos",
+		"countryOfOrigin": "País de origen",
+		"englishName": "Nombre inglés",
+		"episodeLength": "Longitud del episodio",
+		"episodes": "Cantidad de episodios",
+		"externalLinks": "Enlaces externos",
+		"nativeName": "Nombre nativo",
+		"romajiName": "Nombre romanizado",
+		"volumes": "Cantidad de volúmenes"
+	},
+	"countryChina": "China",
+	"countryJapan": "Japón",
+	"countryKorea": "Corea del Sur",
+	"countryTaiwan": "Taiwán"
+}
