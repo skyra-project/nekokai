@@ -1,0 +1,5 @@
+{
+	"formatList": "{{value, list}}",
+	"formatNumber": "{{value, number(maximumFractionDigits: 2)}}",
+	"none": "Ninguno"
+}
