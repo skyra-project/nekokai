@@ -3,9 +3,9 @@
 		"chapters": "Cantidad de capítulos",
 		"countryOfOrigin": "País de origen",
 		"englishName": "Nombre inglés",
-		"episodeLength": "Longitud del episodio",
-		"episodes": "Cantidad de episodios",
-		"externalLinks": "Enlaces externos",
+		"episodeLength": "Longitud del capítulo",
+		"episodes": "Cantidad de capítulos",
+		"externalLinks": "Vínculos externos",
 		"nativeName": "Nombre nativo",
 		"romajiName": "Nombre romanizado",
 		"volumes": "Cantidad de volúmenes"
