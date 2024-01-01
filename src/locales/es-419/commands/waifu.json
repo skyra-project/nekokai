@@ -1,0 +1,11 @@
+{
+	"name": "waifu",
+	"description": "Publica una imagen de una waifu generada al azar.",
+	"footer": "Hecho posible gracias a thiswaifudoesnotexist.net",
+	"optionsRangeDescription": "Los rangos de waifus de los que escoger.",
+	"optionsRangeName": "rango",
+	"keyAll": "Todas las imágenes disponibles (Por defecto)",
+	"keyMediumQuality": "Calidad Media / Diversidad Media",
+	"keyHighQuality": "Alta Calidad / Diversidad Baja",
+	"keyLowQuality": "Baja Calidad / Diversidad Alta"
+}

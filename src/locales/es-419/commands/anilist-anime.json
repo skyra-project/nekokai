@@ -3,5 +3,5 @@
 	"description": "Obtiene datos de cualquier anime en AniList",
 	"optionsAnimeName": "anime",
 	"optionsAnimeDescription": "El anime a buscar",
-	"searchError": "Algo mal ha pasado mientras que buscaba el anime. ¿Tal vez funcione con otro?"
+	"searchError": "Algo mal pasó mientras que buscaba el anime. ¿Tal vez funcione con otro?"
 }
