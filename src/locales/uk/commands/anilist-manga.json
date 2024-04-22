@@ -1,1 +1,7 @@
-{}
+{
+	"name": "manga",
+	"description": "Отримати дані про будь-яку мангу з AniList",
+	"optionsMangaName": "манга",
+	"optionsMangaDescription": "Манга для пошуку",
+	"searchError": "Виникла помилка при спробі знайти мангу. Можливо, спробувати іншу?"
+}

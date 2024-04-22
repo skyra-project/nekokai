@@ -1,1 +1,11 @@
-{}
+{
+	"name": "waifu",
+	"description": "Публікує випадково згенероване зображення вайфи.",
+	"footer": "Працює завдяки thiswaifudoesnotexist.net",
+	"optionsRangeDescription": "Асортимент вайфів на вибір.",
+	"optionsRangeName": "діапазон",
+	"keyAll": "Усі доступні зображення (за стандартом)",
+	"keyMediumQuality": "Середня якість / Середня різноманітність",
+	"keyHighQuality": "Висока якість / Низька різноманітність",
+	"keyLowQuality": "Низька якість / Висока різноманітність"
+}

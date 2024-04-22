@@ -1,17 +1,17 @@
 {
 	"embedTitles": {
-		"chapters": "",
-		"countryOfOrigin": "",
-		"englishName": "",
-		"episodeLength": "",
-		"episodes": "",
-		"externalLinks": "",
-		"nativeName": "",
-		"romajiName": "",
-		"volumes": ""
+		"chapters": "Кількість розділів",
+		"countryOfOrigin": "Країна походження",
+		"englishName": "Назва англійською",
+		"episodeLength": "Тривалість епізоду",
+		"episodes": "Кількість епізодів",
+		"externalLinks": "Зовнішні посилання",
+		"nativeName": "Оригінальна назва",
+		"romajiName": "Назва латиницею",
+		"volumes": "Кількість томів"
 	},
-	"countryChina": "",
-	"countryJapan": "",
-	"countryKorea": "",
-	"countryTaiwan": ""
+	"countryChina": "Китай",
+	"countryJapan": "Японія",
+	"countryKorea": "Південна Корея",
+	"countryTaiwan": "Тайвань"
 }

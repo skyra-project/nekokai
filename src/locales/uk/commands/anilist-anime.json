@@ -1,1 +1,7 @@
-{}
+{
+	"name": "anime",
+	"description": "Отримати дані про будь-яке аніме з AniList",
+	"optionsAnimeName": "аніме",
+	"optionsAnimeDescription": "Аніме для пошуку",
+	"searchError": "Виникла помилка при спробі знайти аніме. Можливо, спробувати інше?"
+}
