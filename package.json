@@ -37,7 +37,7 @@
 		"discord-api-types": "^0.37.85",
 		"he": "^1.2.0",
 		"ioredis": "^5.4.1",
-		"ix": "^5.0.0",
+		"ix": "^6.0.0",
 		"tslib": "^2.6.2"
 	},
 	"devDependencies": {

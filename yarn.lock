@@ -696,7 +696,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.1.3"
     he: "npm:^1.2.0"
     ioredis: "npm:^5.4.1"
-    ix: "npm:^5.0.0"
+    ix: "npm:^6.0.0"
     lint-staged: "npm:^15.2.5"
     prettier: "npm:^3.2.5"
     tslib: "npm:^2.6.2"
@@ -753,19 +753,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.12.12":
+"@types/node@npm:*, @types/node@npm:>=13.7.4, @types/node@npm:^20.12.12":
   version: 20.12.12
   resolution: "@types/node@npm:20.12.12"
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10/e3945da0a3017bdc1f88f15bdfb823f526b2a717bd58d4640082d6eb0bd2794b5c99bfb914b9e9324ec116dce36066990353ed1c777e8a7b0641f772575793c4
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^13.7.4":
-  version: 13.13.52
-  resolution: "@types/node@npm:13.13.52"
-  checksum: 10/a1fbd080dd2462f6f0d0c10cb8328ee6b22e59941fb6beb8bca907f96e00798ce85e94320ccab3bf04f87d6c5443535a62e6896ac59c34c79a286821223e56cd
   languageName: node
   linkType: hard
 
@@ -2354,13 +2347,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ix@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "ix@npm:5.0.0"
+"ix@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "ix@npm:6.0.0"
   dependencies:
-    "@types/node": "npm:^13.7.4"
-    tslib: "npm:^2.3.0"
-  checksum: 10/957d5de7f45f3e6f60a6e6604816747f0369ea9240b22f96948825bdecf667a4843972f39a4f1ef6ec674d0ba46b8e5da2911077ffb27b95247546b49a908f02
+    "@types/node": "npm:>=13.7.4"
+    tslib: "npm:^2.6.2"
+  checksum: 10/c1d7e79ed08c7765ee622ab52eefa4a6f5f92c7c1c50ee93e27a5006f278604148f444b4acde52ad6a92a1d7bb5a227e2cf8e7ed018e9069d0c4bf8d9046dbac
   languageName: node
   linkType: hard
 
@@ -3417,7 +3410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.6.2":
+"tslib@npm:^2.1.0, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 10/bd26c22d36736513980091a1e356378e8b662ded04204453d353a7f34a4c21ed0afc59b5f90719d4ba756e581a162ecbf93118dc9c6be5acf70aa309188166ca
