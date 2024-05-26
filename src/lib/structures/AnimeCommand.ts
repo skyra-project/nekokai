@@ -138,7 +138,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 }
 
 export namespace AnimeCommand {
-	export type Context = Command.Context;
+	export type LoaderContext = Command.LoaderContext;
 	export type Options = Command.Options;
 	export type Arguments<Kind extends 'anime' | 'manga'> = InteractionArguments<Kind extends 'anime' ? { anime: string } : { manga: string }>;
 	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<Arguments<Kind>>;
