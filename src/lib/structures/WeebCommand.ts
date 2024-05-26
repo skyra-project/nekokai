@@ -2,12 +2,12 @@ import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { isNsfwChannel } from '#lib/utilities/discord-utilities';
 import { EmbedBuilder, userMention } from '@discordjs/builders';
-import { Result } from '@sapphire/result';
+import { at } from '@sapphire/iterator-utilities/at';
+import { Result, err, ok } from '@sapphire/result';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, type TransformedArguments } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey, type TypedT } from '@skyra/http-framework-i18n';
 import { MessageFlags } from 'discord-api-types/v10';
-import { elementAt } from 'ix/iterable/elementat.js';
 import { platform, release } from 'node:os';
 import { setTimeout } from 'node:timers';
 
@@ -15,7 +15,7 @@ export class WeebCommand extends Command {
 	private readonly type: string;
 	private readonly cache = new Set<string>();
 
-	public constructor(context: Command.Context, options: WeebCommand.Options) {
+	public constructor(context: Command.LoaderContext, options: WeebCommand.Options) {
 		super(context, options);
 		this.type = options.type;
 	}
@@ -64,7 +64,7 @@ export class WeebCommand extends Command {
 			if (response.ok) {
 				const data = (await response.json()) as WeebCommandFetchResult;
 				this.cache.add(data.url);
-				return Result.ok(data.url);
+				return ok(data.url);
 			}
 
 			// If we got an 4XX error code, warn the error:
@@ -77,10 +77,10 @@ export class WeebCommand extends Command {
 			const key = result.isOkAnd((value) => value.status >= 500)
 				? LanguageKeys.Commands.Anime.UnavailableError
 				: LanguageKeys.Commands.Anime.UnexpectedError;
-			return Result.err(key);
+			return err(key);
 		}
 
-		return Result.ok(elementAt(this.cache.values(), Math.floor(Math.random() * this.cache.size))!);
+		return ok(at(this.cache.values(), Math.floor(Math.random() * this.cache.size))!);
 	}
 
 	private static readonly headers = {
@@ -90,7 +90,7 @@ export class WeebCommand extends Command {
 }
 
 export namespace WeebCommand {
-	export type Context = Command.Context;
+	export type LoaderContext = Command.LoaderContext;
 	export interface Options extends Command.Options {
 		type: string;
 	}

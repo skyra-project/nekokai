@@ -26,7 +26,7 @@ export function createCommand(options: createCommand.Options): typeof WeebComman
 
 	@RegisterCommand(builder)
 	class UserAnimeCommand extends WeebCommand {
-		public constructor(context: WeebCommand.Context) {
+		public constructor(context: WeebCommand.LoaderContext) {
 			super(context, { type });
 		}
 	}

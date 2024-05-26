@@ -24,6 +24,7 @@
 	"dependencies": {
 		"@discordjs/builders": "^1.8.1",
 		"@discordjs/collection": "^2.1.0",
+		"@sapphire/iterator-utilities": "^1.0.1",
 		"@sapphire/result": "^2.6.6",
 		"@sapphire/time-utilities": "^1.7.12",
 		"@sapphire/utilities": "^3.16.2",
@@ -37,7 +38,6 @@
 		"discord-api-types": "^0.37.85",
 		"he": "^1.2.0",
 		"ioredis": "^5.4.1",
-		"ix": "^5.0.0",
 		"tslib": "^2.6.2"
 	},
 	"devDependencies": {
