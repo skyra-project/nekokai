@@ -125,8 +125,8 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 
 	private getTitle(title: MediaTitle, locale: LocaleString, origin: string | null | undefined) {
 		return this.shouldUseNative(locale, origin ?? 'JP')
-			? title.native ?? title.english ?? title.romaji!
-			: title.english ?? title.romaji ?? title.native!;
+			? (title.native ?? title.english ?? title.romaji!)
+			: (title.english ?? title.romaji ?? title.native!);
 	}
 
 	private shouldUseNative(locale: LocaleString, origin: string) {
