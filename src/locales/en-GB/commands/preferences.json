@@ -1,1 +1,21 @@
-{}
+{
+	"name": "preferences",
+	"description": "Manage your user preferences",
+	"viewName": "view",
+	"viewDescription": "View your current preferences",
+	"editName": "edit",
+	"editDescription": "Edit your preferences",
+	"resetName": "reset",
+	"resetDescription": "Reset your preferences",
+	"optionsTitleLanguageName": "title-language",
+	"optionsTitleLanguageDescription": "The language used for AniList titles when searching",
+	"optionsTitleLanguageChoiceRomaji": "Romaji (Shingeki no Kyojin)",
+	"optionsTitleLanguageChoiceEnglish": "English (Attack on Titan)",
+	"optionsTitleLanguageChoiceNative": "Native (進撃の巨人)",
+	"optionsTitleLanguageChoiceUnset": "Unset (Depends on user locale)",
+	"optionsResetKeyName": "key",
+	"optionsResetKeyDescription": "The option to reset",
+	"optionsResetKeyAll": "all",
+	"responseView": "**Current preferences**:\n\nTitle Language: `{{titleLanguage}}`\n\n> **Note**: To update them, you can use `/$t(commands/preferences:name) $t(commands/preferences:editName)`.",
+	"responseSuccess": "Successfully updated your preferences."
+}
