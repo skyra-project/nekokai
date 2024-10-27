@@ -14,6 +14,7 @@
 		"build": "tsc -b src",
 		"dev": "yarn build && yarn start",
 		"watch": "tsc -b src -w",
+		"prisma:generate": "yarn prisma generate",
 		"clean": "node scripts/build/clean.mjs",
 		"start": "node --enable-source-maps dist/main.js",
 		"test": "eslint --ext ts src",
@@ -24,6 +25,7 @@
 	"dependencies": {
 		"@discordjs/builders": "^1.9.0",
 		"@discordjs/collection": "^2.1.1",
+		"@prisma/client": "^5.21.1",
 		"@sapphire/iterator-utilities": "^1.0.2",
 		"@sapphire/result": "^2.6.6",
 		"@sapphire/time-utilities": "^1.7.12",
@@ -55,6 +57,7 @@
 		"eslint-plugin-prettier": "^5.2.1",
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
+		"prisma": "^5.21.1",
 		"typescript": "~5.4.5"
 	},
 	"resolutions": {

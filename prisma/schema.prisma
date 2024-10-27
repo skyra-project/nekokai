@@ -1,0 +1,22 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum AniListSearchTitleLanguage {
+    Romaji
+    English
+    Native
+    Unset
+}
+
+model User {
+    // The Discord user ID
+    id                                  BigInt                     @id
+    // The preferred search title language for AniList
+    preferredAniListSearchTitleLanguage AniListSearchTitleLanguage @default(Unset) @map("preferred_ani_list_search_title_language")
+}
