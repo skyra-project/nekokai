@@ -5,6 +5,7 @@ import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { minutes } from '#lib/utilities/time-utilities';
 import { EmbedBuilder, bold, hideLinkEmbed, hyperlink } from '@discordjs/builders';
+import { AniListSearchTitleLanguage } from '@prisma/client';
 import type { Result } from '@sapphire/result';
 import { cutText, filterNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import { Command, type AutocompleteInteractionArguments, type MessageResponseOptions } from '@skyra/http-framework';
@@ -31,21 +32,24 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 	public override async autocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
 		const result = await this.autocompleteFetch(options);
 		const t = getSupportedUserLanguageT(interaction);
+
+		const preferences = await this.container.prisma.user.findUnique({ where: { id: BigInt(interaction.user.id) } });
+		const titleLanguage = preferences?.preferredAniListSearchTitleLanguage ?? AniListSearchTitleLanguage.Unset;
 		const entries = result.match({
-			ok: (values) => values.map((value) => ({ name: this.renderAutocompleteOptionName(t, value), value: value.id })),
+			ok: (values) => values.map((value) => ({ name: this.renderAutocompleteOptionName(t, titleLanguage, value), value: value.id })),
 			err: () => []
 		});
 
 		return interaction.reply({ choices: entries });
 	}
 
-	protected renderAutocompleteOptionName(t: TFunction, value: AnilistEntryTypeByKind<Kind>) {
+	protected renderAutocompleteOptionName(t: TFunction, titleLanguage: AniListSearchTitleLanguage, value: AnilistEntryTypeByKind<Kind>) {
 		const rawYear = value.seasonYear ?? value.startDate?.year ?? null;
 		const year = isNullishOrZero(rawYear) ? t(Root.Unknown) : rawYear.toString();
 		const kind = t(isNullishOrEmpty(value.format) ? Root.Unknown : FormatKeys[value.format]);
 		const description = ` — ${year} ${kind}`;
 
-		const title = this.getTitle(value.title, t.lng as LocaleString, value.countryOfOrigin);
+		const title = this.getTitle(value.title, t.lng as LocaleString, value.countryOfOrigin, titleLanguage);
 		return `${cutText(title, 100 - description.length)}${description}`;
 	}
 
@@ -125,7 +129,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		const locale = t.lng as LocaleString;
 		return new EmbedBuilder()
 			.setColor(BrandingColors.Primary)
-			.setTitle(this.getTitle(value.title, locale, value.countryOfOrigin))
+			.setTitle(this.getTitle(value.title, locale, value.countryOfOrigin, AniListSearchTitleLanguage.English))
 			.setURL(value.siteUrl ?? null)
 			.setDescription(description.join('\n'))
 			.setImage(`https://img.anili.st/media/${value.id}`)
@@ -148,10 +152,19 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		}
 	}
 
-	private getTitle(title: MediaTitle, locale: LocaleString, origin: string | null | undefined) {
-		return this.shouldUseNative(locale, origin ?? 'JP')
-			? (title.native ?? title.english ?? title.romaji!)
-			: (title.english ?? title.romaji ?? title.native!);
+	private getTitle(title: MediaTitle, locale: LocaleString, origin: string | null | undefined, titleLanguage: AniListSearchTitleLanguage) {
+		switch (titleLanguage) {
+			case AniListSearchTitleLanguage.English:
+				return title.english ?? title.romaji ?? title.native!;
+			case AniListSearchTitleLanguage.Romaji:
+				return title.romaji ?? title.english ?? title.native!;
+			case AniListSearchTitleLanguage.Native:
+				return title.native ?? title.romaji ?? title.english!;
+			default:
+				return this.shouldUseNative(locale, origin ?? 'JP')
+					? (title.native ?? title.english ?? title.romaji!)
+					: (title.english ?? title.romaji ?? title.native!);
+		}
 	}
 
 	private shouldUseNative(locale: LocaleString, origin: string) {

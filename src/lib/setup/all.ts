@@ -1,4 +1,5 @@
 import '#lib/setup/logger';
+import '#lib/setup/prisma';
 import { setup as envRun } from '@skyra/env-utilities';
 import { initializeSentry, setInvite, setRepository } from '@skyra/shared-http-pieces';
 
