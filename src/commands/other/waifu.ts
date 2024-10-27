@@ -4,17 +4,20 @@ import { EmbedBuilder } from '@discordjs/builders';
 import { parseURL } from '@sapphire/utilities';
 import { Command, RegisterCommand, type InteractionArguments } from '@skyra/http-framework';
 import { applyLocalizedBuilder, createSelectMenuChoiceName, resolveKey } from '@skyra/http-framework-i18n';
+import { ApplicationIntegrationType, InteractionContextType } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
-	applyLocalizedBuilder(builder, LanguageKeys.Commands.Waifu.RootName, LanguageKeys.Commands.Waifu.RootDescription).addStringOption((builder) =>
-		applyLocalizedBuilder(builder, LanguageKeys.Commands.Waifu.OptionRange) //
-			.addChoices(
+	applyLocalizedBuilder(builder, LanguageKeys.Commands.Waifu.RootName, LanguageKeys.Commands.Waifu.RootDescription)
+		.setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+		.setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
+		.addStringOption((builder) =>
+			applyLocalizedBuilder(builder, LanguageKeys.Commands.Waifu.OptionRange).addChoices(
 				createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyAll, { value: 'all' }),
 				createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyMediumQuality, { value: 'medium' }),
 				createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyHighQuality, { value: 'high' }),
 				createSelectMenuChoiceName(LanguageKeys.Commands.Waifu.KeyLowQuality, { value: 'low' })
 			)
-	)
+		)
 )
 export class UserCommand extends Command {
 	/** Potential sizes for the generated faces */
