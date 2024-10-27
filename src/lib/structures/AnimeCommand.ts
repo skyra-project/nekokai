@@ -169,6 +169,5 @@ export namespace AnimeCommand {
 	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<MakeArguments<Kind, string>>;
 }
 
-type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Kind extends 'anime'
-	? { anime: Value; hide?: boolean }
-	: { manga: Value; hide?: boolean };
+type Pretty<Type extends object> = { [K in keyof Type]: Type[K] };
+type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Pretty<{ [key in Kind]: Value } & { hide?: boolean }>;
