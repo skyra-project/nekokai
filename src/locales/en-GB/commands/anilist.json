@@ -1,4 +1,6 @@
 {
+	"optionsHideName": "",
+	"optionsHideDescription": "",
 	"embedTitles": {
 		"chapters": "Amount of chapters",
 		"countryOfOrigin": "Country of origin",
