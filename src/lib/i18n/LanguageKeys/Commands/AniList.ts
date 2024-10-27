@@ -1,5 +1,7 @@
 import { T } from '@skyra/http-framework-i18n';
 
+export const OptionsHide = 'commands/anilist:optionsHide';
+
 export * as Anime from '#lib/i18n/LanguageKeys/Commands/AniList/Anime';
 export * as Manga from '#lib/i18n/LanguageKeys/Commands/AniList/Manga';
 

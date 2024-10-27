@@ -7,10 +7,10 @@ import { minutes } from '#lib/utilities/time-utilities';
 import { EmbedBuilder, bold, hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import type { Result } from '@sapphire/result';
 import { cutText, filterNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
-import { Command, type AutocompleteInteractionArguments } from '@skyra/http-framework';
+import { Command, type AutocompleteInteractionArguments, type MessageResponseOptions } from '@skyra/http-framework';
 import { getSupportedLanguageT, getSupportedUserLanguageT, resolveUserKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
 import type { FetchError } from '@skyra/safe-fetch';
-import { MessageFlags, type APIEmbed, type LocaleString } from 'discord-api-types/v10';
+import { MessageFlags, type LocaleString } from 'discord-api-types/v10';
 
 const Root = LanguageKeys.Commands.AniList;
 
@@ -49,19 +49,24 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		return `${cutText(title, 100 - description.length)}${description}`;
 	}
 
-	protected handleResult(interaction: Command.ChatInputInteraction, result: Result<AnilistEntryTypeByKind<Kind> | null, FetchError>, kind: Kind) {
+	protected handleResult(
+		interaction: Command.ChatInputInteraction,
+		result: Result<AnilistEntryTypeByKind<Kind> | null, FetchError>,
+		kind: Kind,
+		hide: boolean | null | undefined
+	) {
+		hide ??= false;
+
+		const t = hide ? getSupportedUserLanguageT(interaction) : getSupportedLanguageT(interaction);
 		const response = result.match({
-			ok: (value) =>
-				isNullishOrEmpty(value)
-					? this.createErrorResponse(interaction, kind)
-					: this.createResponse(value, getSupportedLanguageT(interaction)),
+			ok: (value) => (isNullishOrEmpty(value) ? this.createErrorResponse(interaction, kind) : this.createResponse(value, t, hide)),
 			err: () => this.createErrorResponse(interaction, kind)
 		});
 		return interaction.reply(response);
 	}
 
-	protected createResponse(value: AnilistEntryTypeByKind<Kind>, t: TFunction): { embeds: APIEmbed[] } {
-		return { embeds: [this.createEmbed(value, t).toJSON()] };
+	protected createResponse(value: AnilistEntryTypeByKind<Kind>, t: TFunction, hide: boolean): MessageResponseOptions {
+		return { embeds: [this.createEmbed(value, t).toJSON()], flags: hide ? MessageFlags.Ephemeral : undefined };
 	}
 
 	protected createErrorResponse(interaction: Command.ChatInputInteraction, kind: Kind) {
@@ -164,4 +169,5 @@ export namespace AnimeCommand {
 	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<MakeArguments<Kind, string>>;
 }
 
-type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Kind extends 'anime' ? { anime: Value } : { manga: Value };
+type Pretty<Type extends object> = { [K in keyof Type]: Type[K] };
+type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Pretty<{ [key in Kind]: Value } & { hide?: boolean }>;
