@@ -1,10 +1,26 @@
-import type { AnilistEntry } from '#lib/apis/anilist/anilist-types';
+import type { AnilistEntryAnime, AnilistEntryManga } from '#lib/apis/anilist/anilist-types';
+import { TemporaryCollection } from '#lib/utilities/temporary-collection';
 import { Result, ok } from '@sapphire/result';
 import { Time } from '@sapphire/time-utilities';
 import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
-import { container } from '@skyra/http-framework';
-import { Json, safeTimedFetch, type FetchError } from '@skyra/safe-fetch';
+import { Json, safeTimedFetch, type FetchError, type FetchResult } from '@skyra/safe-fetch';
 import he from 'he';
+
+const cache = {
+	anime: {
+		search: new TemporaryCollection<string, readonly number[]>({ lifetime: Time.Hour, sweepInterval: Time.Minute }),
+		result: new TemporaryCollection<number, AnilistEntryAnime>({ lifetime: Time.Hour, sweepInterval: Time.Minute })
+	},
+	manga: {
+		search: new TemporaryCollection<string, readonly number[]>({ lifetime: Time.Hour, sweepInterval: Time.Minute }),
+		result: new TemporaryCollection<number, AnilistEntryManga>({ lifetime: Time.Hour, sweepInterval: Time.Minute })
+	}
+};
+
+export type AnilistEntryTypeByKind<Kind extends 'anime' | 'manga'> = {
+	anime: AnilistEntryAnime;
+	manga: AnilistEntryManga;
+}[Kind];
 
 /**
  * Regex to remove excessive new lines from the Anime or Manga description
@@ -34,13 +50,6 @@ const htmlEntityReplacements = Object.freeze({
 	u: '__'
 } as const);
 
-export enum AnilistKeys {
-	AnimeSearch = 'aas',
-	AnimeResult = 'aar',
-	MangaSearch = 'ams',
-	MangaResult = 'amr'
-}
-
 export function parseAniListDescription(description: string) {
 	return cutText(
 		he
@@ -54,70 +63,70 @@ export function parseAniListDescription(description: string) {
 	);
 }
 
-export async function anilistAnimeGet(query: string): Promise<Result<AnilistEntry | null, FetchError>> {
-	const key = `${AnilistKeys.AnimeResult}:${query.toLowerCase()}`;
-	const cached = await container.redis.get(key);
-	if (cached) return ok(JSON.parse(cached));
-
-	const result = await anilistAnimeSearch(query);
-	return result.map((entries) => (isNullishOrEmpty(entries) ? null : entries[0]));
+export async function anilistAnimeGet(id: number): Promise<Result<AnilistEntryAnime | null, FetchError>> {
+	const cached = cache.anime.result.get(id);
+	return cached ? ok(cached) : sharedSearchId('anime', id);
 }
 
-export async function anilistMangaGet(query: string): Promise<Result<AnilistEntry | null, FetchError>> {
-	const key = `${AnilistKeys.MangaResult}:${query.toLowerCase()}`;
-	const cached = await container.redis.get(key);
-	if (cached) return ok(JSON.parse(cached));
-
-	const result = await anilistMangaSearch(query);
-	return result.map((entries) => (isNullishOrEmpty(entries) ? null : entries[0]));
+export async function anilistMangaGet(id: number): Promise<Result<AnilistEntryManga | null, FetchError>> {
+	const cached = cache.manga.result.get(id);
+	return cached ? ok(cached) : sharedSearchId('manga', id);
 }
 
-export async function anilistAnimeSearch(query: string): Promise<Result<readonly AnilistEntry[], FetchError>> {
-	const key = `${AnilistKeys.AnimeSearch}:${query.toLowerCase()}`;
-	const cached = await loadSearchResultsFromRedis(key, AnilistKeys.AnimeResult);
-	if (cached) return ok(cached);
+export async function anilistAnimeSearch(query: string): Promise<Result<readonly AnilistEntryAnime[], FetchError>> {
+	const cached = cache.anime.search.get(query.toLowerCase());
+	if (cached) return ok(cached.map((id) => cache.anime.result.get(id)!));
 
 	const body = isNullishOrEmpty(query) ? GetTrendingAnimeBody : JSON.stringify({ variables: { query }, query: GetAnimeQuery });
-	return sharedSearch(key, AnilistKeys.AnimeResult, body);
+	return sharedSearch('anime', query, body);
 }
 
-export async function anilistMangaSearch(query: string): Promise<Result<readonly AnilistEntry[], FetchError>> {
-	const key = `${AnilistKeys.MangaSearch}:${query.toLowerCase()}`;
-	const cached = await loadSearchResultsFromRedis(key, AnilistKeys.MangaResult);
-	if (cached) return ok(cached);
+export async function anilistMangaSearch(query: string): Promise<Result<readonly AnilistEntryManga[], FetchError>> {
+	const cached = cache.manga.search.get(query.toLowerCase());
+	if (cached) return ok(cached.map((id) => cache.manga.result.get(id)!));
 
 	const body = isNullishOrEmpty(query) ? GetTrendingMangaBody : JSON.stringify({ variables: { query }, query: GetMangaQuery });
-	return sharedSearch(key, AnilistKeys.MangaResult, body);
+	return sharedSearch('manga', query, body);
 }
 
-async function sharedSearch(key: string, prefix: AnilistKeys, body: string) {
-	const result = await Json<{ data: { Page: { media: readonly AnilistEntry[] } } }>(
+async function sharedSearchId<Kind extends 'anime' | 'manga'>(kind: Kind, id: number): Promise<FetchResult<AnilistEntryTypeByKind<Kind> | null>> {
+	const query = kind === 'anime' ? GetAnimeQuery : GetMangaQuery;
+	const result = await Json<{ data: { Page: { media: AnilistEntryTypeByKind<Kind>[] } } }>(
+		safeTimedFetch('https://graphql.anilist.co/', 2000, {
+			method: 'POST',
+			body: JSON.stringify({ variables: { id }, query }),
+			headers: Headers
+		})
+	);
+
+	return result
+		.map((data) => data.data.Page.media.at(0) ?? null)
+		.inspect((entry) => {
+			if (entry) cache[kind].result.add(id, entry);
+		});
+}
+
+async function sharedSearch<Kind extends 'anime' | 'manga'>(
+	kind: Kind,
+	query: string,
+	body: string
+): Promise<FetchResult<AnilistEntryTypeByKind<Kind>[]>> {
+	const result = await Json<{ data: { Page: { media: AnilistEntryTypeByKind<Kind>[] } } }>(
 		safeTimedFetch('https://graphql.anilist.co/', 2000, { method: 'POST', body, headers: Headers })
 	);
 
-	return result.map((data) => data.data.Page.media).inspectAsync((entries) => saveSearchResultsToRedis(key, prefix, entries));
-}
+	return result
+		.map((data) => data.data.Page.media)
+		.inspect((entries) => {
+			cache[kind].search.add(
+				query,
+				entries.map((entry) => entry.id)
+			);
 
-async function loadSearchResultsFromRedis(key: string, prefix: AnilistKeys) {
-	const list = await container.redis.get(key);
-	if (isNullishOrEmpty(list)) return null;
-
-	const ids = JSON.parse(list) as readonly string[];
-	if (isNullishOrEmpty(ids)) return null;
-
-	const entries = await container.redis.mget(...ids.map((id) => `${prefix}:${id.toLowerCase()}`));
-	return entries.map((entry) => JSON.parse(entry!) as AnilistEntry);
-}
-
-async function saveSearchResultsToRedis(key: string, prefix: AnilistKeys, entries: readonly AnilistEntry[]) {
-	const names = entries.map((entry) => cutText(entry.title.english || entry.title.romaji || entry.title.native || entry.id.toString(), 100));
-	const pipeline = container.redis.pipeline();
-	pipeline.set(key, JSON.stringify(names), 'EX', Time.Hour);
-	for (const [index, entry] of entries.entries()) {
-		pipeline.set(`${prefix}:${names[index].toLowerCase()}`, JSON.stringify(entry), 'EX', Time.Hour);
-	}
-
-	await pipeline.exec();
+			for (const entry of entries) {
+				cache[kind].result.add(entry.id, entry);
+			}
+		});
 }
 
 export const Headers = {
@@ -134,7 +143,11 @@ const MediaFragment = `
 			native
 		}
 		description
-		isAdult
+		format
+		seasonYear
+		startDate {
+			year
+		}
 		countryOfOrigin
 		duration
 		siteUrl
@@ -154,8 +167,8 @@ const GetTrendingAnimeBody = JSON.stringify({
 		Page(page: 1, perPage: 25) {
 			media(type: ANIME, sort: $sort) {
 				...MediaFragment
-				chapters
-				volumes
+				episodes
+				duration
 			}
 		}
 	}`
@@ -166,7 +179,7 @@ const GetTrendingMangaBody = JSON.stringify({
 	query: `
 	${MediaFragment}
 
-	query getTrendingAnime($sort: [MediaSort] = [TRENDING_DESC]) {
+	query getTrendingManga($sort: [MediaSort] = [TRENDING_DESC]) {
 		Page(page: 1, perPage: 25) {
 			media(type: MANGA, sort: $sort) {
 				...MediaFragment
@@ -180,11 +193,12 @@ const GetTrendingMangaBody = JSON.stringify({
 export const GetAnimeQuery = `
 	${MediaFragment}
 
-	query getAnime($query: String!) {
+	query getAnime($id: Int, $query: String) {
 		Page(page: 1, perPage: 25) {
-			media(search: $query, type: ANIME, isAdult: false) {
+			media(id: $id, search: $query, type: ANIME, isAdult: false) {
 				...MediaFragment
 				episodes
+				duration
 			}
 		}
 	}
@@ -193,11 +207,12 @@ export const GetAnimeQuery = `
 export const GetMangaQuery = `
 	${MediaFragment}
 
-	query getManga($query: String!) {
+	query getManga($id: Int, $query: String) {
 		Page(page: 1, perPage: 25) {
-			media(search: $query, type: MANGA, isAdult: false) {
+			media(id: $id, search: $query, type: MANGA, isAdult: false) {
 				...MediaFragment
-				episodes
+				chapters
+				volumes
 			}
 		}
 	}
