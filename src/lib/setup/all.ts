@@ -1,5 +1,4 @@
 import '#lib/setup/logger';
-import { run as redisRun } from '#lib/setup/redis';
 import { setup as envRun } from '@skyra/env-utilities';
 import { initializeSentry, setInvite, setRepository } from '@skyra/shared-http-pieces';
 
@@ -11,6 +10,4 @@ export function setup() {
 	setRepository('nekokai');
 	setInvite('939613684592934992', '16384');
 	initializeSentry();
-
-	redisRun();
 }

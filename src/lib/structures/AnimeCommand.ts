@@ -1,37 +1,55 @@
-import type { AnilistEntry, MediaTitle } from '#lib/apis/anilist/anilist-types';
-import { parseAniListDescription } from '#lib/apis/anilist/anilist-utilities';
+import { MediaFormat, type MediaTitle } from '#lib/apis/anilist/anilist-types';
+import { parseAniListDescription, type AnilistEntryTypeByKind } from '#lib/apis/anilist/anilist-utilities';
 import { BrandingColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { durationFormatter } from '#lib/utilities/duration-formatter';
 import { minutes } from '#lib/utilities/time-utilities';
 import { EmbedBuilder, bold, hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import type { Result } from '@sapphire/result';
-import { cutText, filterNullish, isNullishOrEmpty } from '@sapphire/utilities';
-import { Command, type AutocompleteInteractionArguments, type InteractionArguments } from '@skyra/http-framework';
-import { getSupportedLanguageT, getSupportedUserLanguageName, resolveUserKey, type TFunction } from '@skyra/http-framework-i18n';
+import { cutText, filterNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
+import { Command, type AutocompleteInteractionArguments } from '@skyra/http-framework';
+import { getSupportedLanguageT, getSupportedUserLanguageT, resolveUserKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
 import type { FetchError } from '@skyra/safe-fetch';
 import { MessageFlags, type APIEmbed, type LocaleString } from 'discord-api-types/v10';
 
 const Root = LanguageKeys.Commands.AniList;
 
+const FormatKeys = {
+	[MediaFormat.Manga]: Root.MediaFormatManga,
+	[MediaFormat.Movie]: Root.MediaFormatMovie,
+	[MediaFormat.Music]: Root.MediaFormatMusic,
+	[MediaFormat.Novel]: Root.MediaFormatNovel,
+	[MediaFormat.OriginalNetAnimation]: Root.MediaFormatOriginalNetAnimation,
+	[MediaFormat.OneShot]: Root.MediaFormatOneShot,
+	[MediaFormat.OriginalVideoAnimation]: Root.MediaFormatOriginalVideoAnimation,
+	[MediaFormat.Special]: Root.MediaFormatSpecial,
+	[MediaFormat.TV]: Root.MediaFormatTV,
+	[MediaFormat.TVShort]: Root.MediaFormatTVShort
+} satisfies Record<MediaFormat, TypedT>;
+
 export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Command {
 	public override async autocompleteRun(interaction: Command.AutocompleteInteraction, options: AnimeCommand.AutocompleteArguments<Kind>) {
 		const result = await this.autocompleteFetch(options);
-		const locale = getSupportedUserLanguageName(interaction);
+		const t = getSupportedUserLanguageT(interaction);
 		const entries = result.match({
-			ok: (values) => {
-				return values.map((value) => ({
-					name: cutText(this.getTitle(value.title, locale, value.countryOfOrigin), 100),
-					value: cutText(value.title.english || value.title.romaji || value.title.native!, 100)
-				}));
-			},
+			ok: (values) => values.map((value) => ({ name: this.renderAutocompleteOptionName(t, value), value: value.id })),
 			err: () => []
 		});
 
 		return interaction.reply({ choices: entries });
 	}
 
-	protected handleResult(interaction: Command.ChatInputInteraction, result: Result<AnilistEntry | null, FetchError>, kind: Kind) {
+	protected renderAutocompleteOptionName(t: TFunction, value: AnilistEntryTypeByKind<Kind>) {
+		const rawYear = value.seasonYear ?? value.startDate?.year ?? null;
+		const year = isNullishOrZero(rawYear) ? t(Root.Unknown) : rawYear.toString();
+		const kind = t(isNullishOrEmpty(value.format) ? Root.Unknown : FormatKeys[value.format]);
+		const description = ` — ${year} ${kind}`;
+
+		const title = this.getTitle(value.title, t.lng as LocaleString, value.countryOfOrigin);
+		return `${cutText(title, 100 - description.length)}${description}`;
+	}
+
+	protected handleResult(interaction: Command.ChatInputInteraction, result: Result<AnilistEntryTypeByKind<Kind> | null, FetchError>, kind: Kind) {
 		const response = result.match({
 			ok: (value) =>
 				isNullishOrEmpty(value)
@@ -42,7 +60,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		return interaction.reply(response);
 	}
 
-	protected createResponse(value: AnilistEntry, t: TFunction): { embeds: APIEmbed[] } {
+	protected createResponse(value: AnilistEntryTypeByKind<Kind>, t: TFunction): { embeds: APIEmbed[] } {
 		return { embeds: [this.createEmbed(value, t).toJSON()] };
 	}
 
@@ -53,9 +71,11 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		};
 	}
 
-	protected abstract autocompleteFetch(options: AnimeCommand.AutocompleteArguments<Kind>): Promise<Result<readonly AnilistEntry[], FetchError>>;
+	protected abstract autocompleteFetch(
+		options: AnimeCommand.AutocompleteArguments<Kind>
+	): Promise<Result<readonly AnilistEntryTypeByKind<Kind>[], FetchError>>;
 
-	private createEmbed(value: AnilistEntry, t: TFunction) {
+	private createEmbed(value: AnilistEntryTypeByKind<Kind>, t: TFunction) {
 		const anilistTitles = t(Root.EmbedTitles);
 		const description = [
 			`**${anilistTitles.romajiName}**: ${value.title.romaji || t(LanguageKeys.Common.None)}`,
@@ -67,19 +87,19 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${this.getCountry(t, value.countryOfOrigin)}`);
 		}
 
-		if (value.episodes) {
+		if ('episodes' in value && value.episodes) {
 			description.push(`${bold(anilistTitles.episodes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.episodes })}`);
 		}
 
-		if (value.chapters) {
+		if ('chapters' in value && value.chapters) {
 			description.push(`${bold(anilistTitles.chapters)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.chapters })}`);
 		}
 
-		if (value.volumes) {
+		if ('volumes' in value && value.volumes) {
 			description.push(`${bold(anilistTitles.volumes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.volumes })}`);
 		}
 
-		if (value.duration) {
+		if ('duration' in value && value.duration) {
 			description.push(`${bold(anilistTitles.episodeLength)}: ${durationFormatter.format(minutes(value.duration), 1)}`);
 		}
 
@@ -107,7 +127,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			.setFooter({ text: '© anilist.co' });
 	}
 
-	private getCountry(t: TFunction, origin: NonNullable<AnilistEntry['countryOfOrigin']>) {
+	private getCountry(t: TFunction, origin: NonNullable<AnilistEntryTypeByKind<Kind>['countryOfOrigin']>) {
 		switch (origin) {
 			case 'CN':
 				return `${t(Root.CountryChina)} 🇨🇳`;
@@ -140,6 +160,8 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 export namespace AnimeCommand {
 	export type LoaderContext = Command.LoaderContext;
 	export type Options = Command.Options;
-	export type Arguments<Kind extends 'anime' | 'manga'> = InteractionArguments<Kind extends 'anime' ? { anime: string } : { manga: string }>;
-	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<Arguments<Kind>>;
+	export type Arguments<Kind extends 'anime' | 'manga'> = MakeArguments<Kind, number>;
+	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<MakeArguments<Kind, string>>;
 }
+
+type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Kind extends 'anime' ? { anime: Value } : { manga: Value };

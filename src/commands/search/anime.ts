@@ -8,7 +8,7 @@ const Root = LanguageKeys.Commands.AniList.Anime;
 
 @RegisterCommand((builder) =>
 	applyLocalizedBuilder(builder, Root.RootName, Root.RootDescription) //
-		.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsAnime).setRequired(true).setAutocomplete(true))
+		.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsAnime).setRequired(true).setAutocomplete(true))
 )
 export class UserCommand extends AnimeCommand<'anime'> {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction, { anime }: AnimeCommand.Arguments<'anime'>) {
