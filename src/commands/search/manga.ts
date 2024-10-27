@@ -5,17 +5,18 @@ import { Command, RegisterCommand } from '@skyra/http-framework';
 import { applyLocalizedBuilder } from '@skyra/http-framework-i18n';
 import { ApplicationIntegrationType, InteractionContextType } from 'discord-api-types/v10';
 
-const Root = LanguageKeys.Commands.AniList.Manga;
+const Root = LanguageKeys.Commands.AniList;
 
 @RegisterCommand((builder) =>
-	applyLocalizedBuilder(builder, Root.RootName, Root.RootDescription)
+	applyLocalizedBuilder(builder, Root.Manga.RootName, Root.Manga.RootDescription)
 		.setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
 		.setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
-		.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsManga).setRequired(true).setAutocomplete(true))
+		.addIntegerOption((option) => applyLocalizedBuilder(option, Root.Manga.OptionsManga).setRequired(true).setAutocomplete(true))
+		.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsHide))
 )
 export class UserCommand extends AnimeCommand<'manga'> {
-	public override async chatInputRun(interaction: Command.ChatInputInteraction, { manga }: AnimeCommand.Arguments<'manga'>) {
-		return this.handleResult(interaction, await anilistMangaGet(manga), 'manga');
+	public override async chatInputRun(interaction: Command.ChatInputInteraction, { manga, hide }: AnimeCommand.Arguments<'manga'>) {
+		return this.handleResult(interaction, await anilistMangaGet(manga), 'manga', hide);
 	}
 
 	protected override autocompleteFetch(options: AnimeCommand.AutocompleteArguments<'manga'>) {
