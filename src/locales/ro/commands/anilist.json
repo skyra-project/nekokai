@@ -1,6 +1,8 @@
 {
 	"optionsHideName": "",
 	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "",
 		"countryOfOrigin": "",
