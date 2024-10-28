@@ -1,8 +1,8 @@
 {
 	"optionsHideName": "hide",
 	"optionsHideDescription": "Whether to hide the response (default: False)",
-	"optionsHideDescriptionName": "",
-	"optionsHideDescriptionDescription": "",
+	"optionsHideDescriptionName": "hide-description",
+	"optionsHideDescriptionDescription": "Whether to hide the description from the card (default: False)",
 	"embedTitles": {
 		"chapters": "Amount of chapters",
 		"countryOfOrigin": "Country of origin",
