@@ -1,4 +1,8 @@
 {
+	"optionsHideName": "",
+	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "Количество глав",
 		"countryOfOrigin": "Страна происхождения",
@@ -10,6 +14,17 @@
 		"romajiName": "Ромадзи",
 		"volumes": "Количество томов"
 	},
+	"mediaFormatManga": "",
+	"mediaFormatMovie": "",
+	"mediaFormatMusic": "",
+	"mediaFormatNovel": "",
+	"mediaFormatOriginalNetAnimation": "",
+	"mediaFormatOneShot": "",
+	"mediaFormatOriginalVideoAnimation": "",
+	"mediaFormatSpecial": "",
+	"mediaFormatTV": "",
+	"mediaFormatTVShort": "",
+	"unknown": "",
 	"countryChina": "Китай",
 	"countryJapan": "Япония",
 	"countryKorea": "Южная Корея",

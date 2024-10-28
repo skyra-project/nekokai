@@ -1,4 +1,8 @@
 {
+	"optionsHideName": "",
+	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "Кількість розділів",
 		"countryOfOrigin": "Країна походження",
@@ -10,6 +14,17 @@
 		"romajiName": "Назва латиницею",
 		"volumes": "Кількість томів"
 	},
+	"mediaFormatManga": "",
+	"mediaFormatMovie": "",
+	"mediaFormatMusic": "",
+	"mediaFormatNovel": "",
+	"mediaFormatOriginalNetAnimation": "",
+	"mediaFormatOneShot": "",
+	"mediaFormatOriginalVideoAnimation": "",
+	"mediaFormatSpecial": "",
+	"mediaFormatTV": "",
+	"mediaFormatTVShort": "",
+	"unknown": "",
 	"countryChina": "Китай",
 	"countryJapan": "Японія",
 	"countryKorea": "Південна Корея",

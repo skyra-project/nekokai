@@ -1,4 +1,8 @@
 {
+	"optionsHideName": "",
+	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "अध्यायों की सांख्या",
 		"countryOfOrigin": "उद्गम देश",
@@ -10,6 +14,17 @@
 		"romajiName": "रोमनकृत नाम",
 		"volumes": "मात्राओं की सांख्या"
 	},
+	"mediaFormatManga": "",
+	"mediaFormatMovie": "",
+	"mediaFormatMusic": "",
+	"mediaFormatNovel": "",
+	"mediaFormatOriginalNetAnimation": "",
+	"mediaFormatOneShot": "",
+	"mediaFormatOriginalVideoAnimation": "",
+	"mediaFormatSpecial": "",
+	"mediaFormatTV": "",
+	"mediaFormatTVShort": "",
+	"unknown": "",
 	"countryChina": "चीन",
 	"countryJapan": "जापान",
 	"countryKorea": "दक्षिण कोरिया",

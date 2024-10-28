@@ -1,4 +1,8 @@
 {
+	"optionsHideName": "ocultar",
+	"optionsHideDescription": "Si ocultar la respuesta (por defecto: False)",
+	"optionsHideDescriptionName": "ocultar-descripción",
+	"optionsHideDescriptionDescription": "Si ocultar la descripción de la tarjeta (por defecto: False)",
 	"embedTitles": {
 		"chapters": "Cantidad de capítulos",
 		"countryOfOrigin": "País de origen",
@@ -10,6 +14,17 @@
 		"romajiName": "Nombre romanizado",
 		"volumes": "Cantidad de volúmenes"
 	},
+	"mediaFormatManga": "Manga",
+	"mediaFormatMovie": "Película",
+	"mediaFormatMusic": "Música",
+	"mediaFormatNovel": "Novela Ligera",
+	"mediaFormatOriginalNetAnimation": "ONA",
+	"mediaFormatOneShot": "One-shot",
+	"mediaFormatOriginalVideoAnimation": "OVA",
+	"mediaFormatSpecial": "Especial",
+	"mediaFormatTV": "TV",
+	"mediaFormatTVShort": "Cortometraje de TV",
+	"unknown": "Desconocido",
 	"countryChina": "China",
 	"countryJapan": "Japón",
 	"countryKorea": "Corea del Sur",

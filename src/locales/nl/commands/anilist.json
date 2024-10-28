@@ -1,4 +1,8 @@
 {
+	"optionsHideName": "",
+	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "Aantal hoofdstukken",
 		"countryOfOrigin": "Land van oorsprong",
@@ -10,6 +14,17 @@
 		"romajiName": "Geromaniseerde naam",
 		"volumes": "Aantal volumes"
 	},
+	"mediaFormatManga": "",
+	"mediaFormatMovie": "",
+	"mediaFormatMusic": "",
+	"mediaFormatNovel": "",
+	"mediaFormatOriginalNetAnimation": "",
+	"mediaFormatOneShot": "",
+	"mediaFormatOriginalVideoAnimation": "",
+	"mediaFormatSpecial": "",
+	"mediaFormatTV": "",
+	"mediaFormatTVShort": "",
+	"unknown": "",
 	"countryChina": "China",
 	"countryJapan": "Japan",
 	"countryKorea": "Zuid-Korea",

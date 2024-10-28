@@ -1,0 +1,21 @@
+{
+	"name": "preferencias",
+	"description": "Gestiona sus preferencias de usuario",
+	"viewName": "ver",
+	"viewDescription": "Vea sus preferencias actuales",
+	"editName": "editar",
+	"editDescription": "Edite sus preferencias",
+	"resetName": "restablecer",
+	"resetDescription": "Restablezca sus preferencias",
+	"optionsTitleLanguageName": "lenguaje-título",
+	"optionsTitleLanguageDescription": "El idioma utilizado para los títulos de AniList al buscar",
+	"optionsTitleLanguageChoiceRomaji": "Romaji (Shingeki no Kyojin)",
+	"optionsTitleLanguageChoiceEnglish": "Inglés (Attack on Titan)",
+	"optionsTitleLanguageChoiceNative": "Nativo (進撃の巨人)",
+	"optionsTitleLanguageChoiceUnset": "Sin definir (Depende del lenguaje del usuario)",
+	"optionsResetKeyName": "opción",
+	"optionsResetKeyDescription": "La opción a restablecer",
+	"optionsResetKeyAll": "todos",
+	"responseView": "**Preferencias actuales**:\n\nIdioma del título: `{{titleLanguage}}`\n\n> **Nota**: Para actualizar sus preferencias, puedes usar `/$t(commands/preferences:name) $t(commands/preferences:editName)`.",
+	"responseSuccess": "Se actualizaron correctamente sus preferencias."
+}
