@@ -1,6 +1,8 @@
 {
 	"optionsHideName": "hide",
 	"optionsHideDescription": "Whether to hide the response (default: False)",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "Amount of chapters",
 		"countryOfOrigin": "Country of origin",
