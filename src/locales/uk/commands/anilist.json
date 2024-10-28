@@ -1,6 +1,8 @@
 {
 	"optionsHideName": "",
 	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "Кількість розділів",
 		"countryOfOrigin": "Країна походження",
