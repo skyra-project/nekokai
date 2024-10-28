@@ -12,11 +12,18 @@ const Root = LanguageKeys.Commands.AniList;
 		.setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
 		.setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
 		.addIntegerOption((option) => applyLocalizedBuilder(option, Root.Manga.OptionsManga).setRequired(true).setAutocomplete(true))
+		.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsHideDescription))
 		.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsHide))
 )
 export class UserCommand extends AnimeCommand<'manga'> {
-	public override async chatInputRun(interaction: Command.ChatInputInteraction, { manga, hide }: AnimeCommand.Arguments<'manga'>) {
-		return this.handleResult(interaction, await anilistMangaGet(manga), 'manga', hide);
+	public override async chatInputRun(interaction: Command.ChatInputInteraction, options: AnimeCommand.Arguments<'manga'>) {
+		return this.handleResult({
+			interaction,
+			result: await anilistMangaGet(options.manga),
+			kind: 'manga',
+			hideDescription: options['hide-description'],
+			hide: options.hide
+		});
 	}
 
 	protected override autocompleteFetch(options: AnimeCommand.AutocompleteArguments<'manga'>) {

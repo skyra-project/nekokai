@@ -53,24 +53,22 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		return `${cutText(title, 100 - description.length)}${description}`;
 	}
 
-	protected handleResult(
-		interaction: Command.ChatInputInteraction,
-		result: Result<AnilistEntryTypeByKind<Kind> | null, FetchError>,
-		kind: Kind,
-		hide: boolean | null | undefined
-	) {
-		hide ??= false;
+	protected handleResult(options: HandlerOptions<Kind>) {
+		const { interaction, kind } = options;
+		const hide = options.hide ?? false;
+		const hideDescription = options.hideDescription ?? false;
 
 		const t = hide ? getSupportedUserLanguageT(interaction) : getSupportedLanguageT(interaction);
-		const response = result.match({
-			ok: (value) => (isNullishOrEmpty(value) ? this.createErrorResponse(interaction, kind) : this.createResponse(value, t, hide)),
+		const response = options.result.match({
+			ok: (value) =>
+				isNullishOrEmpty(value) ? this.createErrorResponse(interaction, kind) : this.createResponse(value, t, hideDescription, hide),
 			err: () => this.createErrorResponse(interaction, kind)
 		});
 		return interaction.reply(response);
 	}
 
-	protected createResponse(value: AnilistEntryTypeByKind<Kind>, t: TFunction, hide: boolean): MessageResponseOptions {
-		return { embeds: [this.createEmbed(value, t).toJSON()], flags: hide ? MessageFlags.Ephemeral : undefined };
+	protected createResponse(value: AnilistEntryTypeByKind<Kind>, t: TFunction, hideDescription: boolean, hide: boolean): MessageResponseOptions {
+		return { embeds: [this.createEmbed(value, t, hideDescription).toJSON()], flags: hide ? MessageFlags.Ephemeral : undefined };
 	}
 
 	protected createErrorResponse(interaction: Command.ChatInputInteraction, kind: Kind) {
@@ -84,7 +82,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		options: AnimeCommand.AutocompleteArguments<Kind>
 	): Promise<Result<readonly AnilistEntryTypeByKind<Kind>[], FetchError>>;
 
-	private createEmbed(value: AnilistEntryTypeByKind<Kind>, t: TFunction) {
+	private createEmbed(value: AnilistEntryTypeByKind<Kind>, t: TFunction, hideDescription: boolean) {
 		const anilistTitles = t(Root.EmbedTitles);
 		const description = [
 			`**${anilistTitles.romajiName}**: ${value.title.romaji || t(LanguageKeys.Common.None)}`,
@@ -122,7 +120,7 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 			}
 		}
 
-		if (value.description) {
+		if (!hideDescription && value.description) {
 			description.push('', parseAniListDescription(value.description));
 		}
 
@@ -182,5 +180,15 @@ export namespace AnimeCommand {
 	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<MakeArguments<Kind, string>>;
 }
 
+export interface HandlerOptions<Kind extends 'anime' | 'manga'> {
+	interaction: Command.ChatInputInteraction;
+	result: Result<AnilistEntryTypeByKind<Kind> | null, FetchError>;
+	kind: Kind;
+	hideDescription: boolean | null | undefined;
+	hide: boolean | null | undefined;
+}
+
 type Pretty<Type extends object> = { [K in keyof Type]: Type[K] };
-type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Pretty<{ [key in Kind]: Value } & { hide?: boolean }>;
+type MakeArguments<Kind extends 'anime' | 'manga', Value extends string | number> = Pretty<
+	{ [key in Kind]: Value } & { hide?: boolean; 'hide-description'?: boolean }
+>;
