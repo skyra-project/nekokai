@@ -1,6 +1,8 @@
 {
 	"optionsHideName": "ocultar",
 	"optionsHideDescription": "Si ocultar la respuesta (por defecto: False)",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "Cantidad de capítulos",
 		"countryOfOrigin": "País de origen",
