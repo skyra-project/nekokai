@@ -1,6 +1,8 @@
 {
 	"optionsHideName": "",
 	"optionsHideDescription": "",
+	"optionsHideDescriptionName": "",
+	"optionsHideDescriptionDescription": "",
 	"embedTitles": {
 		"chapters": "अध्यायों की सांख्या",
 		"countryOfOrigin": "उद्गम देश",
