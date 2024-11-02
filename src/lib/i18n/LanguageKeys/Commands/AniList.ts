@@ -35,3 +35,6 @@ export const CountryChina = T('commands/anilist:countryChina');
 export const CountryJapan = T('commands/anilist:countryJapan');
 export const CountryKorea = T('commands/anilist:countryKorea');
 export const CountryTaiwan = T('commands/anilist:countryTaiwan');
+
+export const ButtonSource = T('commands/anilist:buttonSource');
+export const ButtonShare = T('commands/anilist:buttonShare');

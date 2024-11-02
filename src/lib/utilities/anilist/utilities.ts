@@ -1,4 +1,4 @@
-import type { AnilistEntryAnime, AnilistEntryManga } from '#lib/apis/anilist/anilist-types';
+import type { AnilistEntryAnime, AnilistEntryManga } from '#lib/utilities/anilist/types';
 import { TemporaryCollection } from '#lib/utilities/temporary-collection';
 import { Result, ok } from '@sapphire/result';
 import { Time } from '@sapphire/time-utilities';

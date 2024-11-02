@@ -6,9 +6,7 @@
 		"outDir": "../dist",
 		"composite": true,
 		"tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
-		"paths": {
-			"#lib/*": ["lib/*"]
-		}
+		"resolvePackageJsonImports": true
 	},
 	"include": ["."]
 }

@@ -8,6 +8,7 @@
 	"main": "dist/main.js",
 	"type": "module",
 	"imports": {
+		"#lib/anilist": "./dist/lib/utilities/anilist/index.js",
 		"#lib/*": "./dist/lib/*.js"
 	},
 	"scripts": {

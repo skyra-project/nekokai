@@ -1,17 +1,12 @@
-import { MediaFormat, type MediaTitle } from '#lib/apis/anilist/anilist-types';
-import { parseAniListDescription, type AnilistEntryTypeByKind } from '#lib/apis/anilist/anilist-utilities';
-import { BrandingColors } from '#lib/common/constants';
+import { getAniListTitle, MediaFormat, type AnilistEntryTypeByKind } from '#lib/anilist';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { durationFormatter } from '#lib/utilities/duration-formatter';
-import { minutes } from '#lib/utilities/time-utilities';
-import { EmbedBuilder, bold, hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import { AniListSearchTitleLanguage } from '@prisma/client';
 import type { Result } from '@sapphire/result';
-import { cutText, filterNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
-import { Command, type AutocompleteInteractionArguments, type MessageResponseOptions } from '@skyra/http-framework';
-import { getSupportedLanguageT, getSupportedUserLanguageT, resolveUserKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
+import { cutText, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
+import { Command, type AutocompleteInteractionArguments } from '@skyra/http-framework';
+import { getSupportedUserLanguageT, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
 import type { FetchError } from '@skyra/safe-fetch';
-import { MessageFlags, type LocaleString } from 'discord-api-types/v10';
+import type { LocaleString } from 'discord-api-types/v10';
 
 const Root = LanguageKeys.Commands.AniList;
 
@@ -49,128 +44,13 @@ export abstract class AnimeCommand<Kind extends 'anime' | 'manga'> extends Comma
 		const kind = t(isNullishOrEmpty(value.format) ? Root.Unknown : FormatKeys[value.format]);
 		const description = ` — ${year} ${kind}`;
 
-		const title = this.getTitle(value.title, t.lng as LocaleString, value.countryOfOrigin, titleLanguage);
+		const title = getAniListTitle(value.title, t.lng as LocaleString, value.countryOfOrigin, titleLanguage);
 		return `${cutText(title, 100 - description.length)}${description}`;
-	}
-
-	protected handleResult(options: HandlerOptions<Kind>) {
-		const { interaction, kind } = options;
-		const hide = options.hide ?? false;
-		const hideDescription = options.hideDescription ?? false;
-
-		const t = hide ? getSupportedUserLanguageT(interaction) : getSupportedLanguageT(interaction);
-		const response = options.result.match({
-			ok: (value) =>
-				isNullishOrEmpty(value) ? this.createErrorResponse(interaction, kind) : this.createResponse(value, t, hideDescription, hide),
-			err: () => this.createErrorResponse(interaction, kind)
-		});
-		return interaction.reply(response);
-	}
-
-	protected createResponse(value: AnilistEntryTypeByKind<Kind>, t: TFunction, hideDescription: boolean, hide: boolean): MessageResponseOptions {
-		return { embeds: [this.createEmbed(value, t, hideDescription).toJSON()], flags: hide ? MessageFlags.Ephemeral : undefined };
-	}
-
-	protected createErrorResponse(interaction: Command.ChatInputInteraction, kind: Kind) {
-		return {
-			content: resolveUserKey(interaction, kind === 'anime' ? Root.Anime.SearchError : Root.Manga.SearchError),
-			flags: MessageFlags.Ephemeral
-		};
 	}
 
 	protected abstract autocompleteFetch(
 		options: AnimeCommand.AutocompleteArguments<Kind>
 	): Promise<Result<readonly AnilistEntryTypeByKind<Kind>[], FetchError>>;
-
-	private createEmbed(value: AnilistEntryTypeByKind<Kind>, t: TFunction, hideDescription: boolean) {
-		const anilistTitles = t(Root.EmbedTitles);
-		const description = [
-			`**${anilistTitles.romajiName}**: ${value.title.romaji || t(LanguageKeys.Common.None)}`,
-			`**${anilistTitles.englishName}**: ${value.title.english || t(LanguageKeys.Common.None)}`,
-			`**${anilistTitles.nativeName}**: ${value.title.native || t(LanguageKeys.Common.None)}`
-		];
-
-		if (value.countryOfOrigin) {
-			description.push(`${bold(anilistTitles.countryOfOrigin)}: ${this.getCountry(t, value.countryOfOrigin)}`);
-		}
-
-		if ('episodes' in value && value.episodes) {
-			description.push(`${bold(anilistTitles.episodes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.episodes })}`);
-		}
-
-		if ('chapters' in value && value.chapters) {
-			description.push(`${bold(anilistTitles.chapters)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.chapters })}`);
-		}
-
-		if ('volumes' in value && value.volumes) {
-			description.push(`${bold(anilistTitles.volumes)}: ${t(LanguageKeys.Common.FormatNumber, { value: value.volumes })}`);
-		}
-
-		if ('duration' in value && value.duration) {
-			description.push(`${bold(anilistTitles.episodeLength)}: ${durationFormatter.format(minutes(value.duration), 1)}`);
-		}
-
-		if (value.externalLinks?.length) {
-			const externalLinks = value.externalLinks
-				.map((link) => (link?.url && link.site ? hyperlink(link.site, hideLinkEmbed(link.url)) : undefined))
-				.filter(filterNullish);
-
-			if (externalLinks.length) {
-				description.push(`${bold(anilistTitles.externalLinks)}: ${t(LanguageKeys.Common.FormatList, { value: externalLinks })}`);
-			}
-		}
-
-		if (!hideDescription && value.description) {
-			description.push('', parseAniListDescription(value.description));
-		}
-
-		const locale = t.lng as LocaleString;
-		return new EmbedBuilder()
-			.setColor(BrandingColors.Primary)
-			.setTitle(this.getTitle(value.title, locale, value.countryOfOrigin, AniListSearchTitleLanguage.English))
-			.setURL(value.siteUrl ?? null)
-			.setDescription(description.join('\n'))
-			.setImage(`https://img.anili.st/media/${value.id}`)
-			.setFooter({ text: '© anilist.co' });
-	}
-
-	private getCountry(t: TFunction, origin: NonNullable<AnilistEntryTypeByKind<Kind>['countryOfOrigin']>) {
-		switch (origin) {
-			case 'CN':
-				return `${t(Root.CountryChina)} 🇨🇳`;
-			case 'JP':
-				return `${t(Root.CountryJapan)} 🇯🇵`;
-			case 'KR':
-				return `${t(Root.CountryKorea)} 🇰🇷`;
-			case 'TW':
-				return `${t(Root.CountryTaiwan)} 🇹🇼`;
-			default:
-				this.container.logger.warn(`[ANILIST] Received unknown origin: ${origin}`);
-				return origin;
-		}
-	}
-
-	private getTitle(title: MediaTitle, locale: LocaleString, origin: string | null | undefined, titleLanguage: AniListSearchTitleLanguage) {
-		switch (titleLanguage) {
-			case AniListSearchTitleLanguage.English:
-				return title.english ?? title.romaji ?? title.native!;
-			case AniListSearchTitleLanguage.Romaji:
-				return title.romaji ?? title.english ?? title.native!;
-			case AniListSearchTitleLanguage.Native:
-				return title.native ?? title.romaji ?? title.english!;
-			default:
-				return this.shouldUseNative(locale, origin ?? 'JP')
-					? (title.native ?? title.english ?? title.romaji!)
-					: (title.english ?? title.romaji ?? title.native!);
-		}
-	}
-
-	private shouldUseNative(locale: LocaleString, origin: string) {
-		if (locale === 'ja') return origin === 'JP';
-		if (locale === 'zh-CN') return origin === 'CN';
-		if (locale === 'ko') return origin === 'KR';
-		return false;
-	}
 }
 
 export namespace AnimeCommand {
@@ -178,14 +58,6 @@ export namespace AnimeCommand {
 	export type Options = Command.Options;
 	export type Arguments<Kind extends 'anime' | 'manga'> = MakeArguments<Kind, number>;
 	export type AutocompleteArguments<Kind extends 'anime' | 'manga'> = AutocompleteInteractionArguments<MakeArguments<Kind, string>>;
-}
-
-export interface HandlerOptions<Kind extends 'anime' | 'manga'> {
-	interaction: Command.ChatInputInteraction;
-	result: Result<AnilistEntryTypeByKind<Kind> | null, FetchError>;
-	kind: Kind;
-	hideDescription: boolean | null | undefined;
-	hide: boolean | null | undefined;
 }
 
 type Pretty<Type extends object> = { [K in keyof Type]: Type[K] };

@@ -38,7 +38,7 @@ export interface AnilistEntryManga extends AnilistEntryBase {
 }
 
 /** An external link to another site related to the media */
-interface MediaExternalLink {
+export interface MediaExternalLink {
 	/** The url of the external link */
 	readonly url: string;
 	/** The site location of the external link */
