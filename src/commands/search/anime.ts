@@ -1,4 +1,4 @@
-import { anilistAnimeGet, anilistAnimeSearch } from '#lib/apis/anilist/anilist-utilities';
+import { anilistAnimeGet, anilistAnimeSearch, handleAniListResult } from '#lib/anilist';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { AnimeCommand } from '#lib/structures/AnimeCommand';
 import { Command, RegisterCommand } from '@skyra/http-framework';
@@ -17,13 +17,15 @@ const Root = LanguageKeys.Commands.AniList;
 )
 export class UserCommand extends AnimeCommand<'anime'> {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction, options: AnimeCommand.Arguments<'anime'>) {
-		return this.handleResult({
+		const response = handleAniListResult({
 			interaction,
 			result: await anilistAnimeGet(options.anime),
 			kind: 'anime',
 			hideDescription: options['hide-description'],
 			hide: options.hide
 		});
+
+		return interaction.reply(response);
 	}
 
 	protected override autocompleteFetch(options: AnimeCommand.AutocompleteArguments<'anime'>) {
