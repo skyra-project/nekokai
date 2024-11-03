@@ -27,7 +27,7 @@
 		"@discordjs/builders": "^1.9.0",
 		"@discordjs/collection": "^2.1.1",
 		"@prisma/client": "^5.21.1",
-		"@sapphire/iterator-utilities": "^1.0.2",
+		"@sapphire/iterator-utilities": "^2.0.0",
 		"@sapphire/result": "^2.6.6",
 		"@sapphire/time-utilities": "^1.7.12",
 		"@sapphire/utilities": "^3.17.0",
