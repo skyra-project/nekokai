@@ -1,1 +1,21 @@
-{}
+{
+	"name": "अधिमान",
+	"description": "अपने उपयोगकर्ता अधिमान प्रबंधित करें",
+	"viewName": "देखें",
+	"viewDescription": "अपने वर्तमान अधिमान देखें",
+	"editName": "संपादन",
+	"editDescription": "अपने अधिमान संपादित करें",
+	"resetName": "रीसेट",
+	"resetDescription": "अपने अधिमान रीसेट करें",
+	"optionsTitleLanguageName": "शीर्षक-भाषा",
+	"optionsTitleLanguageDescription": "खोज करते समय AniList शीर्षकों के लिए उपयोग की जाने वाली भाषा",
+	"optionsTitleLanguageChoiceRomaji": "रोमाजी (Shingeki no Kyojin)",
+	"optionsTitleLanguageChoiceEnglish": "अंग्रेजी (Attack on Titan)",
+	"optionsTitleLanguageChoiceNative": "स्थानीय (進撃の巨人)",
+	"optionsTitleLanguageChoiceUnset": "अनसेट (उपयोगकर्ता की भाषा पर निर्भर करता है)",
+	"optionsResetKeyName": "कुंजी",
+	"optionsResetKeyDescription": "रीसेट करने का विकल्प",
+	"optionsResetKeyAll": "सभी",
+	"responseView": "**वर्तमान अधिमान**:\n\nशीर्षक भाषा: `{{titleLanguage}}`\n\n> **नोट**: उन्हें अपडेट करने के लिए, आप `/$t(commands/preferences:name) $t(commands/preferences:editName)` का उपयोग कर सकते हैं।",
+	"responseSuccess": "आपके अधिमान सफलतापूर्वक अपडेट किए गए"
+}
