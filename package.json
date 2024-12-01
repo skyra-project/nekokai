@@ -26,7 +26,7 @@
 	"dependencies": {
 		"@discordjs/builders": "^1.9.0",
 		"@discordjs/collection": "^2.1.1",
-		"@prisma/client": "^5.21.1",
+		"@prisma/client": "^6.0.0",
 		"@sapphire/iterator-utilities": "^2.0.0",
 		"@sapphire/result": "^2.6.6",
 		"@sapphire/time-utilities": "^1.7.12",
@@ -58,7 +58,7 @@
 		"eslint-plugin-prettier": "^5.2.1",
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
-		"prisma": "^5.21.1",
+		"prisma": "^6.0.0",
 		"typescript": "~5.4.5"
 	},
 	"resolutions": {
