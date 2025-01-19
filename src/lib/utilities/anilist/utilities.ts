@@ -117,7 +117,7 @@ async function sharedSearch<Kind extends 'anime' | 'manga'>(
 
 	return result
 		.map((data) => data.data.Page.media)
-		.inspect((entries) => {
+		.inspect((entries: AnilistEntryTypeByKind<Kind>[]) => {
 			cache[kind].search.add(
 				query,
 				entries.map((entry) => entry.id)
