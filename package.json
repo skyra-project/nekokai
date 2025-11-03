@@ -49,7 +49,7 @@
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
 		"@types/he": "^1.2.3",
-		"@types/node": "^22.8.6",
+		"@types/node": "^24.10.0",
 		"@typescript-eslint/eslint-plugin": "^7.13.1",
 		"@typescript-eslint/parser": "^7.13.1",
 		"cz-conventional-changelog": "^3.3.0",
@@ -89,6 +89,6 @@
 	},
 	"packageManager": "yarn@4.5.1",
 	"volta": {
-		"node": "22.11.0"
+		"node": "24.11.0"
 	}
 }
